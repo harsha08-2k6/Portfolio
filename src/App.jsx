@@ -4,6 +4,7 @@ import { Github, Linkedin, Mail, Download, ExternalLink, Code2, Menu, X, Termina
 import studyPlannerImg from './assets/study_planner.png';
 import gradingSystemImg from './assets/grading_system.png';
 import todoListImg from './assets/todo_list.png';
+import masterpieceImg from './assets/masterpiece.png';
 
 const App = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -329,115 +330,184 @@ const App = () => {
                                         </div>
                                     </div>
 
-                                    <div className="p-8 grid grid-cols-2 gap-6 h-[calc(100%-60px)]">
-                                        {/* Background Grid Pattern */}
-                                        <div className="absolute inset-0 opacity-[0.05] pointer-events-none"
-                                            style={{ backgroundImage: 'radial-gradient(circle, #38bdf8 1px, transparent 1px)', backgroundSize: '20px 20px' }}
-                                        />
+                                    <div className="p-6 grid grid-cols-2 gap-4 h-[calc(100%-60px)] relative">
+                                        {/* Left Side: Creative Workflow */}
+                                        <div className="space-y-3 relative z-10 flex flex-col justify-center">
+                                            {/* Studio Monitor / Viewfinder */}
+                                            <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 shadow-2xl group/monitor">
+                                                <img src={masterpieceImg} className="w-full h-full object-cover grayscale-[0.3] group-hover/monitor:grayscale-0 transition-all duration-700" alt="Masterpiece" />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
 
-                                        <div className="space-y-4 relative z-10">
-                                            <div className="p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md">
-                                                <div className="text-[10px] text-sky-400/60 mb-2 uppercase tracking-[0.2em] font-bold">Project Status</div>
-                                                <div className="flex flex-col gap-2">
-                                                    <div className="text-xl font-black text-white font-['Outfit']">Color Grading</div>
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="h-1 flex-1 bg-white/5 rounded-full overflow-hidden">
-                                                            <div className="h-full w-[85%] bg-sky-500 rounded-full" />
-                                                        </div>
-                                                        <span className="text-[10px] text-slate-400 font-mono">85%</span>
-                                                    </div>
+                                                {/* Camera HUD Overlay */}
+                                                <div className="absolute inset-2 border border-white/20 rounded-sm pointer-events-none">
+                                                    <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-sky-400"></div>
+                                                    <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-sky-400"></div>
+                                                    <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-sky-400"></div>
+                                                    <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-sky-400"></div>
                                                 </div>
-                                            </div>
-                                            <div className="p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md">
-                                                <div className="text-[10px] text-indigo-400/60 mb-2 uppercase tracking-[0.2em] font-bold">Creative Sync</div>
-                                                <div className="flex items-end gap-3">
-                                                    <div className="text-2xl font-black text-white">Pr</div>
-                                                    <div className="text-2xl font-black text-white">Ae</div>
-                                                    <div className="text-2xl font-black text-white">Da</div>
-                                                    <div className="ml-auto flex gap-1">
-                                                        {[...Array(3)].map((_, i) => (
-                                                            <motion.div
-                                                                key={i}
-                                                                animate={{ scaleY: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-                                                                transition={{ duration: 1, delay: i * 0.2, repeat: Infinity }}
-                                                                className="w-1 h-4 bg-sky-500 rounded-full"
-                                                            />
+
+                                                <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></div>
+                                                    <span className="text-[8px] font-mono text-white/80 tracking-widest uppercase">REC 00:24:12:02</span>
+                                                </div>
+
+                                                <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end">
+                                                    <div className="text-[8px] font-mono text-white/60 leading-none">
+                                                        <div>ISO 100</div>
+                                                        <div>f/1.8 1/250</div>
+                                                    </div>
+                                                    <div className="flex gap-1 h-2 items-end">
+                                                        {[...Array(5)].map((_, i) => (
+                                                            <div key={i} className={`w-0.5 rounded-full bg-sky-400`} style={{ height: `${20 + i * 15}%` }} />
                                                         ))}
                                                     </div>
                                                 </div>
+
+                                                {/* Scanning Line */}
+                                                <motion.div
+                                                    animate={{ top: ["0%", "100%", "0%"] }}
+                                                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                                                    className="absolute inset-x-0 h-[1px] bg-sky-400/30 shadow-[0_0_8px_#38bdf8] z-10"
+                                                />
+                                            </div>
+
+                                            {/* Creative DNA Stats */}
+                                            <div className="grid grid-cols-2 gap-2">
+                                                <div className="p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md">
+                                                    <div className="text-[8px] text-sky-400/60 mb-1 uppercase tracking-widest">Retouching</div>
+                                                    <div className="text-sm font-black text-white">99.8%</div>
+                                                </div>
+                                                <div className="p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md">
+                                                    <div className="text-[8px] text-indigo-400/60 mb-1 uppercase tracking-widest">Grading</div>
+                                                    <div className="text-sm font-black text-white">PRO</div>
+                                                </div>
                                             </div>
                                         </div>
+
+                                        {/* Right Side: The Editor with Laptop */}
                                         <div className="flex flex-col justify-center items-center relative z-10">
-                                            {/* Advanced Animated Editor Visual */}
-                                            <div className="relative w-40 h-40 flex items-center justify-center">
-                                                {/* Circular "Environment" */}
+                                            <div className="relative w-44 h-44 flex items-center justify-center scale-100">
+                                                {/* Circular HUD Elements */}
                                                 <motion.div
                                                     animate={{ rotate: 360 }}
-                                                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                                                    className="absolute inset-0 border border-sky-500/10 rounded-full border-dashed"
+                                                    transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                                                    className="absolute inset-0 border border-sky-400/20 rounded-full"
+                                                />
+                                                <motion.div
+                                                    animate={{ rotate: -360 }}
+                                                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                                                    className="absolute inset-4 border border-dashed border-indigo-400/30 rounded-full"
                                                 />
 
-                                                {/* The PC / Desk Setup */}
+                                                {/* The Workspace */}
                                                 <div className="relative flex flex-col items-center">
-                                                    {/* Screen with Glow */}
-                                                    <div className="relative mb-2">
-                                                        <motion.div
-                                                            animate={{ boxShadow: ["0 0 20px rgba(56,189,248,0.2)", "0 0 40px rgba(56,189,248,0.4)", "0 0 20px rgba(56,189,248,0.2)"] }}
-                                                            transition={{ duration: 2, repeat: Infinity }}
-                                                            className="w-28 h-12 bg-[#1e293b] border border-white/20 rounded-md relative overflow-hidden"
-                                                        >
-                                                            {/* Waveform/Editing UI */}
-                                                            <div className="absolute inset-x-0 bottom-0 h-4 flex items-end gap-[1px] px-1 pb-1">
-                                                                {[...Array(20)].map((_, i) => (
-                                                                    <motion.div
-                                                                        key={i}
-                                                                        animate={{ height: [`${Math.random() * 60 + 20}%`, `${Math.random() * 60 + 20}%`] }}
-                                                                        transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
-                                                                        className="flex-1 bg-sky-500/50 rounded-t-[1px]"
-                                                                    />
-                                                                ))}
-                                                            </div>
-                                                            {/* Scanning Line */}
-                                                            <motion.div
-                                                                animate={{ x: ["-100%", "300%"] }}
-                                                                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                                                                className="absolute top-0 w-8 h-full bg-gradient-to-r from-transparent via-sky-500/20 to-transparent skew-x-12"
-                                                            />
-                                                        </motion.div>
-                                                    </div>
+                                                    {/* Glow behind character */}
+                                                    <div className="absolute w-32 h-32 bg-sky-500/10 blur-3xl rounded-full -z-10" />
 
-                                                    {/* The "Man" (Stylized Silhouette) */}
-                                                    <div className="relative flex flex-col items-center">
-                                                        {/* Head */}
-                                                        <div className="w-6 h-6 rounded-full bg-slate-800 border border-white/10 mb-[-4px] relative z-20" />
-                                                        {/* Body/Torso */}
-                                                        <div className="w-14 h-12 bg-slate-800 rounded-t-3xl border border-white/10 relative z-10 overflow-hidden">
-                                                            <div className="absolute top-0 inset-x-0 h-1 bg-sky-500/20" />
+                                                    {/* Laptop & Man Setup */}
+                                                    <div className="relative flex flex-col items-center pt-8">
+                                                        {/* Stylized Man leaning in */}
+                                                        <div className="relative flex flex-col items-center mb-[-12px] z-20">
+                                                            <div className="w-4 h-4 rounded-full bg-slate-800 border border-white/10" />
+                                                            <motion.div
+                                                                animate={{ rotateX: [0, 5, 0] }}
+                                                                transition={{ duration: 4, repeat: Infinity }}
+                                                                className="w-10 h-8 bg-slate-800 rounded-t-xl border border-white/10 mt-[-2px] origin-bottom"
+                                                            />
                                                         </div>
-                                                        {/* Arms/Camera Positioning */}
+
+                                                        {/* The Laptop */}
+                                                        <div className="relative flex flex-col items-center">
+                                                            {/* Laptop Lid / Screen */}
+                                                            <motion.div
+                                                                animate={{ rotateX: [0, -2, 0] }}
+                                                                transition={{ duration: 3, repeat: Infinity }}
+                                                                className="w-24 h-16 bg-[#1a202c] border border-white/20 rounded-md relative shadow-2xl overflow-hidden [transform-style:preserve-3d]"
+                                                            >
+                                                                {/* Editing Setup on Screen */}
+                                                                <div className="absolute inset-1 bg-black/40 rounded-[2px] overflow-hidden flex flex-col gap-0.5 p-1">
+                                                                    {/* Editor Top Bar */}
+                                                                    <div className="flex justify-between items-center h-1.5 px-0.5">
+                                                                        <div className="flex gap-0.5">
+                                                                            <div className="w-1 h-1 rounded-full bg-red-400"></div>
+                                                                            <div className="w-1 h-1 rounded-full bg-yellow-400"></div>
+                                                                        </div>
+                                                                        <div className="w-6 h-0.5 bg-sky-400/40 rounded-full"></div>
+                                                                    </div>
+                                                                    {/* Main Workspace Area */}
+                                                                    <div className="flex-1 flex gap-0.5">
+                                                                        {/* Left Panel: Layers */}
+                                                                        <div className="w-4 flex flex-col gap-0.5">
+                                                                            {[...Array(4)].map((_, i) => (
+                                                                                <div key={i} className="h-1.5 bg-white/5 rounded-sm" />
+                                                                            ))}
+                                                                        </div>
+                                                                        {/* Central Preview */}
+                                                                        <div className="flex-1 bg-white/5 rounded-sm relative overflow-hidden">
+                                                                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-transparent" />
+                                                                            <motion.div
+                                                                                animate={{ opacity: [0.3, 0.7, 0.3] }}
+                                                                                transition={{ duration: 2, repeat: Infinity }}
+                                                                                className="absolute bottom-1 right-1 w-2 h-2 rounded-full border border-sky-400/50 flex items-center justify-center p-[2px]"
+                                                                            >
+                                                                                <div className="w-full h-full bg-sky-400 rounded-full" />
+                                                                            </motion.div>
+                                                                        </div>
+                                                                        {/* Right Panel: Effects */}
+                                                                        <div className="w-4 flex flex-col items-center gap-0.5">
+                                                                            <div className="w-2.5 h-2.5 rounded-full border border-white/10 flex items-center justify-center">
+                                                                                <div className="w-1 h-1 bg-yellow-400/60 rounded-full" />
+                                                                            </div>
+                                                                            <div className="w-full h-1 bg-white/5 rounded-sm" />
+                                                                            <div className="w-full h-1 bg-white/5 rounded-sm" />
+                                                                        </div>
+                                                                    </div>
+                                                                    {/* Timeline Bottom Bar */}
+                                                                    <div className="h-3 flex flex-col gap-0.5 pt-0.5">
+                                                                        <div className="flex-1 bg-white/10 relative rounded-sm overflow-hidden">
+                                                                            <motion.div
+                                                                                animate={{ x: ["-100%", "200%"] }}
+                                                                                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                                                                                className="absolute inset-y-0 w-0.5 bg-sky-400 z-10 shadow-[0_0_5px_#38bdf8]"
+                                                                            />
+                                                                            <div className="absolute inset-0 flex gap-[1px]">
+                                                                                <div className="w-1/3 h-full bg-sky-500/20" />
+                                                                                <div className="w-1/4 h-full bg-indigo-500/20" />
+                                                                                <div className="w-1/2 h-full bg-pink-500/20" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </motion.div>
+                                                            {/* Laptop Base */}
+                                                            <div className="w-28 h-1.5 bg-slate-700/80 rounded-b-sm relative">
+                                                                <div className="absolute top-0 inset-x-0 h-[1px] bg-white/10" />
+                                                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-[1px] bg-white/5" />
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Floating Studio Gear */}
                                                         <motion.div
-                                                            animate={{ y: [0, -2, 0] }}
-                                                            transition={{ duration: 3, repeat: Infinity }}
-                                                            className="absolute top-8 -right-4 bg-slate-900 p-1.5 rounded-lg border border-sky-500/30 shadow-lg rotate-12"
+                                                            animate={{ y: [0, -3, 0], rotate: [5, -5, 5] }}
+                                                            transition={{ duration: 4, repeat: Infinity }}
+                                                            className="absolute top-4 -right-12 bg-slate-900/60 backdrop-blur-sm p-1.5 rounded-lg border border-sky-500/20 shadow-xl"
                                                         >
-                                                            <Camera size={20} className="text-sky-400" />
+                                                            <Camera size={18} className="text-sky-400/80" />
                                                         </motion.div>
                                                     </div>
                                                 </div>
-
-                                                {/* Floating Effects */}
-                                                <motion.div
-                                                    animate={{ y: [0, -10, 0] }}
-                                                    transition={{ duration: 4, repeat: Infinity }}
-                                                    className="absolute top-4 left-4"
-                                                >
-                                                    <div className="w-2 h-2 rounded-full bg-sky-500 shadow-[0_0_10px_#0ea5e9]" />
-                                                </motion.div>
                                             </div>
 
-                                            <div className="mt-4 text-center">
-                                                <div className="text-sm font-bold text-white tracking-widest uppercase">Visual Architect</div>
-                                                <div className="text-[9px] text-sky-500/70 font-mono tracking-[0.3em] mt-1 uppercase">Creative Engine Active</div>
+                                            <div className="text-center mt-2">
+                                                <div className="text-sm font-bold text-white tracking-[0.2em] uppercase font-['Outfit']">Creative Master</div>
+                                                <div className="flex items-center gap-1.5 justify-center mt-1">
+                                                    <motion.span
+                                                        animate={{ opacity: [0.3, 1, 0.3] }}
+                                                        transition={{ duration: 1.5, repeat: Infinity }}
+                                                        className="w-1.5 h-1.5 rounded-full bg-sky-500 shadow-[0_0_8px_#0ea5e9]"
+                                                    />
+                                                    <div className="text-[8px] text-sky-500/70 font-mono tracking-widest uppercase">Editor Mode Enabled</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
