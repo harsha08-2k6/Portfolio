@@ -124,7 +124,7 @@ const App = () => {
                                         className="w-32 h-32 rounded-full border border-sky-500/20 border-t-sky-500 border-r-sky-500/30"
                                     />
                                     <div className="absolute inset-0 flex items-center justify-center font-['Outfit'] font-bold text-3xl tracking-tighter">
-                                        SH<span className="text-sky-400">.</span>
+                                        SHVR<span className="text-sky-400">.</span>
                                     </div>
                                 </div>
 
@@ -176,7 +176,7 @@ const App = () => {
                     className={`max-w-5xl w-full flex justify-between items-center px-8 py-3 rounded-2xl transition-all duration-500 border pointer-events-auto ${scrolled ? 'bg-white/5 backdrop-blur-xl border-white/10 shadow-2xl' : 'bg-transparent border-transparent'}`}
                 >
                     <div className="text-2xl font-bold font-['Outfit'] tracking-tighter text-white">
-                        SH<span className="text-sky-400">.</span>
+                        SHVR<span className="text-sky-400">.</span>
                     </div>
 
                     <div className="hidden md:flex gap-10">
@@ -348,17 +348,22 @@ const App = () => {
 
                                                 <div className="absolute top-3 left-3 flex items-center gap-1.5">
                                                     <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></div>
-                                                    <span className="text-[8px] font-mono text-white/80 tracking-widest uppercase">REC 00:24:12:02</span>
+                                                    <span className="text-[8px] font-mono text-white/80 tracking-widest uppercase">REC &bull; 4K LOG &bull; 24FPS</span>
                                                 </div>
 
                                                 <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end">
-                                                    <div className="text-[8px] font-mono text-white/60 leading-none">
-                                                        <div>ISO 100</div>
-                                                        <div>f/1.8 1/250</div>
+                                                    <div className="text-[8px] font-mono text-white/60 leading-none space-y-1">
+                                                        <div>ISO 800 &bull; 5600K</div>
+                                                        <div>f/2.8 &nbsp; 1/48</div>
                                                     </div>
-                                                    <div className="flex gap-1 h-2 items-end">
-                                                        {[...Array(5)].map((_, i) => (
-                                                            <div key={i} className={`w-0.5 rounded-full bg-sky-400`} style={{ height: `${20 + i * 15}%` }} />
+                                                    <div className="flex gap-1 h-3 items-end">
+                                                        {[...Array(6)].map((_, i) => (
+                                                            <motion.div
+                                                                key={i}
+                                                                animate={{ height: [`${Math.random() * 40 + 20}%`, `${Math.random() * 80 + 20}%`] }}
+                                                                transition={{ duration: 0.2, repeat: Infinity, repeatType: "reverse" }}
+                                                                className={`w-0.5 rounded-full ${i > 4 ? 'bg-red-400' : i > 3 ? 'bg-yellow-400' : 'bg-emerald-400'}`}
+                                                            />
                                                         ))}
                                                     </div>
                                                 </div>
@@ -374,12 +379,12 @@ const App = () => {
                                             {/* Creative DNA Stats */}
                                             <div className="grid grid-cols-2 gap-2">
                                                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md">
-                                                    <div className="text-[8px] text-sky-400/60 mb-1 uppercase tracking-widest">Retouching</div>
-                                                    <div className="text-sm font-black text-white">99.8%</div>
+                                                    <div className="text-[8px] text-sky-400/60 mb-1 uppercase tracking-widest">Color Space</div>
+                                                    <div className="text-sm font-black text-white px-0.5">DCI-P3</div>
                                                 </div>
                                                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-md">
-                                                    <div className="text-[8px] text-indigo-400/60 mb-1 uppercase tracking-widest">Grading</div>
-                                                    <div className="text-sm font-black text-white">PRO</div>
+                                                    <div className="text-[8px] text-indigo-400/60 mb-1 uppercase tracking-widest">Processing</div>
+                                                    <div className="text-sm font-black text-white px-0.5">32-Bit Float</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -499,14 +504,14 @@ const App = () => {
                                             </div>
 
                                             <div className="text-center mt-2">
-                                                <div className="text-sm font-bold text-white tracking-[0.2em] uppercase font-['Outfit']">Creative Master</div>
+                                                <div className="text-sm font-bold text-white tracking-[0.2em] uppercase font-['Outfit']">Lead Video Editor</div>
                                                 <div className="flex items-center gap-1.5 justify-center mt-1">
                                                     <motion.span
                                                         animate={{ opacity: [0.3, 1, 0.3] }}
                                                         transition={{ duration: 1.5, repeat: Infinity }}
                                                         className="w-1.5 h-1.5 rounded-full bg-sky-500 shadow-[0_0_8px_#0ea5e9]"
                                                     />
-                                                    <div className="text-[8px] text-sky-500/70 font-mono tracking-widest uppercase">Editor Mode Enabled</div>
+                                                    <div className="text-[8px] text-sky-500/70 font-mono tracking-widest uppercase">DaVinci Resolve Pipeline</div>
                                                 </div>
                                             </div>
                                         </div>
