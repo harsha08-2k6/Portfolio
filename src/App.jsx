@@ -748,7 +748,7 @@ const App = () => {
                                 <Github size={32} />
                             </div>
                             <span className="text-slate-500 text-xs uppercase tracking-[0.2em] font-bold mb-3">Code Base</span>
-                            <span className="text-slate-200 font-semibold text-lg">GitHub Repository</span>
+                            <span className="text-slate-200 font-semibold text-lg">Repository</span>
                         </a>
                     </div>
                 </motion.div>
