@@ -504,7 +504,7 @@ const App = () => {
                                             </div>
 
                                             <div className="text-center mt-2">
-                                                <div className="text-sm font-bold text-white tracking-[0.2em] uppercase font-['Outfit']">Lead Video Editor</div>
+                                                <div className="text-sm font-bold text-white tracking-[0.2em] uppercase font-['Outfit']">Video Editor</div>
                                                 <div className="flex items-center gap-1.5 justify-center mt-1">
                                                     <motion.span
                                                         animate={{ opacity: [0.3, 1, 0.3] }}
