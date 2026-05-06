@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Github, Linkedin, Mail, Download, ExternalLink, Code2, Menu, X, Terminal, Cpu, Camera } from 'lucide-react';
+import { Github, Linkedin, Mail, Download, ExternalLink, Code2, Menu, X, Terminal, Cpu, Camera, ArrowUpRight, CheckCircle2, Layers } from 'lucide-react';
 import studyPlannerImg from './assets/study_planner.png';
 import gradingSystemImg from './assets/grading_system.png';
 import todoListImg from './assets/todo_list.png';
 import masterpieceImg from './assets/masterpiece.png';
+import projectOneImg from './assets/project1.png';
 
 const App = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,6 +14,8 @@ const App = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [counter, setCounter] = useState(0);
     const [isFlipped, setIsFlipped] = useState(false);
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [activeNavTarget, setActiveNavTarget] = useState(null);
 
     useEffect(() => {
         // Handle scroll state
@@ -45,27 +48,75 @@ const App = () => {
         { name: 'Contact', href: '#contact' },
     ];
 
+    const handleNavClick = (e, href) => {
+        e.preventDefault();
+        const target = document.querySelector(href);
+
+        if (!target) return;
+
+        const targetId = href.replace('#', '');
+        setActiveNavTarget(targetId);
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        window.setTimeout(() => {
+            setActiveNavTarget(null);
+        }, 1100);
+    };
+
+    const sectionFocusMotion = (id) => (
+        activeNavTarget === id
+            ? { opacity: [0.75, 1], y: [22, 0], scale: [0.985, 1] }
+            : {}
+    );
+
     const projects = [
         {
             title: 'Study Planner',
             tech: ['React', 'Python', 'CSS'],
-            desc: 'A comprehensive personal study planning and productivity application designed to help students manage their schedules.',
+            skills: ['Dashboard UI', 'Task Planning', 'Progress Tracking', 'Responsive Design'],
+            status: 'Completed',
+            type: 'Productivity App',
+            desc: 'A productivity dashboard for students to plan schedules, track tasks, and monitor study progress in one place.',
+            highlights: ['Calendar-based study planning', 'Progress and task tracking', 'Responsive dashboard UI'],
             github: 'https://github.com/harsha08-2k6/Study-Planner.git',
+            demo: 'https://harsha08-2k6.github.io/Study-Planner/',
             img: studyPlannerImg
         },
         {
             title: 'Online Grading System',
             tech: ['React.js', 'Supabase', 'CSS'],
-            desc: 'A web-based, secure application designed to modernize and streamline the traditional process of recording student grades.',
+            skills: ['Full Stack', 'Database Design', 'Analytics UI', 'Auth-ready Flow'],
+            status: 'Full Stack',
+            type: 'Academic Platform',
+            desc: 'A secure grading platform for managing student records, assignments, grade analytics, and performance reports.',
+            highlights: ['Student grade management', 'Analytics and performance charts', 'Supabase-backed data flow'],
             github: 'https://github.com/harsha08-2k6/fsad-project.git',
+            demo: 'https://harsha08-2k6.github.io/fsad-project/',
             img: gradingSystemImg
         },
         {
             title: 'To-do List',
             tech: ['JavaScript', 'CSS'],
-            desc: 'A simple, lightweight web application built to help users manage daily tasks efficiently with MVP focus.',
+            skills: ['DOM Logic', 'Task UX', 'Local Workflow', 'Clean UI'],
+            status: 'MVP',
+            type: 'Task Manager',
+            desc: 'A lightweight task manager with priority labels, completion tracking, and a clean responsive interface.',
+            highlights: ['Fast daily task capture', 'Completion-focused workflow', 'Minimal responsive layout'],
             github: 'https://github.com/harsha08-2k6/To-Do-List.git',
+            demo: 'https://harsha08-2k6.github.io/To-Do-List/',
             img: todoListImg
+        },
+        {
+            title: 'AutoOps',
+            tech: ['React', 'Node.js', 'Docker'],
+            skills: ['DevOps Automation', 'Container Management', 'System Monitoring', 'REST APIs'],
+            status: 'Open Source',
+            type: 'DevOps Platform',
+            desc: 'A DevOps automation platform for managing containers, monitoring system performance, and automating operational workflows from one dashboard.',
+            highlights: ['Docker container monitoring', 'CPU and memory metrics', 'Automation workflows and logs'],
+            github: 'https://github.com/harsha08-2k6/AutoOps.git',
+            demo: 'https://github.com/harsha08-2k6/AutoOps',
+            img: projectOneImg
         }
     ];
 
@@ -168,12 +219,12 @@ const App = () => {
 
 
             {/* Navbar */}
-            <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center p-6 pointer-events-none">
+            <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center border-b border-white/10 bg-[#0f172a]/95 px-6 py-4 shadow-2xl shadow-slate-950/40 backdrop-blur-xl pointer-events-none">
                 <motion.div
                     initial={{ y: -100, opacity: 0 }}
                     animate={!isLoading ? { y: 0, opacity: 1 } : { y: -100, opacity: 0 }}
                     transition={{ duration: 0.8, delay: 0.8, ease: [0.33, 1, 0.68, 1] }}
-                    className={`max-w-5xl w-full flex justify-between items-center px-8 py-3 rounded-2xl transition-all duration-500 border pointer-events-auto ${scrolled ? 'bg-white/5 backdrop-blur-xl border-white/10 shadow-2xl' : 'bg-transparent border-transparent'}`}
+                    className={`max-w-5xl w-full flex justify-between items-center px-8 py-3 rounded-2xl transition-all duration-500 border pointer-events-auto ${scrolled ? 'bg-white/[0.08] border-white/15 shadow-lg shadow-sky-950/20' : 'bg-white/[0.03] border-white/10'}`}
                 >
                     <div className="text-2xl font-bold font-['Outfit'] tracking-tighter text-white">
                         SHVR<span className="text-sky-400">.</span>
@@ -184,6 +235,7 @@ const App = () => {
                             <a
                                 key={link.name}
                                 href={link.href}
+                                onClick={(e) => handleNavClick(e, link.href)}
                                 className="text-sm font-semibold text-slate-400 hover:text-white transition-all uppercase tracking-widest relative group"
                             >
                                 {link.name}
@@ -209,15 +261,18 @@ const App = () => {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="absolute top-24 left-6 right-6 bg-[#0f172a]/95 backdrop-blur-2xl rounded-3xl border border-white/10 p-8 md:hidden pointer-events-auto shadow-2xl overflow-hidden"
+                            className="absolute top-24 left-6 right-6 bg-[#0f172a]/[0.98] backdrop-blur-2xl rounded-3xl border border-white/10 p-8 md:hidden pointer-events-auto shadow-2xl overflow-hidden"
                         >
                             <div className="flex flex-col gap-6 text-center">
                                 {navLinks.map((link) => (
                                     <a
                                         key={link.name}
                                         href={link.href}
+                                        onClick={(e) => {
+                                            handleNavClick(e, link.href);
+                                            setIsMenuOpen(false);
+                                        }}
                                         className="text-lg font-bold text-slate-300 hover:text-sky-400 py-2 border-b border-white/5 transition-all"
-                                        onClick={() => setIsMenuOpen(false)}
                                     >
                                         {link.name}
                                     </a>
@@ -524,40 +579,66 @@ const App = () => {
             </section >
 
             {/* About Section */}
-            < section id="about" className="min-h-screen flex items-center py-24 px-6 bg-[#111a2e] snap-start justify-center" >
+            < section id="about" className="min-h-screen flex items-start px-6 pb-14 pt-32 bg-[#111a2e] snap-start justify-center overflow-hidden" >
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
+                    animate={sectionFocusMotion('about')}
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 0.8 }}
-                    className="max-w-7xl mx-auto"
+                    className="max-w-7xl mx-auto w-full"
                 >
-                    <h2 className="text-4xl font-bold font-['Outfit'] mb-12 relative inline-block">
-                        About Me
-                        <div className="absolute -bottom-2 left-0 w-12 h-1 bg-sky-400"></div>
-                    </h2>
-                    <div className="grid md:grid-cols-2 gap-16 items-center">
-                        <div className="text-slate-400 space-y-6 text-lg">
-                            <p>I’m Harsha, a Computer Science student at K L University who’s passionate about building practical and impactful tech solutions. I enjoy working on frontend development with React, HTML, CSS, and JavaScript, while continuously strengthening my problem-solving skills in C and core algorithms.</p>
-                            <p>I’ve worked on projects involving admin portals, approval workflows, auto-generated ID systems, and quiz platforms with analytics dashboards. Currently, I’m focused on improving my DSA foundation, refining my UI/UX thinking, and building scalable web applications. My goal is to create clean, minimal, and efficient products that solve real-world problems effectively.</p>
-                            <div className="flex flex-wrap gap-3 pt-4">
-                                {['Prompt Engineering', 'Video Editing', 'Full Stack', 'Photography', 'Open Source'].map(skill => (
-                                    <span key={skill} className="px-4 py-2 bg-sky-500/10 border border-sky-500/20 text-sky-400 rounded-full text-sm font-medium">
+                    <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                        <div className="flex flex-col items-start">
+                            <span className="mb-4 inline-flex rounded-full border border-sky-300/15 bg-sky-400/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-sky-200">
+                                Computer Science Student
+                            </span>
+                            <h2 className="text-4xl font-bold font-['Outfit'] relative inline-block">
+                                About Me
+                                <div className="absolute -bottom-2 left-0 w-12 h-1 bg-sky-400"></div>
+                            </h2>
+                        </div>
+                        <div className="text-sm font-semibold text-slate-400 md:pb-2">
+                            K L University / Frontend / DevOps
+                        </div>
+                    </div>
+                    <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+                        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-7 shadow-xl shadow-black/10">
+                            <h3 className="mb-4 text-2xl font-bold text-white">Building practical web products with clean UI and reliable logic.</h3>
+                            <div className="space-y-4 text-sm leading-7 text-slate-400">
+                                <p>I am Harsha, a Computer Science student focused on frontend development, full-stack fundamentals, and DevOps-oriented project work.</p>
+                                <p>I work with React, JavaScript, CSS, Node.js, Python, Supabase, and Docker concepts to build dashboards, productivity tools, grading systems, and automation platforms.</p>
+                            </div>
+                            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                                {[
+                                    { label: 'Focus', value: 'React Interfaces' },
+                                    { label: 'Learning', value: 'DSA + DevOps' },
+                                    { label: 'Style', value: 'Clean & Minimal' }
+                                ].map(item => (
+                                    <div key={item.label} className="rounded-xl border border-white/10 bg-slate-950/25 p-4">
+                                        <div className="mb-1 text-[11px] font-bold uppercase tracking-widest text-slate-500">{item.label}</div>
+                                        <div className="text-sm font-semibold text-slate-200">{item.value}</div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="mt-5 flex flex-wrap gap-2">
+                                {['React', 'JavaScript', 'Node.js', 'Python', 'Supabase', 'Docker', 'Open Source'].map(skill => (
+                                    <span key={skill} className="rounded-lg border border-sky-300/10 bg-sky-400/10 px-3 py-1.5 text-xs font-semibold text-sky-200">
                                         {skill}
                                     </span>
                                 ))}
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-6">
+                        <div className="grid grid-cols-2 gap-4">
                             {[
                                 { label: 'Projects', val: '10+' },
                                 { label: 'CGPA', val: '9.3' },
                                 { label: 'Contributions', val: '130+' },
                                 { label: 'Certificates', val: '10+' }
                             ].map(stat => (
-                                <div key={stat.label} className="bg-[#1e293b]/50 p-6 rounded-2xl border border-white/5 text-center transition-transform hover:-translate-y-2">
-                                    <div className="text-3xl font-bold text-sky-400 mb-1">{stat.val}</div>
-                                    <div className="text-sm text-slate-500">{stat.label}</div>
+                                <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 shadow-xl shadow-black/10 transition-all duration-300 hover:-translate-y-1 hover:border-sky-300/30">
+                                    <div className="mb-2 text-3xl font-bold text-sky-400">{stat.val}</div>
+                                    <div className="text-xs font-semibold uppercase tracking-widest text-slate-500">{stat.label}</div>
                                 </div>
                             ))}
                         </div>
@@ -566,38 +647,65 @@ const App = () => {
             </section >
 
             {/* Projects */}
-            < section id="projects" className="min-h-screen flex items-center py-24 px-6 snap-start justify-center" >
+            < section id="projects" className="min-h-screen flex items-start px-6 pb-20 pt-32 snap-start justify-center" >
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
+                    animate={sectionFocusMotion('projects')}
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 0.8 }}
                     className="max-w-7xl mx-auto"
                 >
-                    <h2 className="text-4xl font-bold font-['Outfit'] mb-16 relative inline-block">
-                        Featured Projects
-                        <div className="absolute -bottom-2 left-0 w-12 h-1 bg-sky-400"></div>
-                    </h2>
-                    <div className="grid md:grid-cols-3 gap-8">
+                    <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                        <div>
+                            <h2 className="text-4xl font-bold font-['Outfit'] relative inline-block">
+                                Featured Projects
+                                <div className="absolute -bottom-2 left-0 w-12 h-1 bg-sky-400"></div>
+                            </h2>
+                        </div>
+                        <div className="rounded-2xl border border-sky-300/15 bg-sky-400/10 px-5 py-3 text-sm font-semibold text-sky-200">
+                            {projects.length} Projects
+                        </div>
+                    </div>
+                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {projects.map((p, i) => (
                             <motion.div
                                 key={i}
-                                whileHover={{ y: -10 }}
-                                className="bg-[#1e293b]/30 border border-white/5 rounded-2xl overflow-hidden group"
+                                role="button"
+                                tabIndex={0}
+                                onClick={() => setSelectedProject(p)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        setSelectedProject(p);
+                                    }
+                                }}
+                                whileHover={{ y: -8 }}
+                                transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+                                className="cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-[#1e293b]/35 shadow-xl shadow-black/10 outline-none transition-colors duration-300 group hover:border-sky-400/60 hover:bg-[#1e293b]/60 hover:shadow-sky-500/10 focus-visible:border-sky-300"
                             >
-                                <div className="h-48 overflow-hidden relative">
-                                    <img src={p.img} alt={p.title} className="w-full h-full object-cover transition-all duration-500" />
-                                    <div className="absolute inset-0 bg-sky-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                <div className="h-36 overflow-hidden relative bg-slate-900">
+                                    <img src={p.img} alt={p.title} className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/5 to-transparent"></div>
+                                    <span className="absolute top-4 right-4 inline-flex items-center gap-1.5 rounded-full border border-sky-300/30 bg-slate-950/75 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-sky-200 backdrop-blur-md">
+                                        <CheckCircle2 size={13} /> {p.status}
+                                    </span>
+                                    <span className="absolute bottom-4 left-4 text-xs font-semibold uppercase tracking-widest text-sky-200">
+                                        {p.type}
+                                    </span>
                                 </div>
-                                <div className="p-8">
-                                    <div className="flex gap-2 mb-4">
-                                        {p.tech.map(t => <span key={t} className="text-[10px] uppercase tracking-widest text-slate-500 bg-white/5 px-2 py-1 rounded">{t}</span>)}
+                                <div className="flex min-h-[210px] flex-col p-5">
+                                    <h3 className="mb-3 text-lg font-bold text-white">{p.title}</h3>
+                                    <p className="mb-4 h-12 overflow-hidden text-sm leading-6 text-slate-400">{p.desc}</p>
+                                    <div className="mb-5 flex flex-wrap gap-2">
+                                        {p.tech.slice(0, 3).map(t => <span key={t} className="rounded-md border border-sky-300/10 bg-sky-400/10 px-2.5 py-1 text-[10px] uppercase tracking-widest text-sky-200">{t}</span>)}
                                     </div>
-                                    <h3 className="text-xl font-bold mb-4">{p.title}</h3>
-                                    <p className="text-sm text-slate-400 mb-6">{p.desc}</p>
-                                    <a href={p.github} target="_blank" className="inline-flex items-center gap-2 text-sky-400 font-bold hover:underline">
-                                        <Github size={18} /> GitHub
-                                    </a>
+                                    <div className="mt-auto flex items-center justify-between border-t border-white/10 pt-4">
+                                        <span className="text-xs font-semibold text-slate-400">{p.skills[0]}</span>
+                                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-sky-400 text-slate-950 transition-transform group-hover:translate-x-1">
+                                            <ArrowUpRight size={18} />
+                                        </span>
+                                    </div>
                                 </div>
                             </motion.div>
                         ))}
@@ -605,156 +713,253 @@ const App = () => {
                 </motion.div>
             </section >
 
+            <AnimatePresence>
+                {selectedProject && (
+                    <motion.div
+                        className="fixed inset-0 z-[90] flex items-center justify-center overflow-y-auto bg-slate-950/80 px-6 py-10 backdrop-blur-sm"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSelectedProject(null)}
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, y: 30, scale: 0.96 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 20, scale: 0.96 }}
+                            transition={{ duration: 0.25 }}
+                            className="relative w-full max-w-5xl overflow-hidden rounded-2xl border border-white/10 bg-[#111c31] shadow-2xl shadow-black/30"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <button
+                                type="button"
+                                aria-label="Close project details"
+                                onClick={() => setSelectedProject(null)}
+                                className="absolute right-4 top-4 z-10 rounded-full border border-white/10 bg-slate-950/70 p-2 text-slate-300 backdrop-blur-md transition-colors hover:border-sky-400/50 hover:text-white"
+                            >
+                                <X size={18} />
+                            </button>
+                            <div className="grid lg:grid-cols-[1.05fr_1fr]">
+                                <div className="relative min-h-[260px] bg-slate-950">
+                                    <img src={selectedProject.img} alt={selectedProject.title} className="h-full min-h-[260px] w-full object-cover object-top" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/20 to-transparent"></div>
+                                    <div className="absolute bottom-6 left-6 right-6">
+                                        <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-sky-300/25 bg-slate-950/70 px-3 py-1 text-xs font-bold uppercase tracking-wider text-sky-200 backdrop-blur-md">
+                                            <Layers size={14} /> {selectedProject.type}
+                                        </span>
+                                        <h3 className="font-['Outfit'] text-3xl font-bold text-white md:text-4xl">{selectedProject.title}</h3>
+                                    </div>
+                                </div>
+                                <div className="p-7 md:p-8">
+                                    <div className="mb-5 flex flex-wrap items-center gap-3 pr-10">
+                                        <span className="inline-flex items-center gap-2 rounded-full bg-sky-400/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-sky-200">
+                                            <CheckCircle2 size={14} /> {selectedProject.status}
+                                        </span>
+                                        {selectedProject.tech.map(t => (
+                                            <span key={t} className="rounded bg-white/5 px-2.5 py-1 text-[11px] uppercase tracking-widest text-slate-300">{t}</span>
+                                        ))}
+                                    </div>
+                                    <p className="mb-6 leading-7 text-slate-300">{selectedProject.desc}</p>
+
+                                    <div className="mb-6">
+                                        <h4 className="mb-3 text-sm font-bold uppercase tracking-widest text-slate-500">Skills Used</h4>
+                                        <div className="flex flex-wrap gap-2">
+                                            {selectedProject.skills.map(skill => (
+                                                <span key={skill} className="rounded-lg border border-emerald-300/10 bg-emerald-400/10 px-3 py-1.5 text-xs font-semibold text-emerald-200">
+                                                    {skill}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="mb-7 grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+                                        {selectedProject.highlights.map(item => (
+                                            <div key={item} className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm leading-6 text-slate-300">
+                                                {item}
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="flex flex-wrap gap-3">
+                                        <a href={selectedProject.demo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-lg bg-sky-400 px-4 py-2 text-sm font-bold text-slate-950 transition-colors hover:bg-sky-300">
+                                            <ExternalLink size={16} /> View Project
+                                        </a>
+                                        <a href={selectedProject.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-sm font-bold text-sky-300 transition-colors hover:border-sky-400/50 hover:bg-sky-400/10">
+                                            <Github size={16} /> GitHub
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             {/* Skills Section */}
-            < section id="skills" className="min-h-screen flex items-center py-24 px-6 bg-[#0f172a] snap-start justify-center" >
+            < section id="skills" className="min-h-screen flex items-start px-6 pb-16 pt-32 bg-[#0f172a] snap-start justify-center" >
                 <motion.div
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
+                    animate={sectionFocusMotion('skills')}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8 }}
                     className="max-w-7xl mx-auto w-full"
                 >
-                    <h2 className="text-4xl font-bold font-['Outfit'] mb-16 relative inline-block text-white">
-                        Technical Skills
-                        <div className="absolute -bottom-2 left-0 w-12 h-1 bg-sky-400"></div>
-                    </h2>
-
-                    <div className="grid md:grid-cols-3 gap-8">
-                        {/* Creative Arts */}
-                        <div className="p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-sky-500/30 transition-all duration-500">
-                            <h3 className="text-xl font-bold mb-8 flex items-center gap-3 text-sky-400">
-                                <Camera size={24} /> Creative Arts
-                            </h3>
-                            <div className="space-y-6">
-                                {[
-                                    { name: 'Video Editing', level: 95 },
-                                    { name: 'Photography', level: 80 },
-                                    { name: 'Creative Direction', level: 60 }
-                                ].map(skill => (
-                                    <div key={skill.name}>
-                                        <div className="flex justify-between mb-2">
-                                            <span className="text-sm font-medium text-slate-300">{skill.name}</span>
-                                            <span className="text-sm text-sky-400 font-mono">{skill.level}%</span>
-                                        </div>
-                                        <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                whileInView={{ width: `${skill.level}%` }}
-                                                viewport={{ once: true }}
-                                                transition={{ duration: 1, delay: 0.2 }}
-                                                className="h-full bg-gradient-to-r from-sky-600 to-sky-400"
-                                            />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                    <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                        <div>
+                            <h2 className="text-4xl font-bold font-['Outfit'] relative inline-block text-white">
+                                Technical Skills
+                                <div className="absolute -bottom-2 left-0 w-12 h-1 bg-sky-400"></div>
+                            </h2>
                         </div>
-
-                        {/* Frontend */}
-                        <div className="p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-indigo-500/30 transition-all duration-500">
-                            <h3 className="text-xl font-bold mb-8 flex items-center gap-3 text-indigo-400">
-                                <Code2 size={24} /> Frontend
-                            </h3>
-                            <div className="space-y-6">
-                                {[
-                                    { name: 'React / Next.js', level: 92 },
-                                    { name: 'HTML/CSS', level: 95 },
-                                    { name: 'UI/UX Design', level: 85 }
-                                ].map(skill => (
-                                    <div key={skill.name}>
-                                        <div className="flex justify-between mb-2">
-                                            <span className="text-sm font-medium text-slate-300">{skill.name}</span>
-                                            <span className="text-sm text-indigo-400 font-mono">{skill.level}%</span>
-                                        </div>
-                                        <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                whileInView={{ width: `${skill.level}%` }}
-                                                viewport={{ once: true }}
-                                                transition={{ duration: 1, delay: 0.2 }}
-                                                className="h-full bg-gradient-to-r from-indigo-600 to-indigo-400"
-                                            />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                        <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-slate-300">
+                            React / Node / Docker / UI/UX
                         </div>
+                    </div>
 
-                        {/* Backend */}
-                        <div className="p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-emerald-500/30 transition-all duration-500">
-                            <h3 className="text-xl font-bold mb-8 flex items-center gap-3 text-emerald-400">
-                                <Terminal size={24} /> Backend
-                            </h3>
-                            <div className="space-y-6">
-                                {[
-                                    { name: 'Python / Backend', level: 88 },
-                                    { name: 'Node.js / Express', level: 85 },
-                                    { name: 'SQL / Databases', level: 82 }
-                                ].map(skill => (
-                                    <div key={skill.name}>
-                                        <div className="flex justify-between mb-2">
-                                            <span className="text-sm font-medium text-slate-300">{skill.name}</span>
-                                            <span className="text-sm text-emerald-400 font-mono">{skill.level}%</span>
+                    <div className="grid gap-5 lg:grid-cols-4">
+                        {[
+                            {
+                                title: 'Frontend Engineering',
+                                icon: <Code2 size={22} />,
+                                accent: 'text-sky-300',
+                                desc: 'Building responsive, accessible interfaces with strong layout discipline and smooth interactions.',
+                                tools: ['React', 'JavaScript', 'HTML', 'CSS', 'Tailwind'],
+                                strengths: ['Component UI', 'Responsive Layouts', 'Framer Motion']
+                            },
+                            {
+                                title: 'Backend & APIs',
+                                icon: <Terminal size={22} />,
+                                accent: 'text-emerald-300',
+                                desc: 'Designing API-driven features, database-backed flows, and clean server-side logic.',
+                                tools: ['Node.js', 'Express', 'Python', 'SQL', 'Supabase'],
+                                strengths: ['REST APIs', 'Database Logic', 'Auth-ready Flows']
+                            },
+                            {
+                                title: 'DevOps Foundations',
+                                icon: <Cpu size={22} />,
+                                accent: 'text-indigo-300',
+                                desc: 'Working with automation, containers, monitoring concepts, and deployment-focused workflows.',
+                                tools: ['Docker', 'Git', 'GitHub', 'Vite', 'Linux'],
+                                strengths: ['Container Basics', 'Automation', 'Monitoring']
+                            },
+                            {
+                                title: 'Creative Systems',
+                                icon: <Camera size={22} />,
+                                accent: 'text-rose-300',
+                                desc: 'Creating visual content and presentation systems that make technical work easier to understand.',
+                                tools: ['Video Editing', 'Photography', 'Storytelling', 'Branding'],
+                                strengths: ['Visual Polish', 'Content Flow', 'Creative Direction']
+                            }
+                        ].map((group) => (
+                            <div key={group.title} className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-xl shadow-black/10 transition-all duration-300 hover:-translate-y-1 hover:border-sky-300/30 hover:bg-white/[0.06]">
+                                <div className={`mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-slate-950/40 ${group.accent}`}>
+                                    {group.icon}
+                                </div>
+                                <h3 className="mb-3 text-lg font-bold text-white">{group.title}</h3>
+                                <p className="mb-5 min-h-[72px] text-sm leading-6 text-slate-400">{group.desc}</p>
+                                <div className="mb-5 flex flex-wrap gap-2">
+                                    {group.tools.map(tool => (
+                                        <span key={tool} className="rounded-md border border-white/10 bg-slate-950/30 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-slate-300">
+                                            {tool}
+                                        </span>
+                                    ))}
+                                </div>
+                                <div className="space-y-2 border-t border-white/10 pt-4">
+                                    {group.strengths.map(strength => (
+                                        <div key={strength} className="flex items-center gap-2 text-xs font-medium text-slate-400">
+                                            <span className="h-1.5 w-1.5 rounded-full bg-sky-400"></span>
+                                            {strength}
                                         </div>
-                                        <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                whileInView={{ width: `${skill.level}%` }}
-                                                viewport={{ once: true }}
-                                                transition={{ duration: 1, delay: 0.2 }}
-                                                className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400"
-                                            />
-                                        </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        ))}
                     </div>
                 </motion.div>
             </section >
 
             {/* Contact */}
-            < section id="contact" className="min-h-screen flex items-center py-24 px-6 bg-[#111a2e] snap-start justify-center flex-col" >
+            < section id="contact" className="min-h-screen flex items-start px-6 pb-16 pt-32 bg-[#111a2e] snap-start justify-start flex-col" >
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
+                    animate={sectionFocusMotion('contact')}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
-                    className="max-w-6xl mx-auto text-center w-full"
+                    className="max-w-6xl mx-auto w-full"
                 >
-                    <h2 className="text-4xl font-bold font-['Outfit'] mb-4">Let's Connect</h2>
-                    <p className="text-slate-400 mb-16 max-w-lg mx-auto">Currently open to new opportunities and interesting projects.</p>
+                    <div className="mb-10 grid gap-8 lg:grid-cols-[1fr_0.95fr] lg:items-end">
+                        <div>
+                            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-300/20 bg-emerald-400/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-200">
+                                <span className="h-2 w-2 rounded-full bg-emerald-400"></span>
+                                Available for opportunities
+                            </span>
+                            <h2 className="text-4xl font-bold font-['Outfit'] mb-4">Let's Build Something Useful</h2>
+                            <p className="max-w-2xl text-sm leading-6 text-slate-400">
+                                I am open to internships, open-source collaboration, frontend roles, and practical full-stack projects where clean UI and reliable engineering both matter.
+                            </p>
+                        </div>
+                        <div className="grid gap-3 sm:grid-cols-2">
+                            {[
+                                { label: 'Best Fit', value: 'Frontend / Full Stack' },
+                                { label: 'Response', value: 'Usually within 24h' },
+                                { label: 'Focus', value: 'React, APIs, DevOps' },
+                                { label: 'Location', value: 'India / Remote' }
+                            ].map(item => (
+                                <div key={item.label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                                    <div className="mb-1 text-[11px] font-bold uppercase tracking-widest text-slate-500">{item.label}</div>
+                                    <div className="text-sm font-semibold text-slate-200">{item.value}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+                    <div className="grid grid-cols-1 gap-5 px-0 md:grid-cols-3">
                         {/* Email Card */}
                         <a href="mailto:tsivaharshavardhanreddy08@gmail.com"
-                            className="group p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-sky-500/50 hover:bg-sky-500/5 transition-all duration-500 flex flex-col items-center">
-                            <div className="w-16 h-16 bg-sky-500/10 rounded-2xl flex items-center justify-center text-sky-400 mb-6 group-hover:bg-sky-500 group-hover:text-white transition-all duration-500">
-                                <Mail size={32} />
+                            className="group p-7 rounded-2xl bg-white/5 border border-white/10 hover:border-sky-500/50 hover:bg-sky-500/5 transition-all duration-500 flex flex-col items-start text-left shadow-xl shadow-black/10">
+                            <div className="mb-8 flex w-full items-center justify-between">
+                                <div className="w-14 h-14 bg-sky-500/10 rounded-2xl flex items-center justify-center text-sky-400 group-hover:bg-sky-500 group-hover:text-white transition-all duration-500">
+                                    <Mail size={28} />
+                                </div>
+                                <ArrowUpRight className="text-slate-500 transition-colors group-hover:text-sky-300" size={20} />
                             </div>
-                            <span className="text-slate-500 text-xs uppercase tracking-[0.2em] font-bold mb-3">Email Address</span>
-                            <span className="text-slate-200 font-semibold text-sm break-all">tsivaharshavardhanreddy08@gmail.com</span>
+                            <span className="text-slate-500 text-xs uppercase tracking-[0.2em] font-bold mb-3">Primary Contact</span>
+                            <span className="mb-2 text-slate-200 font-semibold text-lg">Email Me</span>
+                            <span className="text-sm text-slate-400 break-all">tsivaharshavardhanreddy08@gmail.com</span>
                         </a>
 
                         {/* LinkedIn Card */}
-                        <a href="https://linkedin.com/in/siva-harsha-vardhan-reddy" target="_blank"
-                            className="group p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-sky-500/50 hover:bg-sky-500/5 transition-all duration-500 flex flex-col items-center">
-                            <div className="w-16 h-16 bg-sky-500/10 rounded-2xl flex items-center justify-center text-sky-400 mb-6 group-hover:bg-sky-500 group-hover:text-white transition-all duration-500">
-                                <Linkedin size={32} />
+                        <a href="https://linkedin.com/in/siva-harsha-vardhan-reddy" target="_blank" rel="noreferrer"
+                            className="group p-7 rounded-2xl bg-white/5 border border-white/10 hover:border-sky-500/50 hover:bg-sky-500/5 transition-all duration-500 flex flex-col items-start text-left shadow-xl shadow-black/10">
+                            <div className="mb-8 flex w-full items-center justify-between">
+                                <div className="w-14 h-14 bg-sky-500/10 rounded-2xl flex items-center justify-center text-sky-400 group-hover:bg-sky-500 group-hover:text-white transition-all duration-500">
+                                    <Linkedin size={28} />
+                                </div>
+                                <ArrowUpRight className="text-slate-500 transition-colors group-hover:text-sky-300" size={20} />
                             </div>
-                            <span className="text-slate-500 text-xs uppercase tracking-[0.2em] font-bold mb-3">Professional</span>
-                            <span className="text-slate-200 font-semibold text-lg">LinkedIn Profile</span>
+                            <span className="text-slate-500 text-xs uppercase tracking-[0.2em] font-bold mb-3">Professional Network</span>
+                            <span className="mb-2 text-slate-200 font-semibold text-lg">LinkedIn Profile</span>
+                            <span className="text-sm text-slate-400">Connect for roles, collaborations, and updates.</span>
                         </a>
 
                         {/* GitHub Card */}
-                        <a href="https://github.com/harsha08-2k6" target="_blank"
-                            className="group p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-sky-500/50 hover:bg-sky-500/5 transition-all duration-500 flex flex-col items-center">
-                            <div className="w-16 h-16 bg-sky-500/10 rounded-2xl flex items-center justify-center text-sky-400 mb-6 group-hover:bg-sky-500 group-hover:text-white transition-all duration-500">
-                                <Github size={32} />
+                        <a href="https://github.com/harsha08-2k6" target="_blank" rel="noreferrer"
+                            className="group p-7 rounded-2xl bg-white/5 border border-white/10 hover:border-sky-500/50 hover:bg-sky-500/5 transition-all duration-500 flex flex-col items-start text-left shadow-xl shadow-black/10">
+                            <div className="mb-8 flex w-full items-center justify-between">
+                                <div className="w-14 h-14 bg-sky-500/10 rounded-2xl flex items-center justify-center text-sky-400 group-hover:bg-sky-500 group-hover:text-white transition-all duration-500">
+                                    <Github size={28} />
+                                </div>
+                                <ArrowUpRight className="text-slate-500 transition-colors group-hover:text-sky-300" size={20} />
                             </div>
-                            <span className="text-slate-500 text-xs uppercase tracking-[0.2em] font-bold mb-3">Code Base</span>
-                            <span className="text-slate-200 font-semibold text-lg">GitHub</span>
+                            <span className="text-slate-500 text-xs uppercase tracking-[0.2em] font-bold mb-3">Open Source</span>
+                            <span className="mb-2 text-slate-200 font-semibold text-lg">GitHub Projects</span>
+                            <span className="text-sm text-slate-400">View repositories, experiments, and project progress.</span>
                         </a>
+                    </div>
+
+                    <div className="mt-5 rounded-2xl border border-sky-300/15 bg-sky-400/10 p-5 text-sm leading-6 text-sky-100">
+                        Looking for a focused contributor who can design clean screens, build React interfaces, connect APIs, and document work clearly.
                     </div>
                 </motion.div>
             </section >
