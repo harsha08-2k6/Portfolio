@@ -72,8 +72,9 @@ export default function WhatsAppFloat() {
 
         {/* GitHub Option */}
         <a 
-          href="#" 
-          onClick={(e) => e.preventDefault()} 
+          href="https://github.com/harsha08-2k6/Portfolio" 
+          target="_blank" 
+          rel="noreferrer"
           className="wa-menu-item wa-github"
           data-cursor="expand"
         >
