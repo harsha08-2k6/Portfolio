@@ -9,7 +9,6 @@ export default function WhatsAppFloat() {
       <button 
         onClick={() => setIsOpen(!isOpen)} 
         className="wa-toggle-btn"
-        data-cursor="expand"
         aria-label="Toggle floating menu"
       >
         {!isOpen ? (
@@ -53,7 +52,6 @@ export default function WhatsAppFloat() {
           target="_blank" 
           rel="noreferrer" 
           className="wa-menu-item wa-whatsapp"
-          data-cursor="expand"
         >
           <span className="wa-item-text">Get connected with us</span>
           <svg 
@@ -76,7 +74,6 @@ export default function WhatsAppFloat() {
           target="_blank" 
           rel="noreferrer"
           className="wa-menu-item wa-github"
-          data-cursor="expand"
         >
           <span className="wa-item-text">GitHub Repository</span>
           <svg 

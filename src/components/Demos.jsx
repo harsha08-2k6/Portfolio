@@ -63,7 +63,6 @@ function VideoCard({ videoUrl }) {
             className="video-volume-btn" 
             onClick={toggleMute}
             aria-label={isMuted ? "Unmute video" : "Mute video"}
-            data-cursor="expand"
           >
             {isMuted ? (
               // Muted Icon

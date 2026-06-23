@@ -590,7 +590,7 @@ in .hero-meta {
 
 .badge-tl {
   top: 20%;
-  left: -30%;
+  left: -12%;
   animation-delay: 0s;
 }
 
@@ -604,6 +604,12 @@ in .hero-meta {
   top: 5%;
   right: -20%;
   animation-delay: .8s;
+}
+
+.badge-bl {
+  bottom: 25%;
+  left: -10%;
+  animation-delay: 2.2s;
 }
 
 @keyframes badge-float {
@@ -2059,6 +2065,10 @@ footer {
 
   .badge-tr {
     right: 0;
+  }
+
+  .badge-bl {
+    left: -5%;
   }
 
   .hero-meta,

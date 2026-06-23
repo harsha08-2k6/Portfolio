@@ -24,6 +24,7 @@ export default function Hero() {
             <div className="badge badge-tl"><span>Full Stack Dev</span></div>
             <div className="badge badge-br"><span>Cybersecurity</span></div>
             <div className="badge badge-tr"><span className="badge-dot" /><span>Available for work</span></div>
+            <div className="badge badge-bl"><span>Editing</span></div>
           </div>
         </div>
 
