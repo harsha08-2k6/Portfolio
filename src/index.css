@@ -360,6 +360,7 @@ nav {
   justify-content: center;
   height: 60%;
   align-self: center;
+  margin-left: -3rem;
 }
 
 .hero-left-top {
@@ -2037,6 +2038,7 @@ footer {
     height: auto;
     width: 100%;
     align-items: center;
+    margin-left: -15;
   }
 
   .hero-left {
