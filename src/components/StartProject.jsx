@@ -6,6 +6,8 @@ export default function StartProject({ setShowStartProject, navigateToSection })
     email: '',
     description: ''
   })
+  const [toast, setToast] = useState(null)
+  const [showToastClass, setShowToastClass] = useState(false)
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
@@ -16,14 +18,56 @@ export default function StartProject({ setShowStartProject, navigateToSection })
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
+  const triggerToast = (message, type = 'success') => {
+    setToast({ message, type })
+    setTimeout(() => {
+      setShowToastClass(true)
+    }, 10)
+    
+    // Auto dismiss after 4 seconds
+    const timer = setTimeout(() => {
+      setShowToastClass(false)
+      setTimeout(() => {
+        setToast(null)
+      }, 400)
+    }, 4000)
+
+    return () => clearTimeout(timer)
+  }
+
+  const closeToast = () => {
+    setShowToastClass(false)
+    setTimeout(() => {
+      setToast(null)
+    }, 400)
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!formData.name || !formData.email || !formData.description) {
-      alert('Please fill in all fields.')
+      triggerToast('Please fill in all fields.', 'error')
       return
     }
-    alert(`Thank you ${formData.name}! Your message has been sent. I will get back to you soon.`)
-    setFormData({ name: '', email: '', description: '' })
+
+    const encode = (data) => {
+      return Object.keys(data)
+        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+        .join('&')
+    }
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encode({ 'form-name': 'contact', ...formData })
+    })
+    .then(() => {
+      triggerToast(`Thank you ${formData.name}! Your message has been sent. I will get back to you soon.`, 'success')
+      setFormData({ name: '', email: '', description: '' })
+    })
+    .catch((error) => {
+      console.error(error)
+      triggerToast('Something went wrong. Please try again.', 'error')
+    })
   }
 
   return (
@@ -109,7 +153,14 @@ export default function StartProject({ setShowStartProject, navigateToSection })
 
           {/* Right Column (Form) */}
           <div className="start-project-right">
-            <form onSubmit={handleSubmit} className="start-project-form">
+            <form 
+              name="contact" 
+              method="POST" 
+              data-netlify="true" 
+              onSubmit={handleSubmit} 
+              className="start-project-form"
+            >
+              <input type="hidden" name="form-name" value="contact" />
               <div className="form-group">
                 <label>Name<span>*</span></label>
                 <input 
@@ -152,6 +203,32 @@ export default function StartProject({ setShowStartProject, navigateToSection })
           </div>
         </div>
       </div>
+
+      {toast && (
+        <div className={`custom-toast ${toast.type} ${showToastClass ? 'reveal-toast' : ''}`}>
+          <div className="toast-content">
+            {toast.type === 'success' ? (
+              <svg className="toast-icon success" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            ) : toast.type === 'error' ? (
+              <svg className="toast-icon error" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            ) : (
+              <svg className="toast-icon info" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+            )}
+            <span className="toast-message">{toast.message}</span>
+          </div>
+          <button className="toast-close" onClick={closeToast}>×</button>
+        </div>
+      )}
     </div>
   )
 }

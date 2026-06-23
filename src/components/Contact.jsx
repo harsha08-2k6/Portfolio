@@ -51,7 +51,7 @@ function MagneticButton({ children, className, href, onClick, ...props }) {
   )
 }
 
-export default function Contact({ navigateToSection, setShowStartProject }) {
+export default function Contact({ navigateToSection, setShowStartProject, setShowDoc }) {
   return (
     <section className="contact" id="contact">
       <div className="section-inner">
@@ -170,8 +170,8 @@ export default function Contact({ navigateToSection, setShowStartProject }) {
         <div className="footer-bottom-bar">
           <div className="footer-bottom-links">
             <a href="#404" onClick={e => e.preventDefault()}>404</a>
-            <a href="#privacy" onClick={e => e.preventDefault()}>PRIVACY POLICY</a>
-            <a href="#terms" onClick={e => e.preventDefault()}>TERM & CONDITION</a>
+            <a href="#privacy" onClick={e => { e.preventDefault(); setShowDoc('privacy'); }}>PRIVACY POLICY</a>
+            <a href="#terms" onClick={e => { e.preventDefault(); setShowDoc('terms'); }}>TERM & CONDITION</a>
           </div>
         </div>
       </div>

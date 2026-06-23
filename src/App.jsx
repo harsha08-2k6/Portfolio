@@ -10,6 +10,7 @@ import Footer from './components/Footer'
 import ProjectDetails from './components/ProjectDetails'
 import AllProjects from './components/AllProjects'
 import StartProject from './components/StartProject'
+import InfoDocument from './components/InfoDocument'
 import useScrollReveal from './hooks/useScrollReveal'
 import WhatsAppFloat from './components/WhatsAppFloat'
 
@@ -17,12 +18,14 @@ export default function App() {
   const [activeProjectId, setActiveProjectId] = useState(null)
   const [showAllProjects, setShowAllProjects] = useState(false)
   const [showStartProject, setShowStartProject] = useState(false)
+  const [showDoc, setShowDoc] = useState(null)
   useScrollReveal()
 
   const navigateToSection = (id) => {
     setActiveProjectId(null)
     setShowAllProjects(false)
     setShowStartProject(false)
+    setShowDoc(null)
     setTimeout(() => {
       const element = document.getElementById(id)
       if (element) {
@@ -39,7 +42,15 @@ export default function App() {
       <WhatsAppFloat />
       <Navbar navigateToSection={navigateToSection} />
       
-      {activeProjectId !== null ? (
+      {showDoc !== null ? (
+        <>
+          <InfoDocument 
+            type={showDoc} 
+            onClose={() => setShowDoc(null)} 
+          />
+          <Footer />
+        </>
+      ) : activeProjectId !== null ? (
         <>
           <ProjectDetails 
             projectId={activeProjectId} 
@@ -78,6 +89,7 @@ export default function App() {
           <Contact 
             navigateToSection={navigateToSection} 
             setShowStartProject={setShowStartProject}
+            setShowDoc={setShowDoc}
           />
         </>
       )}

@@ -5,12 +5,38 @@ import { ProjectCard } from './Projects'
 export default function ProjectDetails({ projectId, setActiveProjectId, navigateToSection, showAllProjects }) {
   const currentProject = projectsData.find(p => p.id === projectId)
   const [imgFailed, setImgFailed] = useState(false)
+  const [toast, setToast] = useState(null)
+  const [showToastClass, setShowToastClass] = useState(false)
 
   // Scroll to top whenever the selected project changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
     setImgFailed(false)
   }, [projectId])
+
+  const triggerToast = (message, type = 'success') => {
+    setToast({ message, type })
+    setTimeout(() => {
+      setShowToastClass(true)
+    }, 10)
+    
+    // Auto dismiss after 4 seconds
+    const timer = setTimeout(() => {
+      setShowToastClass(false)
+      setTimeout(() => {
+        setToast(null)
+      }, 400)
+    }, 4000)
+
+    return () => clearTimeout(timer)
+  }
+
+  const closeToast = () => {
+    setShowToastClass(false)
+    setTimeout(() => {
+      setToast(null)
+    }, 400)
+  }
 
   if (!currentProject) {
     return (
@@ -61,7 +87,7 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
                 onClick={e => {
                   if (currentProject.liveLink === '#') {
                     e.preventDefault()
-                    alert('Live preview will be available soon!')
+                    triggerToast('Live preview will be available soon!', 'info')
                   }
                 }}
               >
@@ -196,6 +222,32 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
           </div>
         </div>
       </div>
+
+      {toast && (
+        <div className={`custom-toast ${toast.type} ${showToastClass ? 'reveal-toast' : ''}`}>
+          <div className="toast-content">
+            {toast.type === 'success' ? (
+              <svg className="toast-icon success" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            ) : toast.type === 'error' ? (
+              <svg className="toast-icon error" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            ) : (
+              <svg className="toast-icon info" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+            )}
+            <span className="toast-message">{toast.message}</span>
+          </div>
+          <button className="toast-close" onClick={closeToast}>×</button>
+        </div>
+      )}
     </div>
   )
 }
