@@ -2,6 +2,7 @@ import kledgeImg from '../assets/kledge.png'
 import luminImg from '../assets/lumin.png'
 import nubuiltImg from '../assets/nubuilt.png'
 import orbitImg from '../assets/orbit.png'
+import autoopsImg from '../assets/autoops.png'
 
 export const projectsData = [
   {
@@ -66,6 +67,81 @@ export const projectsData = [
       {
         challenge: 'Handling student login validation securely without server storage',
         solution: 'Configured local storage session persistence so credentials stay exclusively on the student browser'
+      }
+    ]
+  },
+  {
+    id: 'auto-ops',
+    title: 'AutoOps',
+    tagline: 'DevOps automation platform to simplify container management, system monitoring, and workflows.',
+    description: 'DevOps automation platform designed to simplify infrastructure management, monitoring, and workflows.',
+    image: autoopsImg,
+    imageAspectRatio: '16:10',
+    imageResolution: '2560x1600',
+    tech: ['React.js', 'Node.js', 'Express', 'Docker'],
+    client: 'Internal DevOps & Engineering Teams',
+    industry: 'DevOps / Infrastructure Automation',
+    timeline: '6 Weeks',
+    technologies: 'React.js, Node.js, Express, Docker API, System Metrics APIs, CSS3',
+    liveLink: 'https://github.com/harsha08-2k6/AutoOps',
+    overview: 'AutoOps is a DevOps-focused automation platform designed to simplify infrastructure management, monitoring, and deployment workflows. It integrates container orchestration, live performance tracking, script execution pipelines, and centralized logs into a unified, user-friendly control center. It helps developers and engineers reduce manual overhead and improve pipeline efficiency.',
+    role: [
+      'Architected and built the centralized dashboard using React',
+      'Engineered backend APIs in Node.js/Express to query and stream Docker container and system resource metrics',
+      'Developed shell execution handlers with parameter sanitization for automated script tasks'
+    ],
+    techStack: [
+      { label: 'Frontend', value: 'React.js, HTML5, CSS3, Vite' },
+      { label: 'Backend', value: 'Node.js, Express' },
+      { label: 'Containerization', value: 'Docker API / Docker SDK' },
+      { label: 'Monitoring', value: 'System Metrics APIs' }
+    ],
+    features: [
+      'Container Management: Monitor and manage Docker containers, start/stop/restart services, and inspect health status',
+      'System Monitoring: Real-time telemetry tracking CPU, Memory, disk, and network resource usage metrics',
+      'Automation Engine: Execute scripts and predefined workflows to reduce repetitive tasks',
+      'Centralized Logs & Debugging: Direct access to container standard output and error logs for rapid system diagnosis'
+    ],
+    structure: `AutoOps/
+│
+├── backend/
+│   ├── config/
+│   ├── controllers/
+│   │   ├── containerController.js
+│   │   ├── metricsController.js
+│   │   └── workflowController.js
+│   ├── routes/
+│   ├── services/
+│   │   ├── dockerService.js
+│   │   └── monitorService.js
+│   ├── package.json
+│   └── server.js
+│
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── ContainerManager.jsx
+│   │   │   ├── MetricsDashboard.jsx
+│   │   │   └── WorkflowEngine.jsx
+│   │   ├── pages/
+│   │   ├── hooks/
+│   │   └── App.jsx
+│   └── package.json
+│
+└── Dockerfile`,
+    structureBullets: [
+      'Clean monolithic Express backend executing shell workflows and direct container API hooks',
+      'Modular client-side React views rendering status monitors and shell consoles'
+    ],
+    challenges: [
+      {
+        challenge: 'Securing the execution of dynamic workflows and scripts against command-injection exploits',
+        solution: 'Implemented strict tokenized parameters, command-level validation, and isolated non-root execution rules.'
+      },
+      {
+        challenge: 'Handling real-time high-throughput Docker container log streams without clogging main event loops',
+        solution: 'Integrated lightweight Server-Sent Events (SSE) combined with throttle-controlled rendering on the React side.'
       }
     ]
   },

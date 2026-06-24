@@ -52,7 +52,7 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
   }
 
   // Get other 3 projects to display in the "More Projects" section
-  const otherProjects = projectsData.filter(p => p.id !== projectId)
+  const otherProjects = projectsData.filter(p => p.id.toLowerCase() !== projectId?.toLowerCase())
 
   return (
     <div className="project-details-page">
