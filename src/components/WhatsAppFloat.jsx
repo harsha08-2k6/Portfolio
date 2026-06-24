@@ -75,7 +75,7 @@ export default function WhatsAppFloat() {
           rel="noreferrer"
           className="wa-menu-item wa-github"
         >
-          <span className="wa-item-text">GitHub Repository</span>
+          <span className="wa-item-text">GitHub Repository For This Template</span>
           <svg 
             className="wa-icon" 
             stroke="currentColor" 
