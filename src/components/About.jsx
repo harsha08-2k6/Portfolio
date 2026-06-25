@@ -95,7 +95,7 @@ export default function About() {
               and learning through experimentation. You'll find me building side projects, diving into
               new tech stacks, or simply exploring what's next in the world of web development.
             </p>
-            <a href="#" className="btn-resume">My Resume <span aria-hidden="true">↗</span></a>
+            <a href="/resume.html" target="_blank" rel="noopener noreferrer" className="btn-resume">My Resume <span aria-hidden="true">↗</span></a>
           </div>
 
         </div>

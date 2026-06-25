@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siva Harsha Vardhan Reddy - Resume</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0d0d0f;
+      --card-bg: #151518;
+      --text-primary: #f3f4f6;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --border-color: #26262b;
+      --mint: #78ED95;
+      --mint-dim: rgba(120, 237, 149, 0.08);
+      --mint-border: rgba(120, 237, 149, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      padding-bottom: 40px;
+    }
+
+    /* Top Navigation Bar */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      height: 80px;
+      background-color: rgba(13, 13, 15, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: none;
+      z-index: 100;
+    }
+
+    .logo {
+      color: var(--mint);
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: -0.5px;
+      transition: opacity 0.2s ease;
+    }
+
+    .logo:hover {
+      opacity: 0.85;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 22px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      background-color: transparent;
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 100px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .btn:hover {
+      border-color: var(--mint);
+      color: var(--mint);
+      background-color: var(--mint-dim);
+      transform: translateY(-1.5px);
+    }
+
+    .btn-primary {
+      background-color: var(--mint);
+      border-color: var(--mint);
+      color: #0d0d0f;
+    }
+
+    .btn-primary:hover {
+      background-color: #ffffff;
+      border-color: #ffffff;
+      color: #0d0d0f;
+      box-shadow: 0 8px 24px rgba(120, 237, 149, 0.2);
+      transform: translateY(-1.5px);
+    }
+
+    /* Resume Container */
+    .resume-wrapper {
+      max-width: 850px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .resume-paper {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 50px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Resume Typography & Layout */
+    .header-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.25rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .contact-info {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    .contact-info span {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .contact-info span:not(:last-child)::after {
+      content: "|";
+      margin-left: 8px;
+      color: var(--text-muted);
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      font-size: 0.9rem;
+    }
+
+    .social-links a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .social-links a:hover {
+      color: var(--accent-hover);
+      text-decoration: underline;
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #ffffff;
+      margin-top: 30px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 6px;
+    }
+
+    .summary-text {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      text-align: justify;
+    }
+
+    /* Experience, Education & Projects list */
+    .entry-item {
+      margin-bottom: 20px;
+    }
+
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+
+    .entry-title {
+      font-weight: 600;
+      color: #ffffff;
+      font-size: 1rem;
+    }
+
+    .entry-meta {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .entry-subtitle {
+      font-style: italic;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .entry-bullets {
+      list-style-type: disc;
+      padding-left: 20px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .entry-bullets li {
+      margin-bottom: 6px;
+    }
+
+    /* Skills Grid */
+    .skills-category {
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    .skills-category-name {
+      font-weight: 600;
+      color: #ffffff;
+      display: inline-block;
+      min-width: 140px;
+    }
+
+    .skills-tags {
+      color: var(--text-secondary);
+    }
+
+    /* Interests & Languages */
+    .inline-list {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    /* Print styles */
+    @media print {
+      body {
+        background-color: #ffffff;
+        color: #000000;
+        padding: 0;
+      }
+
+      .top-bar {
+        display: none;
+      }
+
+      .resume-wrapper {
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+      }
+
+      .resume-paper {
+        background-color: #ffffff;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+      }
+
+      .name {
+        color: #000000;
+      }
+
+      .section-title {
+        color: #000000;
+        border-bottom-color: #000000;
+      }
+
+      .entry-title,
+      .skills-category-name {
+        color: #000000;
+      }
+
+      .contact-info,
+      .social-links a,
+      .summary-text,
+      .entry-meta,
+      .entry-subtitle,
+      .entry-bullets,
+      .skills-tags,
+      .inline-list {
+        color: #333333;
+      }
+
+      .social-links a {
+        text-decoration: underline;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <a href="/" class="logo">.SHVR</a>
+    <div class="nav-actions">
+      <button onclick="window.print()" class="btn">Print Resume</button>
+      <a href="/resume.pdf" download="Siva_Harsha_Vardhan_Reddy_Resume.pdf" class="btn btn-primary">Download PDF</a>
+    </div>
+  </div>
+
+  <!-- Resume Document -->
+  <div class="resume-wrapper">
+    <article class="resume-paper">
+
+      <!-- Header -->
+      <header class="header-section">
+        <h1 class="name">Siva Harsha Vardhan Reddy</h1>
+        <div class="contact-info">
+          <span>Vijayawada, India</span>
+          <span>+91 96584 66999</span>
+          <span>tsivaharshavardhanreddy08@gmail.com</span>
+        </div>
+        <div class="social-links">
+          <a href="https://github.com/harsha08-2k6" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://www.linkedin.com/in/siva-harsha-vardhan-reddy/" target="_blank"
+            rel="noopener noreferrer">LinkedIn</a>
+          <a href="/" target="_blank" rel="noopener noreferrer">Portfolio</a>
+        </div>
+      </header>
+
+      <!-- Professional Summary -->
+      <section>
+        <h2 class="section-title">Professional Summary</h2>
+        <p class="summary-text">
+          Computer Science and Engineering (Honours) student at KL University with strong foundations in Data
+          Structures, Algorithms, Full Stack Development, and Cybersecurity. Passionate about building scalable web
+          applications, contributing to open-source software, and solving real-world engineering problems. Experienced
+          with React, FastAPI, Node.js, MongoDB, Git, and collaborative software development.
+        </p>
+      </section>
+
+      <!-- Education -->
+      <section>
+        <h2 class="section-title">Education</h2>
+        <div class="entry-item">
+          <div class="entry-header">
+            <span class="entry-title">KL University</span>
+            <span class="entry-meta">Expected Graduation: 2028</span>
+          </div>
+          <div class="entry-subtitle">Bachelor of Technology in Computer Science and Engineering (Honours)</div>
+          <p class="summary-text" style="font-size: 0.9rem;">
+            <strong>Relevant Coursework:</strong> Data Structures, Algorithms, Operating Systems, Computer Networks,
+            Database Management Systems, Object-Oriented Programming, Software Engineering.
+          </p>
+        </div>
+      </section>
+
+      <!-- Technical Skills -->
+      <section>
+        <h2 class="section-title">Technical Skills</h2>
+        <div class="skills-category">
+          <span class="skills-category-name">Languages:</span>
+          <span class="skills-tags">C++, C, Python, JavaScript, TypeScript</span>
+        </div>
+        <div class="skills-category">
+          <span class="skills-category-name">Frontend:</span>
+          <span class="skills-tags">React.js, HTML5, CSS3</span>
+        </div>
+        <div class="skills-category">
+          <span class="skills-category-name">Backend:</span>
+          <span class="skills-tags">Node.js, Express.js, FastAPI</span>
+        </div>
+        <div class="skills-category">
+          <span class="skills-category-name">Databases:</span>
+          <span class="skills-tags">MongoDB, MySQL</span>
+        </div>
+        <div class="skills-category">
+          <span class="skills-category-name">Developer Tools:</span>
+          <span class="skills-tags">Git, GitHub, Linux, VS Code, Postman</span>
+        </div>
+        <div class="skills-category">
+          <span class="skills-category-name">Core Concepts:</span>
+          <span class="skills-tags">Data Structures, Algorithms, REST APIs, Authentication, OOP, Problem Solving</span>
+        </div>
+      </section>
+
+      <!-- Projects -->
+      <section>
+        <h2 class="section-title">Projects</h2>
+
+        <div class="entry-item">
+          <div class="entry-header">
+            <span class="entry-title">Educational Platform</span>
+            <span class="entry-meta">React.js — FastAPI — MongoDB</span>
+          </div>
+          <ul class="entry-bullets">
+            <li>Developed a full-stack educational platform for students and teachers.</li>
+            <li>Implemented authentication, role-based access control, assignment management, and responsive dashboards.
+            </li>
+            <li>Built REST APIs and integrated frontend with backend services.</li>
+          </ul>
+        </div>
+
+        <div class="entry-item">
+          <div class="entry-header">
+            <span class="entry-title">AI Mental Wellness Platform</span>
+            <span class="entry-meta">React.js — FastAPI — MongoDB</span>
+          </div>
+          <ul class="entry-bullets">
+            <li>Built an AI-assisted mental wellness application featuring chatbot support.</li>
+            <li>Implemented secure authentication, mood tracking, and daily wellness check-ins.</li>
+            <li>Focused on scalable backend architecture and secure data handling.</li>
+          </ul>
+        </div>
+
+        <div class="entry-item">
+          <div class="entry-header">
+            <span class="entry-title">Personal Portfolio Website</span>
+            <span class="entry-meta">React.js</span>
+          </div>
+          <ul class="entry-bullets">
+            <li>Designed and developed a modern responsive portfolio showcasing projects, skills, certifications, and
+              creative work.</li>
+            <li>Added smooth animations and optimized UI for desktop and mobile devices.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Open Source Contributions -->
+      <section>
+        <h2 class="section-title">Open Source Contributions</h2>
+        <ul class="entry-bullets">
+          <li>Active contributor to open-source projects on GitHub.</li>
+          <li>Contributed to the <strong>4GA Boards</strong> project by fixing bugs and improving features.</li>
+          <li>Submitted <strong>31+ Pull Requests</strong>, with <strong>6 merged</strong> into production.</li>
+          <li>Worked with Git workflows, issue tracking, branching strategies, and code reviews.</li>
+        </ul>
+      </section>
+
+      <!-- Leadership Experience -->
+      <section>
+        <h2 class="section-title">Leadership Experience</h2>
+
+        <div class="entry-item">
+          <div class="entry-header">
+            <span class="entry-title">Team Lead - Cyber Shadows</span>
+            <span class="entry-meta">KL University</span>
+          </div>
+          <ul class="entry-bullets">
+            <li>Led cybersecurity awareness initiatives and technical learning sessions.</li>
+            <li>Organized workshops and collaborative technical activities.</li>
+            <li>Mentored students interested in cybersecurity and software development.</li>
+          </ul>
+        </div>
+
+        <div class="entry-item">
+          <div class="entry-header">
+            <span class="entry-title">Chief of Social Media & Broadcasting - KL Forge</span>
+            <span class="entry-meta">KL University</span>
+          </div>
+          <ul class="entry-bullets">
+            <li>Managed branding, photography, videography, and digital content creation.</li>
+            <li>Produced promotional videos and technical event coverage.</li>
+            <li>Coordinated outreach campaigns and increased community engagement.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Achievements -->
+      <section>
+        <h2 class="section-title">Achievements</h2>
+        <ul class="entry-bullets">
+          <li>Active Competitive Programmer on HackerRank and CodeChef.</li>
+          <li>Contributed to multiple open-source repositories.</li>
+          <li>Participated in hackathons and technical competitions.</li>
+          <li>Built and deployed multiple full-stack web applications.</li>
+        </ul>
+      </section>
+
+      <!-- Certifications -->
+      <section>
+        <h2 class="section-title">Certifications</h2>
+        <ul class="entry-bullets">
+          <li>Google Cybersecurity Professional Certificate</li>
+          <li>Google Cloud Skills Boost Certifications</li>
+          <li>AWS Cloud Foundations</li>
+        </ul>
+      </section>
+
+      <!-- Interests -->
+      <section>
+        <h2 class="section-title">Interests</h2>
+        <p class="inline-list">
+          Competitive Programming &middot; Open Source Development &middot; Cybersecurity &middot; Full Stack
+          Development &middot; Video Editing
+        </p>
+      </section>
+
+      <!-- Languages -->
+      <section>
+        <h2 class="section-title">Languages</h2>
+        <p class="inline-list">
+          English &middot; Telugu &middot; Hindi
+        </p>
+      </section>
+
+    </article>
+  </div>
+</body>
+
+</html>
