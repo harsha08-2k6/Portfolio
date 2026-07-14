@@ -4,11 +4,14 @@ const CACHE_NAME = 'shvr-portfolio-cache-v1';
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll([
+      const assets = [
         '/',
         '/index.html',
-        // Fallback or placeholder assets can go here
-      ]).then(() => self.skipWaiting());
+        /* ASSETS_TO_CACHE */
+      ];
+      // Filter out any empty items or comment placeholders
+      const cleanAssets = assets.filter(asset => asset && typeof asset === 'string' && !asset.startsWith('/*'));
+      return cache.addAll(cleanAssets).then(() => self.skipWaiting());
     })
   );
 });
@@ -31,12 +34,11 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event - Network-First, fallback to Cache
 self.addEventListener('fetch', (event) => {
-  // Only handle GET requests and local/same-origin assets (or safe remote assets)
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
 
-  // We only want to cache local files, ignore external hot-reloads (like websocket connections)
+  // Exclude hot-reload files and WebSocket connections
   if (url.pathname.includes('hot-update') || url.pathname.includes('vite') || url.protocol === 'ws:') {
     return;
   }
@@ -44,8 +46,8 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // If response is valid, clone it and cache it
-        if (response && response.status === 200 && response.type === 'basic') {
+        // Cache same-origin assets dynamically as they are fetched
+        if (response && response.status === 200 && (response.type === 'basic' || response.type === 'cors')) {
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);
