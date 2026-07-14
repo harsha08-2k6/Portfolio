@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 const skills = [
   { title: 'Frontend', tags: ['HTML', 'CSS', 'JavaScript', 'React'] },
   { title: 'Server-side development', tags: ['Node.js', 'Express.js', 'MongoDB'] },
+  { title: 'Editing', tags: ['CapCut', 'DaVinci Resolve', 'Picsart', 'Adobe Photoshop'] },
   { title: 'Tools', tags: ['Git', 'Github', 'AWS', 'Docker'] },
 ]
 

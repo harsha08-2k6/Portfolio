@@ -3,7 +3,7 @@ export default function Footer() {
     <footer>
       <div className="footer-inner">
         <a href="#hero" className="logo">.SHVR</a>
-        <span className="footer-copy">© 2026 Harsha. Designed and developed with attention to detail.</span>
+        <span className="footer-copy">@2026 Tamlampudi Siva Harsha Vardhan Reddy</span>
         <div className="footer-links">
           <a href="https://github.com/harsha08-2k6" target="_blank" rel="noreferrer">GitHub</a>
           <a href="https://www.linkedin.com/in/siva-harsha-vardhan-reddy/" target="_blank" rel="noreferrer">LinkedIn</a>

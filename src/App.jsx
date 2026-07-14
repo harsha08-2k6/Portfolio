@@ -3,6 +3,7 @@ import Cursor from './components/Cursor'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import About from './components/About'
+import TechnicalArsenal from './components/TechnicalArsenal'
 import Projects from './components/Projects'
 import Demos from './components/Demos'
 import Contact from './components/Contact'
@@ -13,6 +14,7 @@ import StartProject from './components/StartProject'
 import InfoDocument from './components/InfoDocument'
 import useScrollReveal from './hooks/useScrollReveal'
 import WhatsAppFloat from './components/WhatsAppFloat'
+import NotFound from './components/NotFound'
 
 export default function App() {
   const [activeProjectId, setActiveProjectId] = useState(null)
@@ -43,13 +45,17 @@ export default function App() {
       <Navbar navigateToSection={navigateToSection} />
       
       {showDoc !== null ? (
-        <>
-          <InfoDocument 
-            type={showDoc} 
-            onClose={() => setShowDoc(null)} 
-          />
-          <Footer />
-        </>
+        showDoc === '404' ? (
+          <NotFound onClose={() => setShowDoc(null)} />
+        ) : (
+          <>
+            <InfoDocument 
+              type={showDoc} 
+              onClose={() => setShowDoc(null)} 
+            />
+            <Footer />
+          </>
+        )
       ) : activeProjectId !== null ? (
         <>
           <ProjectDetails 
@@ -81,6 +87,7 @@ export default function App() {
         <>
           <Hero />
           <About />
+          <TechnicalArsenal />
           <Projects 
             setActiveProjectId={setActiveProjectId} 
             setShowAllProjects={setShowAllProjects}

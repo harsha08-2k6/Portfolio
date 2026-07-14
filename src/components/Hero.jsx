@@ -1,6 +1,54 @@
+import { useState, useEffect } from 'react'
 import heroImg from '../assets/hero.png'
 
 export default function Hero() {
+  const [roleIndex, setRoleIndex] = useState(0)
+  const [currentText, setCurrentText] = useState('')
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [typingSpeed, setTypingSpeed] = useState(80)
+
+  const roles = [
+    "Full Stack Developer",
+    "Video Editor",
+    "Cybersecurity Enthusiast"
+  ]
+
+  useEffect(() => {
+    const fullText = roles[roleIndex]
+
+    const handleTyping = () => {
+      if (!isDeleting) {
+        // Typing
+        setCurrentText((prev) => {
+          const next = fullText.substring(0, prev.length + 1)
+          if (next === fullText) {
+            setIsDeleting(true)
+            setTypingSpeed(2000) // Pause at the end of the word
+          } else {
+            setTypingSpeed(80)
+          }
+          return next
+        })
+      } else {
+        // Deleting
+        setCurrentText((prev) => {
+          const next = fullText.substring(0, prev.length - 1)
+          if (next === '') {
+            setIsDeleting(false)
+            setRoleIndex((prevIdx) => (prevIdx + 1) % roles.length)
+            setTypingSpeed(500) // Pause before starting the next word
+          } else {
+            setTypingSpeed(30)
+          }
+          return next
+        })
+      }
+    }
+
+    const timer = setTimeout(handleTyping, typingSpeed)
+    return () => clearTimeout(timer)
+  }, [currentText, isDeleting, roleIndex, typingSpeed])
+
   return (
     <section className="hero" id="hero">
       <div className="hero-inner">
@@ -11,7 +59,12 @@ export default function Hero() {
             <div className="hero-greeting">
               <span className="greeting-text">Hey,</span>
             </div>
-            <h1 className="hero-headline">I'm a Full Stack<br />Developer</h1>
+            <h1 className="hero-headline">
+              <span className="gradient-text">I'm a</span>
+              <br />
+              <span className="typed-text">{currentText}</span>
+              <span className="typed-cursor">|</span>
+            </h1>
             <div className="hero-name">Siva Harsha Vardhan Reddy</div>
           </div>
         </div>
@@ -21,10 +74,10 @@ export default function Hero() {
           <div className="photo-wrap">
             <div className="photo-glow" />
             <img src={heroImg} alt="Harsha" className="hero-photo" />
-            <div className="badge badge-tl"><span>Full Stack Dev</span></div>
+            <div className="badge badge-tl"><span>Full Stack Developer</span></div>
             <div className="badge badge-br"><span>Cybersecurity</span></div>
             <div className="badge badge-tr"><span className="badge-dot" /><span>Available for work</span></div>
-            <div className="badge badge-bl"><span>Editing</span></div>
+            <div className="badge badge-bl"><span>Editor</span></div>
           </div>
         </div>
 
