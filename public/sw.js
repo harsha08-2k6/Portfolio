@@ -9,9 +9,17 @@ self.addEventListener('install', (event) => {
         '/index.html',
         /* ASSETS_TO_CACHE */
       ];
-      // Filter out any empty items or comment placeholders
+      // Filter out empty items
       const cleanAssets = assets.filter(asset => asset && typeof asset === 'string' && !asset.startsWith('/*'));
-      return cache.addAll(cleanAssets).then(() => self.skipWaiting());
+      
+      // Cache assets individually to ensure one failed asset doesn't break the entire caching process
+      return Promise.all(
+        cleanAssets.map((asset) => {
+          return cache.add(asset)
+            .then(() => console.log('Successfully cached:', asset))
+            .catch((err) => console.warn('Failed to cache during install:', asset, err));
+        })
+      ).then(() => self.skipWaiting());
     })
   );
 });
@@ -46,7 +54,7 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Cache same-origin assets dynamically as they are fetched
+        // Cache same-origin assets dynamically as they are successfully fetched
         if (response && response.status === 200 && (response.type === 'basic' || response.type === 'cors')) {
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
@@ -65,6 +73,12 @@ self.addEventListener('fetch', (event) => {
           if (event.request.mode === 'navigate') {
             return caches.match('/');
           }
+          // Fallback response to prevent 'TypeError: Failed to convert value to Response'
+          return new Response('Offline resource unavailable', {
+            status: 503,
+            statusText: 'Offline Resource Unavailable',
+            headers: { 'Content-Type': 'text/plain' }
+          });
         });
       })
   );
