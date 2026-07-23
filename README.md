@@ -1,16 +1,148 @@
-# React + Vite
+# 🌐 Personal Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive, and interactive portfolio website showcasing my projects, skills, certifications, and journey in software development, cybersecurity, and open source.
 
-Currently, two official plugins are available:
+## 🚀 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+🔗 https://sivaharshavardhanreddy-portfolio.netlify.app/
 
-## React Compiler
+## 📸 Preview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```text
+assets/
+└── portfolio-preview.png
+```
+
+---
+
+## ✨ Features
+
+- Responsive design for desktop, tablet, and mobile
+- Modern and clean UI
+- About Me section
+- Skills and Technologies
+- Featured Projects
+- Certifications
+- GitHub & LinkedIn integration
+- Contact section
+- Smooth animations and transitions
+- Fast loading and optimized performance
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- HTML5
+- CSS3
+- JavaScript
+
+### Deployment
+- Netlify
+
+### Tools
+- Git
+- GitHub
+- VS Code
+
+---
+
+## 📂 Project Structure
+
+```
+Portfolio/
+│
+├── assets/
+├── css/
+├── js/
+├── images/
+├── index.html
+└── README.md
+```
+
+---
+
+## 💻 Getting Started
+
+### Clone the repository
+
+```bash
+git clone https://github.com/harsha08-2k6/Portfolio.git
+```
+
+### Navigate to the project
+
+```bash
+cd Portfolio
+```
+
+### Run locally
+
+Simply open `index.html`
+
+or use VS Code Live Server.
+
+---
+
+## 📌 Sections
+
+- Home
+- About
+- Skills
+- Projects
+- Certifications
+- Contact
+
+---
+
+## 👨‍💻 About Me
+
+I'm **Siva Harsha Vardhan Reddy**, a Computer Science Engineering student passionate about
+
+- Cybersecurity
+- SOC Analysis
+- Cloud Security
+- Open Source
+- Full Stack Development
+
+Currently learning
+
+- AWS Cloud
+- CompTIA Security+
+- Network Security
+- SOC Operations
+- SIEM Tools
+
+---
+
+## 📈 GitHub Stats
+
+Visit my GitHub profile:
+
+**https://github.com/harsha08-2k6**
+
+---
+
+## 🤝 Connect With Me
+
+- GitHub: https://github.com/harsha08-2k6
+- LinkedIn: https://www.linkedin.com/in/siva-harsha-vardhan-reddy
+- Portfolio: https://sivaharshavardhanreddy-portfolio.netlify.app
+
+---
+
+## ⭐ Support
+
+If you like this project,
+
+⭐ Star this repository
+
+It helps and motivates me to build more projects.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
