@@ -6,17 +6,6 @@ A modern, responsive, and interactive portfolio website showcasing my projects, 
 
 🔗 https://sivaharshavardhanreddy-portfolio.netlify.app/
 
-## 📸 Preview
-
-
-
-```text
-assets/
-└── portfolio-preview.png
-```
-
----
-
 ## ✨ Features
 
 - Responsive design for desktop, tablet, and mobile
