@@ -48,30 +48,34 @@ export default function NotFound({ onClose, initialMode = '404' }) {
     }
   }
 
+  const isDevMode = typeof window !== 'undefined' && window.location.search.includes('dev=true')
+
   return (
     <section className="error-page-container">
       {/* Simulation Bar at top */}
-      <div className="error-sim-bar">
-        <span className="sim-label">TEST DESIGNS:</span>
-        <button 
-          className={`sim-btn ${errorMode === '404' ? 'active' : ''}`}
-          onClick={() => setErrorMode('404')}
-        >
-          404 Page
-        </button>
-        <button 
-          className={`sim-btn ${errorMode === 'no-respond' ? 'active' : ''}`}
-          onClick={() => setErrorMode('no-respond')}
-        >
-          Not Responding
-        </button>
-        <button 
-          className={`sim-btn ${errorMode === 'offline' ? 'active' : ''}`}
-          onClick={() => setErrorMode('offline')}
-        >
-          No Internet (Offline)
-        </button>
-      </div>
+      {isDevMode && (
+        <div className="error-sim-bar">
+          <span className="sim-label">TEST DESIGNS:</span>
+          <button 
+            className={`sim-btn ${errorMode === '404' ? 'active' : ''}`}
+            onClick={() => setErrorMode('404')}
+          >
+            404 Page
+          </button>
+          <button 
+            className={`sim-btn ${errorMode === 'no-respond' ? 'active' : ''}`}
+            onClick={() => setErrorMode('no-respond')}
+          >
+            Not Responding
+          </button>
+          <button 
+            className={`sim-btn ${errorMode === 'offline' ? 'active' : ''}`}
+            onClick={() => setErrorMode('offline')}
+          >
+            No Internet (Offline)
+          </button>
+        </div>
+      )}
 
       <div className="error-content-inner">
         {/* Animated Background Grid lines */}
