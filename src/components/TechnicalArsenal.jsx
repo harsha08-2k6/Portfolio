@@ -101,7 +101,6 @@ export default function TechnicalArsenal() {
 
         {/* Matrix Box */}
         <div className="matrix-container reveal-up">
-          <div className="matrix-header">[ MATRIX_V2 ]</div>
           <div className="matrix-grid">
             {matrixRows.map((row, rIdx) => (
               <div className="matrix-row" key={rIdx}>
@@ -123,7 +122,6 @@ export default function TechnicalArsenal() {
               </div>
             ))}
           </div>
-          <div className="matrix-footer">HOVER TO ILLUMINATE</div>
         </div>
 
         {/* Categories Grid */}
