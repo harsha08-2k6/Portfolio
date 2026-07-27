@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react'
 
-export default function NotFound({ onClose }) {
-  const [errorMode, setErrorMode] = useState('404') // '404', 'no-respond', 'offline'
+export default function NotFound({ onClose, initialMode = '404' }) {
+  const [errorMode, setErrorMode] = useState(initialMode)
   const [isOnline, setIsOnline] = useState(navigator.onLine)
 
   // Auto-detect internet connection status
   useEffect(() => {
     const handleOnline = () => {
       setIsOnline(true)
-      setErrorMode('404') // Revert to 404 if online
+      if (initialMode === 'offline') {
+        if (onClose) onClose()
+      } else {
+        setErrorMode('404') // Revert to 404 if online
+      }
     }
     const handleOffline = () => {
       setIsOnline(false)
@@ -27,13 +31,17 @@ export default function NotFound({ onClose }) {
       window.removeEventListener('online', handleOnline)
       window.removeEventListener('offline', handleOffline)
     }
-  }, [])
+  }, [initialMode, onClose])
 
   const handleRetry = () => {
     // Simulate reconnection check
     if (errorMode === 'offline' && navigator.onLine) {
       setIsOnline(true)
-      setErrorMode('404')
+      if (initialMode === 'offline') {
+        if (onClose) onClose()
+      } else {
+        setErrorMode('404')
+      }
     } else if (errorMode === 'no-respond') {
       // Simulate reload response
       setErrorMode('404')

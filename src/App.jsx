@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Cursor from './components/Cursor'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -21,7 +21,21 @@ export default function App() {
   const [showAllProjects, setShowAllProjects] = useState(false)
   const [showStartProject, setShowStartProject] = useState(false)
   const [showDoc, setShowDoc] = useState(null)
+  const [isOnline, setIsOnline] = useState(navigator.onLine)
   useScrollReveal()
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true)
+    const handleOffline = () => setIsOnline(false)
+
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+
+    return () => {
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+    }
+  }, [])
 
   const navigateToSection = (id) => {
     setActiveProjectId(null)
@@ -44,7 +58,9 @@ export default function App() {
       <WhatsAppFloat />
       <Navbar navigateToSection={navigateToSection} />
       
-      {showDoc !== null ? (
+      {!isOnline ? (
+        <NotFound initialMode="offline" onClose={() => setIsOnline(true)} />
+      ) : showDoc !== null ? (
         showDoc === '404' ? (
           <NotFound onClose={() => setShowDoc(null)} />
         ) : (
