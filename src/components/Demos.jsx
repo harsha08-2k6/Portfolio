@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
+import PhotoArchive from './PhotoArchive/PhotoArchive'
 
 function VideoCard({ videoUrl }) {
   const videoRef = useRef(null)
@@ -162,6 +163,9 @@ export default function Demos() {
             More Videos ↗
           </a>
         </div>
+        
+        {/* NEW FEATURE */}
+        <PhotoArchive />
       </div>
     </section>
   )
