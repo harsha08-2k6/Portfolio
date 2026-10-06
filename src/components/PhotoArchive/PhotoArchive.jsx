@@ -9,10 +9,14 @@ export default function PhotoArchive() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [fullscreenIndex, setFullscreenIndex] = useState(null);
 
   useEffect(() => {
     client
-      .fetch(`*[_type == "photo"] | order(_createdAt desc)`)
+      .fetch(`*[_type == "photo"] {
+        ...,
+        "videoUrl": videoFile.asset->url
+      } | order(_createdAt desc)`)
       .then((data) => {
         setPhotos(data);
         setLoading(false);
@@ -26,12 +30,42 @@ export default function PhotoArchive() {
   const selectedPhotos = selectedCategory
     ? photos
         .filter(photo => photo.category === selectedCategory)
-        .map(photo => ({
-          src: photo.image ? urlFor(photo.image).url() : '',
-          title: photo.title,
-          alt: photo.alt || photo.title,
-        }))
-        .filter(photo => photo.src)
+        .flatMap(photo => {
+          const items = [];
+          
+          // Add primary image if it exists
+          if (photo.image) {
+            items.push({
+              src: urlFor(photo.image).url(),
+              title: photo.title,
+              alt: photo.alt || photo.title,
+            });
+          }
+          
+          // Add gallery images if they exist
+          if (photo.images && photo.images.length > 0) {
+            photo.images.forEach((img, index) => {
+              items.push({
+                type: 'image',
+                src: urlFor(img).url(),
+                title: `${photo.title} (${index + 1})`,
+                alt: photo.alt || `${photo.title} ${index + 1}`,
+              });
+            });
+          }
+          
+          // Add video if it exists
+          if (photo.videoUrl) {
+            items.push({
+              type: 'video',
+              src: photo.videoUrl,
+              title: photo.title,
+              alt: photo.alt || photo.title,
+            });
+          }
+          
+          return items;
+        })
     : [];
 
   const handleSelect = (value) => {
@@ -47,7 +81,15 @@ export default function PhotoArchive() {
 
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
-        closeGallery();
+        if (fullscreenIndex !== null) {
+          setFullscreenIndex(null);
+        } else {
+          closeGallery();
+        }
+      } else if (event.key === 'ArrowRight' && fullscreenIndex !== null) {
+        setFullscreenIndex(prev => (prev + 1) % selectedPhotos.length);
+      } else if (event.key === 'ArrowLeft' && fullscreenIndex !== null) {
+        setFullscreenIndex(prev => (prev - 1 + selectedPhotos.length) % selectedPhotos.length);
       }
     };
 
@@ -131,12 +173,22 @@ export default function PhotoArchive() {
                   <figure
                     className="photo-gallery__item"
                     key={`${photo.src}-${index}`}
+                    onClick={() => setFullscreenIndex(index)}
+                    style={{ cursor: 'pointer' }}
                   >
-                    <img
-                      src={photo.src}
-                      alt={photo.alt}
-                      loading="lazy"
-                    />
+                    {photo.type === 'video' ? (
+                      <video
+                        src={photo.src}
+                        controls
+                        style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '4px' }}
+                      />
+                    ) : (
+                      <img
+                        src={photo.src}
+                        alt={photo.alt}
+                        loading="lazy"
+                      />
+                    )}
 
                     {photo.title && (
                       <figcaption>{photo.title}</figcaption>
@@ -153,6 +205,34 @@ export default function PhotoArchive() {
               </div>
             )}
           </div>
+        </div>
+      )}
+
+      {fullscreenIndex !== null && selectedPhotos[fullscreenIndex] && (
+        <div className="photo-lightbox" onClick={() => setFullscreenIndex(null)}>
+          <button className="photo-lightbox__close" onClick={() => setFullscreenIndex(null)}>&times;</button>
+          
+          <button 
+            className="photo-lightbox__nav photo-lightbox__nav--prev"
+            onClick={(e) => { e.stopPropagation(); setFullscreenIndex((fullscreenIndex - 1 + selectedPhotos.length) % selectedPhotos.length); }}
+          >
+            &#10094;
+          </button>
+
+          <div className="photo-lightbox__content" onClick={(e) => e.stopPropagation()}>
+            {selectedPhotos[fullscreenIndex].type === 'video' ? (
+              <video src={selectedPhotos[fullscreenIndex].src} controls autoPlay />
+            ) : (
+              <img src={selectedPhotos[fullscreenIndex].src} alt={selectedPhotos[fullscreenIndex].alt} />
+            )}
+          </div>
+
+          <button 
+            className="photo-lightbox__nav photo-lightbox__nav--next"
+            onClick={(e) => { e.stopPropagation(); setFullscreenIndex((fullscreenIndex + 1) % selectedPhotos.length); }}
+          >
+            &#10095;
+          </button>
         </div>
       )}
     </>
