@@ -9,7 +9,8 @@ export default function PhotoArchive() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [photos, setPhotos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [fullscreenIndex, setFullscreenIndex] = useState(null);
+  const [fullscreenDocIndex, setFullscreenDocIndex] = useState(null);
+  const [fullscreenMediaIndex, setFullscreenMediaIndex] = useState(0);
 
   useEffect(() => {
     client
@@ -27,25 +28,26 @@ export default function PhotoArchive() {
       });
   }, []);
 
-  const selectedPhotos = selectedCategory
+  const selectedDocuments = selectedCategory
     ? photos
         .filter(photo => photo.category === selectedCategory)
-        .flatMap(photo => {
-          const items = [];
+        .map(photo => {
+          const media = [];
           
-          // Add primary image if it exists
+          // Add primary image first (acts as cover)
           if (photo.image) {
-            items.push({
+            media.push({
+              type: 'image',
               src: urlFor(photo.image).url(),
               title: photo.title,
               alt: photo.alt || photo.title,
             });
           }
           
-          // Add gallery images if they exist
+          // Add gallery images
           if (photo.images && photo.images.length > 0) {
             photo.images.forEach((img) => {
-              items.push({
+              media.push({
                 type: 'image',
                 src: urlFor(img).url(),
                 title: photo.title,
@@ -54,9 +56,9 @@ export default function PhotoArchive() {
             });
           }
           
-          // Add video if it exists
+          // Add video
           if (photo.videoUrl) {
-            items.push({
+            media.push({
               type: 'video',
               src: photo.videoUrl,
               title: photo.title,
@@ -64,8 +66,13 @@ export default function PhotoArchive() {
             });
           }
           
-          return items;
+          return {
+            title: photo.title,
+            cover: media[0],
+            media: media,
+          };
         })
+        .filter(doc => doc.media.length > 0)
     : [];
 
   const handleSelect = (value) => {
@@ -81,15 +88,17 @@ export default function PhotoArchive() {
 
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
-        if (fullscreenIndex !== null) {
-          setFullscreenIndex(null);
+        if (fullscreenDocIndex !== null) {
+          setFullscreenDocIndex(null);
         } else {
           closeGallery();
         }
-      } else if (event.key === 'ArrowRight' && fullscreenIndex !== null) {
-        setFullscreenIndex(prev => (prev + 1) % selectedPhotos.length);
-      } else if (event.key === 'ArrowLeft' && fullscreenIndex !== null) {
-        setFullscreenIndex(prev => (prev - 1 + selectedPhotos.length) % selectedPhotos.length);
+      } else if (event.key === 'ArrowRight' && fullscreenDocIndex !== null) {
+        const mediaList = selectedDocuments[fullscreenDocIndex].media;
+        setFullscreenMediaIndex(prev => (prev + 1) % mediaList.length);
+      } else if (event.key === 'ArrowLeft' && fullscreenDocIndex !== null) {
+        const mediaList = selectedDocuments[fullscreenDocIndex].media;
+        setFullscreenMediaIndex(prev => (prev - 1 + mediaList.length) % mediaList.length);
       }
     };
 
@@ -167,31 +176,33 @@ export default function PhotoArchive() {
               </button>
             </div>
 
-            {selectedPhotos.length > 0 ? (
+            {selectedDocuments.length > 0 ? (
               <div className="photo-gallery__grid">
-                {selectedPhotos.map((photo, index) => (
+                {selectedDocuments.map((doc, index) => (
                   <figure
                     className="photo-gallery__item"
-                    key={`${photo.src}-${index}`}
-                    onClick={() => setFullscreenIndex(index)}
+                    key={`${doc.cover.src}-${index}`}
+                    onClick={() => {
+                      setFullscreenDocIndex(index);
+                      setFullscreenMediaIndex(0);
+                    }}
                     style={{ cursor: 'pointer' }}
                   >
-                    {photo.type === 'video' ? (
+                    {doc.cover.type === 'video' ? (
                       <video
-                        src={photo.src}
-                        controls
+                        src={doc.cover.src}
                         style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '4px' }}
                       />
                     ) : (
                       <img
-                        src={photo.src}
-                        alt={photo.alt}
+                        src={doc.cover.src}
+                        alt={doc.cover.alt}
                         loading="lazy"
                       />
                     )}
 
-                    {photo.title && (
-                      <figcaption>{photo.title}</figcaption>
+                    {doc.title && (
+                      <figcaption>{doc.title}</figcaption>
                     )}
                   </figure>
                 ))}
@@ -208,28 +219,46 @@ export default function PhotoArchive() {
         </div>
       )}
 
-      {fullscreenIndex !== null && selectedPhotos[fullscreenIndex] && (
-        <div className="photo-lightbox" onClick={() => setFullscreenIndex(null)}>
-          <button className="photo-lightbox__close" onClick={() => setFullscreenIndex(null)}>&times;</button>
+      {fullscreenDocIndex !== null && selectedDocuments[fullscreenDocIndex] && (
+        <div className="photo-lightbox" onClick={() => setFullscreenDocIndex(null)}>
+          <button className="photo-lightbox__close" onClick={() => setFullscreenDocIndex(null)}>&times;</button>
           
           <button 
             className="photo-lightbox__nav photo-lightbox__nav--prev"
-            onClick={(e) => { e.stopPropagation(); setFullscreenIndex((fullscreenIndex - 1 + selectedPhotos.length) % selectedPhotos.length); }}
+            onClick={(e) => { 
+              e.stopPropagation(); 
+              const mediaList = selectedDocuments[fullscreenDocIndex].media;
+              setFullscreenMediaIndex((fullscreenMediaIndex - 1 + mediaList.length) % mediaList.length); 
+            }}
           >
             &#10094;
           </button>
 
           <div className="photo-lightbox__content" onClick={(e) => e.stopPropagation()}>
-            {selectedPhotos[fullscreenIndex].type === 'video' ? (
-              <video src={selectedPhotos[fullscreenIndex].src} controls autoPlay />
+            {selectedDocuments[fullscreenDocIndex].media[fullscreenMediaIndex].type === 'video' ? (
+              <video src={selectedDocuments[fullscreenDocIndex].media[fullscreenMediaIndex].src} controls autoPlay />
             ) : (
-              <img src={selectedPhotos[fullscreenIndex].src} alt={selectedPhotos[fullscreenIndex].alt} />
+              <img 
+                src={selectedDocuments[fullscreenDocIndex].media[fullscreenMediaIndex].src} 
+                alt={selectedDocuments[fullscreenDocIndex].media[fullscreenMediaIndex].alt} 
+              />
+            )}
+            
+            {/* Show image counter e.g. 1 / 5 */}
+            {selectedDocuments[fullscreenDocIndex].media.length > 1 && (
+              <div style={{ color: 'white', textAlign: 'center', marginTop: '10px', fontSize: '14px' }}>
+                {fullscreenMediaIndex + 1} / {selectedDocuments[fullscreenDocIndex].media.length}
+              </div>
             )}
           </div>
 
           <button 
             className="photo-lightbox__nav photo-lightbox__nav--next"
-            onClick={(e) => { e.stopPropagation(); setFullscreenIndex((fullscreenIndex + 1) % selectedPhotos.length); }}
+            onClick={(e) => { 
+              e.stopPropagation(); 
+              const mediaList = selectedDocuments[fullscreenDocIndex].media;
+              setFullscreenMediaIndex((fullscreenMediaIndex + 1) % mediaList.length); 
+            }}
           >
             &#10095;
           </button>
