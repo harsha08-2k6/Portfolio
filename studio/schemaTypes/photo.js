@@ -33,6 +33,7 @@ export default {
       type: 'image',
       options: {
         hotspot: true,
+        accept: 'image/*,.heic,.heif',
       },
       // Make image optional if category is Videos, otherwise required
       validation: Rule => Rule.custom((image, context) => {
@@ -46,7 +47,7 @@ export default {
       name: 'images',
       title: 'Gallery Images (Multiple)',
       type: 'array',
-      of: [{ type: 'image', options: { hotspot: true } }],
+      of: [{ type: 'image', options: { hotspot: true, accept: 'image/*,.heic,.heif' } }],
       description: 'Upload multiple images here (e.g. for a Travel location).',
     },
     {
