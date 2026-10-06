@@ -44,12 +44,12 @@ export default function PhotoArchive() {
           
           // Add gallery images if they exist
           if (photo.images && photo.images.length > 0) {
-            photo.images.forEach((img, index) => {
+            photo.images.forEach((img) => {
               items.push({
                 type: 'image',
                 src: urlFor(img).url(),
-                title: `${photo.title} (${index + 1})`,
-                alt: photo.alt || `${photo.title} ${index + 1}`,
+                title: photo.title,
+                alt: photo.alt || photo.title,
               });
             });
           }
