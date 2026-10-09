@@ -1,10 +1,27 @@
-import { useEffect } from 'react'
-import { projectsData } from '../data/projectsData'
+import { useState, useEffect } from 'react'
+import { projectsData as staticProjectsData } from '../data/projectsData'
 import { ProjectCard } from './Projects'
+import { client } from '../client'
 
 export default function AllProjects({ setActiveProjectId, setShowAllProjects, navigateToSection }) {
+  const [projects, setProjects] = useState([])
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
+
+    // Fetch projects from Sanity
+    client.fetch('*[_type == "project"]')
+      .then((data) => {
+        if (data.length > 0) {
+          setProjects(data);
+        } else {
+          setProjects(staticProjectsData);
+        }
+      })
+      .catch((err) => {
+        console.error("Sanity fetch error:", err);
+        setProjects(staticProjectsData);
+      });
   }, [])
 
   return (
@@ -38,9 +55,9 @@ export default function AllProjects({ setActiveProjectId, setShowAllProjects, na
 
         {/* Projects Grid */}
         <div className="projects-grid-2col">
-          {projectsData.map(p => (
+          {projects.map(p => (
             <ProjectCard
-              key={p.id}
+              key={p._id || p.id}
               project={p}
               onSelect={setActiveProjectId}
             />
