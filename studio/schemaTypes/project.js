@@ -55,6 +55,14 @@ export default {
     
     // Details Page Fields (Used when you click into a project)
     {
+      name: 'useGithubReadme',
+      title: 'Use GitHub README for Details?',
+      type: 'boolean',
+      description: 'If turned on, the project details page will automatically fetch and display your GitHub README instead of the manual fields below.',
+      group: 'details',
+      initialValue: false,
+    },
+    {
       name: 'client',
       title: 'Client',
       type: 'string',

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { projectsData } from '../data/projectsData'
 import { ProjectCard } from './Projects'
 import { client, urlFor } from '../client'
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 
 export default function ProjectDetails({ projectId, setActiveProjectId, navigateToSection, showAllProjects }) {
   const [currentProject, setCurrentProject] = useState(null)
@@ -9,12 +11,15 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
   const [imgFailed, setImgFailed] = useState(false)
   const [toast, setToast] = useState(null)
   const [showToastClass, setShowToastClass] = useState(false)
+  const [readmeContent, setReadmeContent] = useState(null)
+  const [loadingReadme, setLoadingReadme] = useState(false)
 
   // Fetch project data (either static or from Sanity)
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
     setImgFailed(false)
     setLoading(true)
+    setReadmeContent(null)
 
     // First check static data
     const staticProj = projectsData.find(p => p.id === projectId)
@@ -28,12 +33,13 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
     client.fetch(`*[_type == "project" && _id == $id][0]`, { id: projectId })
       .then(res => {
         if (res) {
-          // Map Sanity fields to match what the component expects
           setCurrentProject({
             id: res._id,
             title: res.title || "Project",
             tagline: res.tagline || (res.description ? res.description.substring(0, 100) + "..." : ""),
             liveLink: res.link || "#",
+            github: res.github || null,
+            useGithubReadme: res.useGithubReadme || false,
             client: res.client || "Personal Project",
             industry: res.industry || "Software",
             timeline: res.timeline || "Recent",
@@ -47,6 +53,35 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
             structureBullets: res.structureBullets || [],
             challenges: res.challenges || []
           })
+
+          // Fetch README if enabled and URL is provided
+          if (res.useGithubReadme && res.github) {
+            setLoadingReadme(true)
+            const match = res.github.match(/github\.com\/([^/]+)\/([^/]+)/);
+            if (match) {
+              const apiurl = `https://api.github.com/repos/${match[1]}/${match[2].replace(/\/$/, '')}/readme`;
+              fetch(apiurl)
+                .then(r => r.json())
+                .then(data => {
+                  if (data.download_url) {
+                    return fetch(data.download_url).then(r => r.text());
+                  }
+                  throw new Error('No download URL');
+                })
+                .then(text => {
+                  setReadmeContent(text)
+                  setLoadingReadme(false)
+                })
+                .catch(err => {
+                  console.error("Failed to fetch README", err)
+                  setReadmeContent("*Failed to load README from GitHub.*")
+                  setLoadingReadme(false)
+                })
+            } else {
+              setReadmeContent("*Invalid GitHub URL provided.*")
+              setLoadingReadme(false)
+            }
+          }
         } else {
           setCurrentProject(null)
         }
@@ -139,6 +174,17 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
               >
                 Live Preview <span>↗</span>
               </a>
+              {currentProject.github && (
+                <a
+                  href={currentProject.github}
+                  className="btn-live-preview"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ marginLeft: '10px', background: 'transparent', border: '1px solid var(--w50)', color: 'var(--white)' }}
+                >
+                  GitHub <span>↗</span>
+                </a>
+              )}
             </div>
 
             <div className="details-hero-right">
@@ -176,84 +222,98 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
             )}
           </div>
 
-          {/* Subsections Grid */}
+          {/* Subsections Grid / Markdown */}
           <div className="details-sections-grid">
             <div className="details-sections-left">
-              {/* Project Overview */}
-              <div className="details-section">
-                <h2>Project Overview</h2>
-                {currentProject.overview.split('\n\n').map((paragraph, idx) => (
-                  <p key={idx}>{paragraph}</p>
-                ))}
-              </div>
-
-              {/* Your Role */}
-              <div className="details-section">
-                <h2>Your Role</h2>
-                <ul>
-                  {currentProject.role.map((r, idx) => (
-                    <li key={idx}>{r}</li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Tech Stack Used */}
-              <div className="details-section">
-                <h2>Tech Stack Used</h2>
-                <ul>
-                  {currentProject.techStack.map((tech, idx) => (
-                    <li key={idx}>
-                      <strong>{tech.label}:</strong> {tech.value}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Key Features */}
-              <div className="details-section">
-                <h2>Key Features</h2>
-                <ul>
-                  {currentProject.features.map((f, idx) => (
-                    <li key={idx}>{f}</li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Code Structure */}
-              <div className="details-section">
-                <h2>Code Structure & Architecture</h2>
-                <div className="code-editor-box">
-                  <div className="code-editor-header">
-                    <div className="code-editor-buttons">
-                      <span className="code-editor-dot dot-red" />
-                      <span className="code-editor-dot dot-yellow" />
-                      <span className="code-editor-dot dot-green" />
-                    </div>
-                    <div className="code-editor-title">bashCopyEdit/components</div>
-                  </div>
-                  <div className="code-editor-body">
-                    {currentProject.structure}
-                  </div>
+              {currentProject.useGithubReadme ? (
+                <div className="details-section markdown-body" style={{ color: 'var(--white)' }}>
+                  {loadingReadme ? (
+                    <p>Loading README from GitHub...</p>
+                  ) : (
+                    <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                      {readmeContent || "No README found."}
+                    </ReactMarkdown>
+                  )}
                 </div>
-                <ul>
-                  {currentProject.structureBullets.map((b, idx) => (
-                    <li key={idx}>{b}</li>
-                  ))}
-                </ul>
-              </div>
+              ) : (
+                <>
+                  {/* Project Overview */}
+                  <div className="details-section">
+                    <h2>Project Overview</h2>
+                    {currentProject.overview.split('\n\n').map((paragraph, idx) => (
+                      <p key={idx}>{paragraph}</p>
+                    ))}
+                  </div>
 
-              {/* Challenges & Solutions */}
-              <div className="details-section">
-                <h2>Challenges & Solutions</h2>
-                <div className="challenges-list">
-                  {currentProject.challenges.map((c, idx) => (
-                    <div className="challenge-item" key={idx}>
-                      <strong>Challenge: {c.challenge}</strong>
-                      <span>Solution: {c.solution}</span>
+                  {/* Your Role */}
+                  <div className="details-section">
+                    <h2>Your Role</h2>
+                    <ul>
+                      {currentProject.role.map((r, idx) => (
+                        <li key={idx}>{r}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Tech Stack Used */}
+                  <div className="details-section">
+                    <h2>Tech Stack Used</h2>
+                    <ul>
+                      {currentProject.techStack.map((tech, idx) => (
+                        <li key={idx}>
+                          <strong>{tech.label}:</strong> {tech.value}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Key Features */}
+                  <div className="details-section">
+                    <h2>Key Features</h2>
+                    <ul>
+                      {currentProject.features.map((f, idx) => (
+                        <li key={idx}>{f}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Code Structure */}
+                  <div className="details-section">
+                    <h2>Code Structure & Architecture</h2>
+                    <div className="code-editor-box">
+                      <div className="code-editor-header">
+                        <div className="code-editor-buttons">
+                          <span className="code-editor-dot dot-red" />
+                          <span className="code-editor-dot dot-yellow" />
+                          <span className="code-editor-dot dot-green" />
+                        </div>
+                        <div className="code-editor-title">bash</div>
+                      </div>
+                      <div className="code-editor-body">
+                        {currentProject.structure}
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </div>
+                    <ul>
+                      {currentProject.structureBullets.map((b, idx) => (
+                        <li key={idx}>{b}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Challenges & Solutions */}
+                  <div className="details-section">
+                    <h2>Challenges & Solutions</h2>
+                    <div className="challenges-list">
+                      {currentProject.challenges.map((c, idx) => (
+                        <div className="challenge-item" key={idx}>
+                          <strong>Challenge: {c.challenge}</strong>
+                          <span>Solution: {c.solution}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
