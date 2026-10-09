@@ -62,12 +62,12 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
               const user = match[1];
               const repo = match[2].replace(/\/$/, '');
               
-              // Fetch directly from raw.githubusercontent to avoid API rate limits
-              fetch(`https://raw.githubusercontent.com/${user}/${repo}/main/README.md`)
+              // Fetch from jsDelivr CDN to bypass restrictive ISP blocks
+              fetch(`https://cdn.jsdelivr.net/gh/${user}/${repo}@main/README.md`)
                 .then(r => {
                   if (r.ok) return r.text();
-                  // If main branch doesn't have it, fallback to master branch
-                  return fetch(`https://raw.githubusercontent.com/${user}/${repo}/master/README.md`)
+                  // If main branch fails, fallback to master branch
+                  return fetch(`https://cdn.jsdelivr.net/gh/${user}/${repo}@master/README.md`)
                     .then(r2 => {
                       if (r2.ok) return r2.text();
                       throw new Error('README not found on main or master');
