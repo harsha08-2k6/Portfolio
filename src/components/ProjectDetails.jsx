@@ -1,41 +1,87 @@
 import { useState, useEffect } from 'react'
 import { projectsData } from '../data/projectsData'
 import { ProjectCard } from './Projects'
+import { client, urlFor } from '../client'
 
 export default function ProjectDetails({ projectId, setActiveProjectId, navigateToSection, showAllProjects }) {
-  const currentProject = projectsData.find(p => p.id === projectId)
+  const [currentProject, setCurrentProject] = useState(null)
+  const [loading, setLoading] = useState(true)
   const [imgFailed, setImgFailed] = useState(false)
   const [toast, setToast] = useState(null)
   const [showToastClass, setShowToastClass] = useState(false)
 
-  // Scroll to top whenever the selected project changes
+  // Fetch project data (either static or from Sanity)
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
     setImgFailed(false)
+    setLoading(true)
+
+    // First check static data
+    const staticProj = projectsData.find(p => p.id === projectId)
+    if (staticProj) {
+      setCurrentProject(staticProj)
+      setLoading(false)
+      return
+    }
+
+    // If not static, fetch from Sanity
+    client.fetch(`*[_type == "project" && _id == $id][0]`, { id: projectId })
+      .then(res => {
+        if (res) {
+          // Map Sanity fields to match what the component expects
+          setCurrentProject({
+            id: res._id,
+            title: res.title || "Project",
+            tagline: res.description ? res.description.substring(0, 100) + "..." : "No tagline",
+            liveLink: res.link || "#",
+            client: "Personal Project",
+            industry: "Software",
+            timeline: "Recent",
+            technologies: res.tags ? res.tags.join(", ") : "Various",
+            image: res.image?.asset ? urlFor(res.image).url() : res.image,
+            overview: res.description || "No overview available.",
+            role: ["Lead Developer"],
+            techStack: (res.tags || []).map(t => ({ label: "Tech", value: t })),
+            features: ["Features will be updated soon."],
+            structure: "Code structure not available.",
+            structureBullets: [],
+            challenges: []
+          })
+        } else {
+          setCurrentProject(null)
+        }
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error(err)
+        setCurrentProject(null)
+        setLoading(false)
+      })
   }, [projectId])
 
   const triggerToast = (message, type = 'success') => {
     setToast({ message, type })
-    setTimeout(() => {
-      setShowToastClass(true)
-    }, 10)
-    
-    // Auto dismiss after 4 seconds
+    setTimeout(() => setShowToastClass(true), 10)
     const timer = setTimeout(() => {
       setShowToastClass(false)
-      setTimeout(() => {
-        setToast(null)
-      }, 400)
+      setTimeout(() => setToast(null), 400)
     }, 4000)
-
     return () => clearTimeout(timer)
   }
 
   const closeToast = () => {
     setShowToastClass(false)
-    setTimeout(() => {
-      setToast(null)
-    }, 400)
+    setTimeout(() => setToast(null), 400)
+  }
+
+  if (loading) {
+    return (
+      <div className="project-details-page">
+        <div className="section-inner" style={{ textAlign: 'center', padding: '100px 0' }}>
+          <h2>Loading project...</h2>
+        </div>
+      </div>
+    )
   }
 
   if (!currentProject) {
