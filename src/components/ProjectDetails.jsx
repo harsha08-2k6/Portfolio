@@ -32,20 +32,20 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
           setCurrentProject({
             id: res._id,
             title: res.title || "Project",
-            tagline: res.description ? res.description.substring(0, 100) + "..." : "No tagline",
+            tagline: res.tagline || (res.description ? res.description.substring(0, 100) + "..." : ""),
             liveLink: res.link || "#",
-            client: "Personal Project",
-            industry: "Software",
-            timeline: "Recent",
+            client: res.client || "Personal Project",
+            industry: res.industry || "Software",
+            timeline: res.timeline || "Recent",
             technologies: res.tags ? res.tags.join(", ") : "Various",
             image: res.image?.asset ? urlFor(res.image).url() : res.image,
-            overview: res.description || "No overview available.",
-            role: ["Lead Developer"],
-            techStack: (res.tags || []).map(t => ({ label: "Tech", value: t })),
-            features: ["Features will be updated soon."],
-            structure: "Code structure not available.",
-            structureBullets: [],
-            challenges: []
+            overview: res.overview || res.description || "No overview available.",
+            role: res.role || ["Lead Developer"],
+            techStack: res.techStack || (res.tags || []).map(t => ({ label: "Tech", value: t })),
+            features: res.features || ["Features will be updated soon."],
+            structure: res.structure || "Code structure not available.",
+            structureBullets: res.structureBullets || [],
+            challenges: res.challenges || []
           })
         } else {
           setCurrentProject(null)
