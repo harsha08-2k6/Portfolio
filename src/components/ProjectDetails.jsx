@@ -59,14 +59,19 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
             setLoadingReadme(true)
             const match = res.github.match(/github\.com\/([^/]+)\/([^/]+)/);
             if (match) {
-              const apiurl = `https://api.github.com/repos/${match[1]}/${match[2].replace(/\/$/, '')}/readme`;
-              fetch(apiurl)
-                .then(r => r.json())
-                .then(data => {
-                  if (data.download_url) {
-                    return fetch(data.download_url).then(r => r.text());
-                  }
-                  throw new Error('No download URL');
+              const user = match[1];
+              const repo = match[2].replace(/\/$/, '');
+              
+              // Fetch directly from raw.githubusercontent to avoid API rate limits
+              fetch(`https://raw.githubusercontent.com/${user}/${repo}/main/README.md`)
+                .then(r => {
+                  if (r.ok) return r.text();
+                  // If main branch doesn't have it, fallback to master branch
+                  return fetch(`https://raw.githubusercontent.com/${user}/${repo}/master/README.md`)
+                    .then(r2 => {
+                      if (r2.ok) return r2.text();
+                      throw new Error('README not found on main or master');
+                    });
                 })
                 .then(text => {
                   setReadmeContent(text)
@@ -74,7 +79,7 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
                 })
                 .catch(err => {
                   console.error("Failed to fetch README", err)
-                  setReadmeContent("*Failed to load README from GitHub.*")
+                  setReadmeContent("*Failed to load README from GitHub. Make sure the repository is public and has a README.md on the main or master branch.*")
                   setLoadingReadme(false)
                 })
             } else {
