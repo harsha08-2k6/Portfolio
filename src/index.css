@@ -1318,9 +1318,10 @@ nav {
 
 .details-sections-grid {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
+  grid-template-columns: 1fr;
+  max-width: 900px;
+  margin: 0 auto 4rem auto;
   gap: 4rem;
-  margin-bottom: 4rem;
 }
 
 .details-sections-left {
