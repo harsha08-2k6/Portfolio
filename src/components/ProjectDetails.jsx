@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import { projectsData } from '../data/projectsData'
 import { ProjectCard } from './Projects'
 import { client, urlFor } from '../client'
 
 export default function ProjectDetails({ projectId, setActiveProjectId, navigateToSection, showAllProjects }) {
   const [currentProject, setCurrentProject] = useState(null)
+  const [otherProjects, setOtherProjects] = useState([])
   const [loading, setLoading] = useState(true)
   const [imgFailed, setImgFailed] = useState(false)
   const [toast, setToast] = useState(null)
@@ -15,15 +15,7 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
     setImgFailed(false)
     setLoading(true)
 
-    // First check static data
-    const staticProj = projectsData.find(p => p.id === projectId)
-    if (staticProj) {
-      setCurrentProject(staticProj)
-      setLoading(false)
-      return
-    }
-
-    // If not static, fetch from Sanity
+    // Fetch from Sanity
     client.fetch(`*[_type == "project" && _id == $id][0]`, { id: projectId })
       .then(res => {
         if (res) {
@@ -47,6 +39,11 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
             structureBullets: res.structureBullets || [],
             challenges: res.challenges || []
           })
+
+          // Fetch other projects
+          client.fetch(`*[_type == "project" && _id != $id][0...4]`, { id: projectId })
+            .then(data => setOtherProjects(data || []))
+            .catch(console.error)
         } else {
           setCurrentProject(null)
         }
@@ -96,9 +93,6 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
       </div>
     )
   }
-
-  // Get other 3 projects to display in the "More Projects" section
-  const otherProjects = projectsData.filter(p => p.id.toLowerCase() !== projectId?.toLowerCase())
 
   return (
     <div className="project-details-page">
@@ -285,14 +279,16 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
           </div>
 
           {/* More Projects Section */}
-          <div className="more-projects-section">
-            <h2 className="more-projects-title">More Projects</h2>
-            <div className="projects-grid-2col">
-              {otherProjects.map(p => (
-                <ProjectCard key={p.id} project={p} onSelect={setActiveProjectId} />
-              ))}
+          {otherProjects && otherProjects.length > 0 && (
+            <div className="more-projects-section">
+              <h2 className="more-projects-title">More Projects</h2>
+              <div className="projects-grid-2col">
+                {otherProjects.map(p => (
+                  <ProjectCard key={p._id || p.id} project={p} onSelect={setActiveProjectId} />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 

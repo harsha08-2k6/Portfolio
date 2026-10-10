@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
-import { projectsData } from '../data/projectsData'
 import { client, urlFor } from '../client'
-
 export function ProjectCard({ project, onSelect }) {
   const [imgFailed, setImgFailed] = useState(false)
 
@@ -54,16 +52,10 @@ export default function Projects({ setActiveProjectId, setShowAllProjects }) {
     // Fetch projects from Sanity
     client.fetch('*[_type == "project"]')
       .then((data) => {
-        if (data.length > 0) {
-          setProjects(data);
-        } else {
-          // Fallback to static data if nothing is in Sanity yet
-          setProjects(projectsData);
-        }
+        if (data) setProjects(data);
       })
       .catch((err) => {
         console.error("Sanity fetch error:", err);
-        setProjects(projectsData); // Fallback on error
       });
   }, []);
 

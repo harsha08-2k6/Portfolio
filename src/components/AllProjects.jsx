@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { projectsData as staticProjectsData } from '../data/projectsData'
 import { ProjectCard } from './Projects'
 import { client } from '../client'
 
@@ -12,15 +11,10 @@ export default function AllProjects({ setActiveProjectId, setShowAllProjects, na
     // Fetch projects from Sanity
     client.fetch('*[_type == "project"]')
       .then((data) => {
-        if (data.length > 0) {
-          setProjects(data);
-        } else {
-          setProjects(staticProjectsData);
-        }
+        if (data) setProjects(data);
       })
       .catch((err) => {
         console.error("Sanity fetch error:", err);
-        setProjects(staticProjectsData);
       });
   }, [])
 
