@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react'
 import { projectsData } from '../data/projectsData'
 import { ProjectCard } from './Projects'
 import { client, urlFor } from '../client'
-import ReactMarkdown from 'react-markdown'
-import rehypeRaw from 'rehype-raw'
 
 export default function ProjectDetails({ projectId, setActiveProjectId, navigateToSection, showAllProjects }) {
   const [currentProject, setCurrentProject] = useState(null)
@@ -11,15 +9,11 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
   const [imgFailed, setImgFailed] = useState(false)
   const [toast, setToast] = useState(null)
   const [showToastClass, setShowToastClass] = useState(false)
-  const [readmeContent, setReadmeContent] = useState(null)
-  const [loadingReadme, setLoadingReadme] = useState(false)
-
   // Fetch project data (either static or from Sanity)
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
     setImgFailed(false)
     setLoading(true)
-    setReadmeContent(null)
 
     // First check static data
     const staticProj = projectsData.find(p => p.id === projectId)
@@ -46,47 +40,13 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
             technologies: res.tags ? res.tags.join(", ") : "Various",
             image: res.image?.asset ? urlFor(res.image).url() : res.image,
             overview: res.overview || res.description || "No overview available.",
-            role: res.role || ["Lead Developer"],
+            role: res.role || [],
             techStack: res.techStack || (res.tags || []).map(t => ({ label: "Tech", value: t })),
-            features: res.features || ["Features will be updated soon."],
-            structure: res.structure || "Code structure not available.",
+            features: res.features || [],
+            structure: res.structure || "",
             structureBullets: res.structureBullets || [],
             challenges: res.challenges || []
           })
-
-          // Fetch README if enabled and URL is provided
-          if (res.useGithubReadme && res.github) {
-            setLoadingReadme(true)
-            const match = res.github.match(/github\.com\/([^/]+)\/([^/]+)/);
-            if (match) {
-              const user = match[1];
-              const repo = match[2].replace(/\/$/, '');
-              
-              // Fetch from jsDelivr CDN to bypass restrictive ISP blocks
-              fetch(`https://cdn.jsdelivr.net/gh/${user}/${repo}@main/README.md`)
-                .then(r => {
-                  if (r.ok) return r.text();
-                  // If main branch fails, fallback to master branch
-                  return fetch(`https://cdn.jsdelivr.net/gh/${user}/${repo}@master/README.md`)
-                    .then(r2 => {
-                      if (r2.ok) return r2.text();
-                      throw new Error('README not found on main or master');
-                    });
-                })
-                .then(text => {
-                  setReadmeContent(text)
-                  setLoadingReadme(false)
-                })
-                .catch(err => {
-                  console.error("Failed to fetch README", err)
-                  setCurrentProject(prev => ({ ...prev, useGithubReadme: false }))
-                  setLoadingReadme(false)
-                })
-            } else {
-              setCurrentProject(prev => ({ ...prev, useGithubReadme: false }))
-              setLoadingReadme(false)
-            }
-          }
         } else {
           setCurrentProject(null)
         }
@@ -227,64 +187,62 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
             )}
           </div>
 
-          {/* Subsections Grid / Markdown */}
+          {/* Subsections Grid */}
           <div className="details-sections-grid">
             <div className="details-sections-left">
-              {currentProject.useGithubReadme ? (
-                <div className="details-section markdown-body" style={{ color: 'var(--white)' }}>
-                  {loadingReadme ? (
-                    <p>Loading README from GitHub...</p>
-                  ) : (
-                    <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-                      {readmeContent || "No README found."}
-                    </ReactMarkdown>
-                  )}
+              {/* Project Overview */}
+              {currentProject.overview && (
+                <div className="details-section">
+                  <h2>Project Overview</h2>
+                  {currentProject.overview.split('\n\n').map((paragraph, idx) => (
+                    <p key={idx}>{paragraph}</p>
+                  ))}
                 </div>
-              ) : (
-                <>
-                  {/* Project Overview */}
-                  <div className="details-section">
-                    <h2>Project Overview</h2>
-                    {currentProject.overview.split('\n\n').map((paragraph, idx) => (
-                      <p key={idx}>{paragraph}</p>
+              )}
+
+              {/* Your Role */}
+              {currentProject.role && currentProject.role.length > 0 && (
+                <div className="details-section">
+                  <h2>Your Role</h2>
+                  <ul>
+                    {currentProject.role.map((r, idx) => (
+                      <li key={idx}>{r}</li>
                     ))}
-                  </div>
+                  </ul>
+                </div>
+              )}
 
-                  {/* Your Role */}
-                  <div className="details-section">
-                    <h2>Your Role</h2>
-                    <ul>
-                      {currentProject.role.map((r, idx) => (
-                        <li key={idx}>{r}</li>
-                      ))}
-                    </ul>
-                  </div>
+              {/* Tech Stack Used */}
+              {currentProject.techStack && currentProject.techStack.length > 0 && (
+                <div className="details-section">
+                  <h2>Tech Stack Used</h2>
+                  <ul>
+                    {currentProject.techStack.map((tech, idx) => (
+                      <li key={idx}>
+                        <strong>{tech.label}:</strong> {tech.value}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
-                  {/* Tech Stack Used */}
-                  <div className="details-section">
-                    <h2>Tech Stack Used</h2>
-                    <ul>
-                      {currentProject.techStack.map((tech, idx) => (
-                        <li key={idx}>
-                          <strong>{tech.label}:</strong> {tech.value}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+              {/* Key Features */}
+              {currentProject.features && currentProject.features.length > 0 && (
+                <div className="details-section">
+                  <h2>Key Features</h2>
+                  <ul>
+                    {currentProject.features.map((f, idx) => (
+                      <li key={idx}>{f}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
-                  {/* Key Features */}
-                  <div className="details-section">
-                    <h2>Key Features</h2>
-                    <ul>
-                      {currentProject.features.map((f, idx) => (
-                        <li key={idx}>{f}</li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Code Structure */}
-                  <div className="details-section">
-                    <h2>Code Structure & Architecture</h2>
+              {/* Code Structure */}
+              {(currentProject.structure || (currentProject.structureBullets && currentProject.structureBullets.length > 0)) && (
+                <div className="details-section">
+                  <h2>Code Structure & Architecture</h2>
+                  {currentProject.structure && (
                     <div className="code-editor-box">
                       <div className="code-editor-header">
                         <div className="code-editor-buttons">
@@ -298,26 +256,30 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
                         {currentProject.structure}
                       </div>
                     </div>
+                  )}
+                  {currentProject.structureBullets && currentProject.structureBullets.length > 0 && (
                     <ul>
                       {currentProject.structureBullets.map((b, idx) => (
                         <li key={idx}>{b}</li>
                       ))}
                     </ul>
-                  </div>
+                  )}
+                </div>
+              )}
 
-                  {/* Challenges & Solutions */}
-                  <div className="details-section">
-                    <h2>Challenges & Solutions</h2>
-                    <div className="challenges-list">
-                      {currentProject.challenges.map((c, idx) => (
-                        <div className="challenge-item" key={idx}>
-                          <strong>Challenge: {c.challenge}</strong>
-                          <span>Solution: {c.solution}</span>
-                        </div>
-                      ))}
-                    </div>
+              {/* Challenges & Solutions */}
+              {currentProject.challenges && currentProject.challenges.length > 0 && (
+                <div className="details-section">
+                  <h2>Challenges & Solutions</h2>
+                  <div className="challenges-list">
+                    {currentProject.challenges.map((c, idx) => (
+                      <div className="challenge-item" key={idx}>
+                        <strong>Challenge: {c.challenge}</strong>
+                        <span>Solution: {c.solution}</span>
+                      </div>
+                    ))}
                   </div>
-                </>
+                </div>
               )}
             </div>
           </div>
