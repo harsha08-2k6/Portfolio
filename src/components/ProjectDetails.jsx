@@ -79,11 +79,11 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
                 })
                 .catch(err => {
                   console.error("Failed to fetch README", err)
-                  setReadmeContent("*Failed to load README from GitHub. Make sure the repository is public and has a README.md on the main or master branch.*")
+                  setCurrentProject(prev => ({ ...prev, useGithubReadme: false }))
                   setLoadingReadme(false)
                 })
             } else {
-              setReadmeContent("*Invalid GitHub URL provided.*")
+              setCurrentProject(prev => ({ ...prev, useGithubReadme: false }))
               setLoadingReadme(false)
             }
           }
