@@ -107,28 +107,28 @@ export default function Contact({ navigateToSection, setShowStartProject, setSho
           <div className="contact-right-col">
             <span className="contact-section-label">PLATFORMS</span>
             <div className="platforms-list">
-              <a href="https://github.com/harsha08-2k6" target="_blank" rel="noreferrer" className="platform-item">
+              <a href="https://github.com/harsha08-2k6" target="_blank" rel="noreferrer" className="platform-item" aria-label="GitHub profile @harsha08-2k6">
                 <div className="platform-info">
                   <svg className="platform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                   <span className="platform-username">@harsha08-2k6</span>
                 </div>
               </a>
               
-              <a href="https://www.linkedin.com/in/siva-harsha-vardhan-reddy/" target="_blank" rel="noreferrer" className="platform-item">
+              <a href="https://www.linkedin.com/in/siva-harsha-vardhan-reddy/" target="_blank" rel="noreferrer" className="platform-item" aria-label="LinkedIn profile siva-harsha-vardhan-reddy">
                 <div className="platform-info">
                   <svg className="platform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                   <span className="platform-username">siva-harsha-vardhan-reddy</span>
                 </div>
               </a>
 
-              <a href="https://www.instagram.com/_name_is_harsha_/" target="_blank" rel="noreferrer" className="platform-item">
+              <a href="https://www.instagram.com/_name_is_harsha_/" target="_blank" rel="noreferrer" className="platform-item" aria-label="Instagram profile @_name_is_harsha_">
                 <div className="platform-info">
                   <svg className="platform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                   <span className="platform-username">@_name_is_harsha_</span>
                 </div>
               </a>
 
-              <a href="https://x.com/harsha08_2k6" target="_blank" rel="noreferrer" className="platform-item">
+              <a href="https://x.com/harsha08_2k6" target="_blank" rel="noreferrer" className="platform-item" aria-label="X (Twitter) profile @harsha08_2k6">
                 <div className="platform-info">
                   <svg className="platform-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
@@ -143,16 +143,16 @@ export default function Contact({ navigateToSection, setShowStartProject, setSho
 
         {/* Social Icon Squares Row (Image 3) */}
         <div className="social-squares-row reveal-up">
-          <a href="https://github.com/harsha08-2k6" target="_blank" rel="noreferrer" className="social-square-btn" data-cursor="expand">
+          <a href="https://github.com/harsha08-2k6" target="_blank" rel="noreferrer" className="social-square-btn" data-cursor="expand" aria-label="GitHub Profile">
             <svg className="social-square-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
           </a>
-          <a href="https://www.linkedin.com/in/siva-harsha-vardhan-reddy/" target="_blank" rel="noreferrer" className="social-square-btn" data-cursor="expand">
+          <a href="https://www.linkedin.com/in/siva-harsha-vardhan-reddy/" target="_blank" rel="noreferrer" className="social-square-btn" data-cursor="expand" aria-label="LinkedIn Profile">
             <svg className="social-square-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
           </a>
-          <a href="https://www.instagram.com/_name_is_harsha_/" target="_blank" rel="noreferrer" className="social-square-btn" data-cursor="expand">
+          <a href="https://www.instagram.com/_name_is_harsha_/" target="_blank" rel="noreferrer" className="social-square-btn" data-cursor="expand" aria-label="Instagram Profile">
             <svg className="social-square-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
           </a>
-          <a href="mailto:tsivaharshavardhanreddy08@gmail.com" className="social-square-btn" data-cursor="expand">
+          <a href="mailto:tsivaharshavardhanreddy08@gmail.com" className="social-square-btn" data-cursor="expand" aria-label="Send Email">
             <svg className="social-square-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
               <rect x="2" y="4" width="20" height="16" rx="2" />
               <path d="M2 7l10 7 10-7" />
@@ -173,9 +173,9 @@ export default function Contact({ navigateToSection, setShowStartProject, setSho
             @2026 Tamlampudi Siva Harsha Vardhan Reddy
           </div>
           <div className="footer-bottom-links">
-            <a href="#404" onClick={e => { e.preventDefault(); setShowDoc('404'); }}>404</a>
-            <a href="#privacy" onClick={e => { e.preventDefault(); setShowDoc('privacy'); }}>PRIVACY POLICY</a>
-            <a href="#terms" onClick={e => { e.preventDefault(); setShowDoc('terms'); }}>TERM & CONDITION</a>
+            <a href="#404" onClick={e => { e.preventDefault(); setShowDoc('404'); }} aria-label="Open 404 page">404</a>
+            <a href="#privacy" onClick={e => { e.preventDefault(); setShowDoc('privacy'); }} aria-label="Open Privacy Policy">PRIVACY POLICY</a>
+            <a href="#terms" onClick={e => { e.preventDefault(); setShowDoc('terms'); }} aria-label="Open Terms and Conditions">TERM & CONDITION</a>
           </div>
         </div>
       </div>

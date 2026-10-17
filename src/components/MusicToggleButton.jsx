@@ -17,36 +17,39 @@ export default function MusicToggleButton({ audioSrc = '/song.mp3' }) {
   
   const audioRef = useRef(null)
 
-  // Initialize and bind audio events
+  // Clean up audio on unmount
   useEffect(() => {
-    const audio = new Audio(audioSrc)
-    audio.preload = 'metadata'
-    audioRef.current = audio
-
-    // Automatically reset when the song finishes playing
-    const handleEnded = () => {
-      setIsPlaying(false)
-      setHeights(Array(bars).fill(0.18))
-    }
-
-    // Stop audio when user closes the tab / window
-    const handleBeforeUnload = () => {
-      if (audio) {
-        audio.pause()
-        audio.currentTime = 0
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current.currentTime = 0
       }
     }
+  }, [])
 
-    audio.addEventListener('ended', handleEnded)
-    window.addEventListener('beforeunload', handleBeforeUnload)
+  // Lazy instantiate audio instance
+  const getAudio = () => {
+    if (!audioRef.current) {
+      const audio = new Audio(audioSrc)
+      audio.preload = 'none'
 
-    return () => {
-      audio.removeEventListener('ended', handleEnded)
-      window.removeEventListener('beforeunload', handleBeforeUnload)
-      audio.pause()
-      audio.currentTime = 0
+      audio.addEventListener('ended', () => {
+        setIsPlaying(false)
+        setHeights(Array(bars).fill(0.18))
+      })
+
+      const handleBeforeUnload = () => {
+        if (audio) {
+          audio.pause()
+          audio.currentTime = 0
+        }
+      }
+      window.addEventListener('beforeunload', handleBeforeUnload)
+
+      audioRef.current = audio
     }
-  }, [audioSrc])
+    return audioRef.current
+  }
 
   // Real-time animated waveform equalizer loop when playing
   useEffect(() => {
@@ -66,7 +69,7 @@ export default function MusicToggleButton({ audioSrc = '/song.mp3' }) {
 
   // Toggle playback
   const toggleSound = () => {
-    const audio = audioRef.current
+    const audio = getAudio()
     if (!audio) return
 
     if (isPlaying) {

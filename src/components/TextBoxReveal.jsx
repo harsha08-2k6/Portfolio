@@ -80,24 +80,18 @@ export default function TextBoxReveal({
               key={`${token.text}-${index}`}
               className="text-box-reveal-highlight-wrap"
               initial={{ 
-                opacity: 0.12, 
-                y: 6, 
-                filter: 'blur(3px)',
-                scale: 0.96
+                opacity: 0.15, 
+                y: 5
               }}
               animate={shouldAnimate ? { 
                 opacity: 1, 
-                y: 0, 
-                filter: 'blur(0px)',
-                scale: 1
+                y: 0
               } : {
-                opacity: 0.12,
-                y: 6,
-                filter: 'blur(3px)',
-                scale: 0.96
+                opacity: 0.15,
+                y: 5
               }}
               transition={{
-                duration: 0.45,
+                duration: 0.4,
                 delay: shouldAnimate ? itemDelay : 0,
                 ease: [0.22, 1, 0.36, 1]
               }}
@@ -117,21 +111,18 @@ export default function TextBoxReveal({
             key={`${token.text}-${index}`}
             className="text-box-reveal-word text-box-reveal-normal"
             initial={{ 
-              opacity: 0.12, 
-              y: 6, 
-              filter: 'blur(3px)'
+              opacity: 0.15, 
+              y: 5
             }}
             animate={shouldAnimate ? { 
               opacity: 1, 
-              y: 0, 
-              filter: 'blur(0px)'
+              y: 0
             } : {
-              opacity: 0.12,
-              y: 6,
-              filter: 'blur(3px)'
+              opacity: 0.15,
+              y: 5
             }}
             transition={{
-              duration: 0.45,
+              duration: 0.4,
               delay: shouldAnimate ? itemDelay : 0,
               ease: [0.22, 1, 0.36, 1]
             }}

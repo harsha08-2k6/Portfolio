@@ -83,64 +83,66 @@ export default function App() {
       <WhatsAppFloat />
       <Navbar navigateToSection={navigateToSection} />
       
-      {!isOnline ? (
-        <NotFound initialMode="offline" onClose={() => setIsOnline(true)} />
-      ) : showDoc !== null ? (
-        showDoc === '404' ? (
-          <NotFound onClose={() => setShowDoc(null)} />
-        ) : (
+      <main id="main-content">
+        {!isOnline ? (
+          <NotFound initialMode="offline" onClose={() => setIsOnline(true)} />
+        ) : showDoc !== null ? (
+          showDoc === '404' ? (
+            <NotFound onClose={() => setShowDoc(null)} />
+          ) : (
+            <>
+              <InfoDocument 
+                type={showDoc} 
+                onClose={() => setShowDoc(null)} 
+              />
+              <Footer />
+            </>
+          )
+        ) : activeProjectId !== null ? (
           <>
-            <InfoDocument 
-              type={showDoc} 
-              onClose={() => setShowDoc(null)} 
+            <ProjectDetails 
+              projectId={activeProjectId} 
+              setActiveProjectId={setActiveProjectId}
+              navigateToSection={navigateToSection}
+              showAllProjects={showAllProjects}
             />
             <Footer />
           </>
-        )
-      ) : activeProjectId !== null ? (
-        <>
-          <ProjectDetails 
-            projectId={activeProjectId} 
-            setActiveProjectId={setActiveProjectId}
-            navigateToSection={navigateToSection}
-            showAllProjects={showAllProjects}
-          />
-          <Footer />
-        </>
-      ) : showAllProjects ? (
-        <>
-          <AllProjects 
-            setActiveProjectId={setActiveProjectId}
-            setShowAllProjects={setShowAllProjects}
-            navigateToSection={navigateToSection}
-          />
-          <Footer />
-        </>
-      ) : showStartProject ? (
-        <>
-          <StartProject 
-            setShowStartProject={setShowStartProject}
-            navigateToSection={navigateToSection}
-          />
-          <Footer />
-        </>
-      ) : (
-        <>
-          <Hero isReady={!isLoading} />
-          <About />
-          <TechnicalArsenal />
-          <Projects 
-            setActiveProjectId={setActiveProjectId} 
-            setShowAllProjects={setShowAllProjects}
-          />
-          <Demos />
-          <Contact 
-            navigateToSection={navigateToSection} 
-            setShowStartProject={setShowStartProject}
-            setShowDoc={setShowDoc}
-          />
-        </>
-      )}
+        ) : showAllProjects ? (
+          <>
+            <AllProjects 
+              setActiveProjectId={setActiveProjectId} 
+              setShowAllProjects={setShowAllProjects}
+              navigateToSection={navigateToSection}
+            />
+            <Footer />
+          </>
+        ) : showStartProject ? (
+          <>
+            <StartProject 
+              setShowStartProject={setShowStartProject}
+              navigateToSection={navigateToSection}
+            />
+            <Footer />
+          </>
+        ) : (
+          <>
+            <Hero isReady={!isLoading} />
+            <About />
+            <TechnicalArsenal />
+            <Projects 
+              setActiveProjectId={setActiveProjectId} 
+              setShowAllProjects={setShowAllProjects}
+            />
+            <Demos />
+            <Contact 
+              navigateToSection={navigateToSection} 
+              setShowStartProject={setShowStartProject}
+              setShowDoc={setShowDoc}
+            />
+          </>
+        )}
+      </main>
     </>
   )
 }

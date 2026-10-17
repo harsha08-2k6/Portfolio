@@ -77,7 +77,15 @@ export default function Hero({ isReady = true }) {
         <div className="hero-center">
           <div className="photo-wrap">
             <div className="photo-glow" />
-            <img src={heroImg} alt="Harsha" className="hero-photo" />
+            <img 
+              src={heroImg} 
+              alt="Harsha" 
+              className="hero-photo" 
+              width="502" 
+              height="497" 
+              fetchPriority="high" 
+              decoding="async" 
+            />
             <div className="badge badge-tl"><span>Full Stack Developer</span></div>
             <div className="badge badge-br"><span>Cybersecurity</span></div>
             <div className="badge badge-tr"><span className="badge-dot" /><span>Available for work</span></div>

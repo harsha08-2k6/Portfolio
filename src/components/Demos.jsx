@@ -54,8 +54,11 @@ function VideoCard({ videoUrl }) {
           loop
           playsInline
           className="demo-video"
-          preload="metadata"
-        />
+          preload="none"
+          aria-label="Demonstration reel video preview"
+        >
+          <track kind="captions" src="data:text/vtt,WEBVTT" label="English" default />
+        </video>
 
 
         {/* Volume Button (only show when video is playing/hovered) */}

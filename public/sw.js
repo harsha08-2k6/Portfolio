@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shvr-portfolio-cache-v1';
+const CACHE_NAME = 'shvr-portfolio-cache-v2';
 
 // Install event - pre-cache critical shell assets
 self.addEventListener('install', (event) => {
@@ -45,6 +45,11 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
+
+  // Only handle same-origin assets; let external APIs (Sanity, Google Fonts) handle their own network caching
+  if (url.origin !== self.location.origin) {
+    return;
+  }
 
   // Exclude hot-reload files and WebSocket connections
   if (url.pathname.includes('hot-update') || url.pathname.includes('vite') || url.protocol === 'ws:') {

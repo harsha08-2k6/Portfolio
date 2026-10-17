@@ -19,7 +19,7 @@
 .text-box-reveal-word {
   display: inline-block;
   margin-right: 0.32em;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
 }
 
 .text-box-reveal-normal {
