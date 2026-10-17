@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { client, urlFor } from '../client'
+import Skiper80Showcase from './Skiper80Showcase'
 export function ProjectCard({ project, onSelect }) {
   const [imgFailed, setImgFailed] = useState(false)
 
@@ -82,15 +83,10 @@ export default function Projects({ setActiveProjectId, setShowAllProjects }) {
           &gt;
         </div>
 
-        <div className="projects-grid-2col">
-          {visibleProjects.map(p => (
-            <ProjectCard
-              key={p.id}
-              project={p}
-              onSelect={setActiveProjectId}
-            />
-          ))}
-        </div>
+        <Skiper80Showcase
+          projects={projects.slice(0, 4)}
+          onSelect={setActiveProjectId}
+        />
 
         <div className="projects-more-btn-wrap reveal-left visible">
           <button 

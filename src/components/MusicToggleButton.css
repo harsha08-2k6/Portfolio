@@ -1,0 +1,157 @@
+/* ==========================================================================
+   SKIPER25 - MUSIC / AUDIO TOGGLE BUTTON
+   Theme: Cyber Neon Mint & Charcoal Glassmorphism
+   Palette:
+   --mint: #78ED95
+   --mint-dim: rgba(120, 237, 149, 0.12)
+   --mint-border: rgba(120, 237, 149, 0.22)
+   --mint-glow: rgba(120, 237, 149, 0.35)
+   ========================================================================== */
+
+/* Outer Capsule Container */
+.skiper25-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  cursor: pointer;
+  user-select: none;
+  background: rgba(17, 21, 24, 0.65);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  padding: 4px 14px 4px 4px;
+  border-radius: 999px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 12px rgba(120, 237, 149, 0.05);
+}
+
+.skiper25-wrap:hover {
+  border-color: var(--mint-border, rgba(120, 237, 149, 0.25));
+  background: rgba(17, 21, 24, 0.9);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.55), 0 0 20px rgba(120, 237, 149, 0.18);
+  transform: translateY(-2px);
+}
+
+.skiper25-wrap.playing {
+  border-color: var(--mint-border, rgba(120, 237, 149, 0.28));
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(120, 237, 149, 0.15);
+}
+
+/* 36px Circular Equalizer Button */
+.skiper25-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--mint-border, rgba(120, 237, 149, 0.22));
+  color: var(--white, #FFFFFF);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.skiper25-wrap:hover .skiper25-btn {
+  border-color: var(--mint, #78ED95);
+  background: rgba(120, 237, 149, 0.1);
+  box-shadow: 0 0 15px rgba(120, 237, 149, 0.3);
+}
+
+.skiper25-wrap.playing .skiper25-btn {
+  border-color: var(--mint, #78ED95);
+  background: rgba(120, 237, 149, 0.15);
+  box-shadow: 0 0 18px rgba(120, 237, 149, 0.4);
+}
+
+/* Waveform equalizer bars */
+.skiper25-waveform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5px;
+  height: 15px;
+}
+
+/* Individual equalizer bar */
+.skiper25-bar {
+  width: 2px;
+  border-radius: 999px;
+  background: var(--w50, rgba(255, 255, 255, 0.45));
+  transition: background 0.3s ease;
+}
+
+.skiper25-wrap.playing .skiper25-bar {
+  background: var(--mint, #78ED95);
+  box-shadow: 0 0 8px rgba(120, 237, 149, 0.7);
+}
+
+/* Helper text near the button */
+.skiper25-helper-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: var(--w50, rgba(255, 255, 255, 0.55));
+  transition: color 0.25s ease;
+  white-space: nowrap;
+}
+
+.skiper25-wrap:hover .skiper25-helper-text {
+  color: var(--white, #FFFFFF);
+}
+
+.skiper25-wrap.playing .skiper25-helper-text {
+  color: var(--mint, #78ED95);
+}
+
+.skiper25-helper-prefix {
+  color: var(--mint, #78ED95);
+  font-weight: 700;
+}
+
+/* Position in hero page middle-down */
+.hero-center-bottom {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  .hero-center-bottom {
+    bottom: 5.5rem;
+  }
+
+  .skiper25-wrap {
+    padding: 3px 12px 3px 3px;
+    gap: 0.5rem;
+  }
+
+  .skiper25-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .skiper25-waveform {
+    gap: 2px;
+    height: 13px;
+  }
+
+  .skiper25-bar {
+    width: 1.8px;
+  }
+
+  .skiper25-helper-text {
+    font-size: 0.68rem;
+  }
+}

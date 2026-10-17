@@ -1,0 +1,80 @@
+/* ==========================================================================
+   TEXT BOX REVEAL (SKIPER70) - THEME: CYBER NEON MINT & CHARCOAL
+   Palette:
+   --mint: #78ED95
+   --mint-dim: rgba(120, 237, 149, 0.08)
+   --mint-border: rgba(120, 237, 149, 0.22)
+   --mint-glow: rgba(120, 237, 149, 0.25)
+   ========================================================================== */
+
+.text-box-reveal-container {
+  display: block;
+  position: relative;
+  font-size: 14.5px;
+  line-height: 2.25 !important;
+  letter-spacing: -0.01em;
+  user-select: text;
+}
+
+.text-box-reveal-word {
+  display: inline-block;
+  margin-right: 0.32em;
+  will-change: transform, opacity, filter;
+}
+
+.text-box-reveal-normal {
+  color: var(--w80, rgba(255, 255, 255, 0.82));
+  font-weight: 400;
+  transition: color 0.3s ease;
+}
+
+/* Highlight phrase wrapper (includes attached punctuation) */
+.text-box-reveal-highlight-wrap {
+  display: inline-block;
+  margin-right: 0.32em;
+  vertical-align: baseline;
+}
+
+/* Compact, refined green box badge */
+.text-box-reveal-highlight {
+  color: var(--mint, #78ED95);
+  background: rgba(120, 237, 149, 0.08);
+  border: 1px solid rgba(120, 237, 149, 0.22);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 550;
+  font-size: 0.9em;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+  display: inline-block;
+  vertical-align: 0.06em;
+  box-shadow: 0 0 10px rgba(120, 237, 149, 0.08);
+  transition: all 0.25s ease;
+}
+
+.text-box-reveal-highlight:hover {
+  background: rgba(120, 237, 149, 0.16);
+  border-color: var(--mint);
+  box-shadow: 0 0 14px rgba(120, 237, 149, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Punctuation (comma, dot) attached directly after highlight badge */
+.text-box-reveal-punct {
+  display: inline;
+  color: var(--w80, rgba(255, 255, 255, 0.82));
+  font-weight: 400;
+  margin-left: 1px;
+}
+
+@media (max-width: 768px) {
+  .text-box-reveal-container {
+    font-size: 13.5px;
+    line-height: 2.15 !important;
+  }
+
+  .text-box-reveal-highlight {
+    padding: 1px 5px;
+    font-size: 0.88em;
+  }
+}

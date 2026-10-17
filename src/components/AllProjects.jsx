@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { ProjectCard } from './Projects'
 import { client } from '../client'
+import Skiper80Showcase from './Skiper80Showcase'
 
 export default function AllProjects({ setActiveProjectId, setShowAllProjects, navigateToSection }) {
   const [projects, setProjects] = useState([])
@@ -47,16 +48,11 @@ export default function AllProjects({ setActiveProjectId, setShowAllProjects, na
           &gt;
         </div>
 
-        {/* Projects Grid */}
-        <div className="projects-grid-2col">
-          {projects.map(p => (
-            <ProjectCard
-              key={p._id || p.id}
-              project={p}
-              onSelect={setActiveProjectId}
-            />
-          ))}
-        </div>
+        {/* Skiper80 Projects Showcase */}
+        <Skiper80Showcase
+          projects={projects}
+          onSelect={setActiveProjectId}
+        />
 
         {/* Back to Home Button */}
         <div className="projects-more-btn-wrap reveal-left visible">

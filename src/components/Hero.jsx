@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import heroImg from '../assets/hero.png'
+import TextBoxReveal from './TextBoxReveal'
+import MusicToggleButton from './MusicToggleButton'
 
-export default function Hero() {
+export default function Hero({ isReady = true }) {
   const [roleIndex, setRoleIndex] = useState(0)
   const [currentText, setCurrentText] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
@@ -14,6 +16,8 @@ export default function Hero() {
   ]
 
   useEffect(() => {
+    if (!isReady) return
+
     const fullText = roles[roleIndex]
 
     const handleTyping = () => {
@@ -47,7 +51,7 @@ export default function Hero() {
 
     const timer = setTimeout(handleTyping, typingSpeed)
     return () => clearTimeout(timer)
-  }, [currentText, isDeleting, roleIndex, typingSpeed])
+  }, [currentText, isDeleting, roleIndex, typingSpeed, isReady])
 
   return (
     <section className="hero" id="hero">
@@ -84,45 +88,65 @@ export default function Hero() {
         {/* RIGHT: desc */}
         <div className="hero-right">
           <div className="hero-right-top">
-            <p className="hero-desc">
-              I craft secure, scalable, and user-friendly applications with expertise in{' '}
-              <span className="hl">Cybersecurity</span>,{' '}
-              <span className="hl">Open Source</span>, and{' '}
-              <span className="hl">Cloud Computing</span>.
-            </p>
+            <TextBoxReveal
+              key={isReady ? 'ready' : 'idle'}
+              text="I craft secure, scalable, and user-friendly applications with expertise in Cybersecurity, Open Source, and Cloud Computing."
+              highlights={["Cybersecurity", "Open Source", "Cloud Computing"]}
+              delay={0.45}
+              stagger={0.045}
+              className="hero-desc"
+              shouldAnimate={isReady}
+            />
           </div>
         </div>
 
       </div>
 
-      {/* Bottom-left: meta */}
+      {/* Bottom-left: Email + Socials */}
       <div className="hero-corner hero-corner-left">
         <div className="hero-meta">
           <div className="meta-row">
             <svg className="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
-            <a href="mailto:tsivaharshavardhanreddy08@gmail.com" className="meta-val">
+            <a 
+              href="mailto:tsivaharshavardhanreddy08@gmail.com" 
+              className="meta-val"
+            >
               tsivaharshavardhanreddy08@gmail.com
             </a>
           </div>
-          <div className="meta-row">
-            <svg className="meta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M6.6 10.8a15.2 15.2 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.4 11.4 0 00.6 3.6 1 1 0 01-.25 1z"/></svg>
-            <span className="meta-val">+91 96584 66999</span>
+
+          <div className="hero-socials hero-socials-left">
+            <a 
+              href="https://x.com/harsha08_2k6" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="soc-link"
+            >
+              <span className="soc-slash">/</span> Twitter (X)
+            </a>
+            <a 
+              href="https://www.linkedin.com/in/siva-harsha-vardhan-reddy/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="soc-link"
+            >
+              <span className="soc-slash">/</span> LinkedIn
+            </a>
+            <a 
+              href="https://github.com/harsha08-2k6" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="soc-link"
+            >
+              <span className="soc-slash">/</span> GitHub
+            </a>
           </div>
         </div>
       </div>
 
-      {/* Bottom-right: socials */}
-      <div className="hero-corner hero-corner-right">
-        <div className="hero-socials">
-          <a href="https://x.com/harsha08_2k6" target="_blank" rel="noreferrer" className="soc-link"><span className="soc-slash">/</span> Twitter (X)</a>
-          <a href="https://www.linkedin.com/in/siva-harsha-vardhan-reddy/" target="_blank" rel="noreferrer" className="soc-link"><span className="soc-slash">/</span> LinkedIn</a>
-          <a href="https://github.com/harsha08-2k6" target="_blank" rel="noreferrer" className="soc-link"><span className="soc-slash">/</span> GitHub</a>
-        </div>
-      </div>
-
-      <div className="scroll-hint">
-        <span>SCROLL</span>
-        <div className="scroll-line" />
+      {/* Middle-down: Skiper25 Music / Sound Waveform Toggle */}
+      <div className="hero-center-bottom">
+        <MusicToggleButton />
       </div>
     </section>
   )

@@ -489,9 +489,9 @@ nav {
 }
 
 .hero-desc {
-  font-size: 14px;
+  font-size: 14.5px;
   color: var(--w50);
-  line-height: 1.8;
+  line-height: 2.25;
 }
 
 .hero-desc .hl {
@@ -503,34 +503,48 @@ nav {
 .hero-corner {
   position: absolute;
   bottom: 2.5rem;
-  z-index: 2;
+  z-index: 20;
+  pointer-events: auto;
 }
 
 .hero-corner-left {
   left: 3rem;
-}
-
-.hero-corner-right {
-  right: 3rem;
+  z-index: 25;
 }
 
 .hero-socials {
   display: flex;
-  flex-direction: column;
   gap: .5rem;
-  align-items: flex-end;
+  position: relative;
+  z-index: 25;
+  pointer-events: auto;
+}
+
+.hero-socials-left {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: 0.4rem;
 }
 
 .soc-link {
   font-size: 13px;
   font-weight: 500;
   color: var(--w50);
-  transition: color var(--ease), letter-spacing var(--ease);
+  transition: color var(--ease), letter-spacing var(--ease), transform var(--ease);
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 26;
+  display: inline-flex;
+  align-items: center;
 }
 
 .soc-link:hover {
   color: var(--mint);
   letter-spacing: .06em;
+  transform: translateX(-4px);
 }
 
 .soc-slash {
@@ -2480,6 +2494,7 @@ footer {
   flex-direction: column-reverse;
   align-items: flex-end;
   gap: 0.8rem;
+  pointer-events: none;
 }
 
 .wa-toggle-btn {
@@ -2492,7 +2507,8 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: none;
+  cursor: pointer;
+  pointer-events: auto;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
   transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.2s ease;
 }

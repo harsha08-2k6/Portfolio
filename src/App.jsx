@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { AnimatePresence } from 'framer-motion'
 import Cursor from './components/Cursor'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -15,14 +16,29 @@ import InfoDocument from './components/InfoDocument'
 import useScrollReveal from './hooks/useScrollReveal'
 import WhatsAppFloat from './components/WhatsAppFloat'
 import NotFound from './components/NotFound'
+import Skiper8Preloader from './components/Skiper8Preloader'
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true)
   const [activeProjectId, setActiveProjectId] = useState(null)
   const [showAllProjects, setShowAllProjects] = useState(false)
   const [showStartProject, setShowStartProject] = useState(false)
   const [showDoc, setShowDoc] = useState(null)
   const [isOnline, setIsOnline] = useState(navigator.onLine)
   useScrollReveal()
+
+  // Lock scrolling during preloader
+  useEffect(() => {
+    if (isLoading) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+      window.scrollTo(0, 0)
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isLoading])
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true)
@@ -54,6 +70,15 @@ export default function App() {
 
   return (
     <>
+      <AnimatePresence mode="wait">
+        {isLoading && (
+          <Skiper8Preloader
+            key="skiper8-preloader"
+            onComplete={() => setIsLoading(false)}
+          />
+        )}
+      </AnimatePresence>
+
       <Cursor />
       <WhatsAppFloat />
       <Navbar navigateToSection={navigateToSection} />
@@ -101,7 +126,7 @@ export default function App() {
         </>
       ) : (
         <>
-          <Hero />
+          <Hero isReady={!isLoading} />
           <About />
           <TechnicalArsenal />
           <Projects 
