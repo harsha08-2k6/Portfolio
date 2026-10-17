@@ -129,7 +129,14 @@
 
 @media (max-width: 768px) {
   .hero-center-bottom {
-    bottom: 5.5rem;
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    order: 2;
+    margin: 1.5rem auto 0.75rem;
+    width: 100%;
+    z-index: 25;
   }
 
   .skiper25-wrap {
