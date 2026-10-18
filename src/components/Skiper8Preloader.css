@@ -62,11 +62,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 4.5rem;
-  width: 100%;
-  max-width: 600px;
-  overflow: hidden;
-  contain: strict;
+  min-height: 3.5rem;
+  contain: layout;
 }
 
 .skiper8-word {
@@ -81,12 +78,8 @@
     0 0 25px rgba(120, 237, 149, 0.4),
     0 0 8px rgba(120, 237, 149, 0.25);
   text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
   will-change: transform, opacity;
-  contain: size layout paint;
+  contain: layout;
 }
 
 /* Morphing Curved SVG hanging below the preloader */
