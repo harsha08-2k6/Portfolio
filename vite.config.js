@@ -14,12 +14,6 @@ export default defineConfig({
           if (id.includes('node_modules/@sanity')) {
             return 'vendor-sanity';
           }
-          if (id.includes('node_modules/gsap')) {
-            return 'vendor-gsap';
-          }
-          if (id.includes('node_modules/matter-js')) {
-            return 'vendor-matter';
-          }
           if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
             return 'vendor-react';
           }
