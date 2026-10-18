@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import Skiper39 from './Skiper39'
 
 function MagneticButton({ children, className, href, onClick, ...props }) {
   const buttonRef = useRef(null)
@@ -158,6 +159,11 @@ export default function Contact({ navigateToSection, setShowStartProject, setSho
               <path d="M2 7l10 7 10-7" />
             </svg>
           </a>
+        </div>
+
+        {/* Skiper39 Crowd Canvas - Clean walking crowd before footer */}
+        <div className="reveal-up" style={{ width: '100%' }}>
+          <Skiper39 />
         </div>
 
         {/* Faded Bottom Divider */}
