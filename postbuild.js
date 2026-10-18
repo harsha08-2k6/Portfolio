@@ -28,6 +28,7 @@ const assetPaths = allFiles.map(file => {
 assetPaths.push('/favicon.svg');
 assetPaths.push('/icons.svg');
 assetPaths.push('/resume.html');
+assetPaths.push('/hero.webp');
 
 console.log('Detected build assets for PWA caching:', assetPaths);
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import Cursor from './components/Cursor'
 import Navbar from './components/Navbar'
@@ -9,14 +9,15 @@ import Projects from './components/Projects'
 import Demos from './components/Demos'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
-import ProjectDetails from './components/ProjectDetails'
-import AllProjects from './components/AllProjects'
-import StartProject from './components/StartProject'
-import InfoDocument from './components/InfoDocument'
 import useScrollReveal from './hooks/useScrollReveal'
 import WhatsAppFloat from './components/WhatsAppFloat'
-import NotFound from './components/NotFound'
 import Skiper8Preloader from './components/Skiper8Preloader'
+
+const ProjectDetails = lazy(() => import('./components/ProjectDetails'))
+const AllProjects = lazy(() => import('./components/AllProjects'))
+const StartProject = lazy(() => import('./components/StartProject'))
+const InfoDocument = lazy(() => import('./components/InfoDocument'))
+const NotFound = lazy(() => import('./components/NotFound'))
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -84,64 +85,66 @@ export default function App() {
       <Navbar navigateToSection={navigateToSection} />
       
       <main id="main-content">
-        {!isOnline ? (
-          <NotFound initialMode="offline" onClose={() => setIsOnline(true)} />
-        ) : showDoc !== null ? (
-          showDoc === '404' ? (
-            <NotFound onClose={() => setShowDoc(null)} />
-          ) : (
+        <Suspense fallback={null}>
+          {!isOnline ? (
+            <NotFound initialMode="offline" onClose={() => setIsOnline(true)} />
+          ) : showDoc !== null ? (
+            showDoc === '404' ? (
+              <NotFound onClose={() => setShowDoc(null)} />
+            ) : (
+              <>
+                <InfoDocument 
+                  type={showDoc} 
+                  onClose={() => setShowDoc(null)} 
+                />
+                <Footer />
+              </>
+            )
+          ) : activeProjectId !== null ? (
             <>
-              <InfoDocument 
-                type={showDoc} 
-                onClose={() => setShowDoc(null)} 
+              <ProjectDetails 
+                projectId={activeProjectId} 
+                setActiveProjectId={setActiveProjectId}
+                navigateToSection={navigateToSection}
+                showAllProjects={showAllProjects}
               />
               <Footer />
             </>
-          )
-        ) : activeProjectId !== null ? (
-          <>
-            <ProjectDetails 
-              projectId={activeProjectId} 
-              setActiveProjectId={setActiveProjectId}
-              navigateToSection={navigateToSection}
-              showAllProjects={showAllProjects}
-            />
-            <Footer />
-          </>
-        ) : showAllProjects ? (
-          <>
-            <AllProjects 
-              setActiveProjectId={setActiveProjectId} 
-              setShowAllProjects={setShowAllProjects}
-              navigateToSection={navigateToSection}
-            />
-            <Footer />
-          </>
-        ) : showStartProject ? (
-          <>
-            <StartProject 
-              setShowStartProject={setShowStartProject}
-              navigateToSection={navigateToSection}
-            />
-            <Footer />
-          </>
-        ) : (
-          <>
-            <Hero isReady={!isLoading} />
-            <About />
-            <TechnicalArsenal />
-            <Projects 
-              setActiveProjectId={setActiveProjectId} 
-              setShowAllProjects={setShowAllProjects}
-            />
-            <Demos />
-            <Contact 
-              navigateToSection={navigateToSection} 
-              setShowStartProject={setShowStartProject}
-              setShowDoc={setShowDoc}
-            />
-          </>
-        )}
+          ) : showAllProjects ? (
+            <>
+              <AllProjects 
+                setActiveProjectId={setActiveProjectId} 
+                setShowAllProjects={setShowAllProjects}
+                navigateToSection={navigateToSection}
+              />
+              <Footer />
+            </>
+          ) : showStartProject ? (
+            <>
+              <StartProject 
+                setShowStartProject={setShowStartProject}
+                navigateToSection={navigateToSection}
+              />
+              <Footer />
+            </>
+          ) : (
+            <>
+              <Hero isReady={!isLoading} />
+              <About />
+              <TechnicalArsenal />
+              <Projects 
+                setActiveProjectId={setActiveProjectId} 
+                setShowAllProjects={setShowAllProjects}
+              />
+              <Demos />
+              <Contact 
+                navigateToSection={navigateToSection} 
+                setShowStartProject={setShowStartProject}
+                setShowDoc={setShowDoc}
+              />
+            </>
+          )}
+        </Suspense>
       </main>
     </>
   )

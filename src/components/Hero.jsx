@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import heroPng from '../assets/hero.png'
-import heroWebp from '../assets/hero.webp'
 import TextBoxReveal from './TextBoxReveal'
 import MusicToggleButton from './MusicToggleButton'
 
@@ -79,9 +77,9 @@ export default function Hero({ isReady = true }) {
           <div className="photo-wrap">
             <div className="photo-glow" />
             <picture>
-              <source srcSet={heroWebp} type="image/webp" />
+              <source srcSet="/hero.webp" type="image/webp" />
               <img 
-                src={heroPng} 
+                src="/hero.png" 
                 alt="Harsha" 
                 className="hero-photo" 
                 width="502" 

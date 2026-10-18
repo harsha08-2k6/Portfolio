@@ -18,46 +18,53 @@ export default function useScrollReveal() {
           const idx = parent ? Array.from(parent.children).indexOf(target) : 0
           const delay = (target.classList.contains('proj-card') || target.classList.contains('proj-card-new')) ? idx * 120 : 0
           
-          setTimeout(() => {
+          if (delay > 0) {
+            setTimeout(() => {
+              target.classList.add('visible')
+            }, delay)
+          } else {
             target.classList.add('visible')
-          }, delay)
+          }
           
           revealObserver.unobserve(target)
         }
       })
     }, observerOptions)
 
+    let scheduledRaf = null
+
     const observeElements = () => {
+      // Ensure target elements have reveal base class
       const revealTargets = document.querySelectorAll(
-        '.hero-left, .hero-right, .skills-grid, .proj-card, .proj-card-new, .contact-left, .contact-right'
+        '.hero-left:not(.reveal), .hero-right:not(.reveal), .skills-grid:not(.reveal), .proj-card:not(.reveal), .proj-card-new:not(.reveal), .contact-left:not(.reveal), .contact-right:not(.reveal)'
       )
       revealTargets.forEach(el => {
-        if (!el.classList.contains('reveal')) {
-          el.classList.add('reveal')
-        }
+        el.classList.add('reveal')
       })
 
-      const allEls = document.querySelectorAll(
-        '.reveal:not(.visible), .reveal-left:not(.visible), .reveal-up:not(.visible)'
+      // Register all unobserved elements with IntersectionObserver
+      // This completely avoids getBoundingClientRect() and eliminates forced reflows!
+      const unobservedEls = document.querySelectorAll(
+        '.reveal:not(.visible):not([data-observed]), .reveal-left:not(.visible):not([data-observed]), .reveal-up:not(.visible):not([data-observed])'
       )
       
-      allEls.forEach(el => {
-        const rect = el.getBoundingClientRect()
-        // If element is already in or above the viewport trigger margin, reveal it instantly
-        const hasEnteredViewport = rect.top < (window.innerHeight || document.documentElement.clientHeight) + 150
-        
-        if (hasEnteredViewport) {
-          el.classList.add('visible')
-        } else {
-          revealObserver.observe(el)
-        }
+      unobservedEls.forEach(el => {
+        el.setAttribute('data-observed', 'true')
+        revealObserver.observe(el)
       })
     }
 
+    // Initial pass
     observeElements()
 
+    // Debounce mutation observations via requestAnimationFrame to avoid layout thrashing
     const mutationObserver = new MutationObserver(() => {
-      observeElements()
+      if (!scheduledRaf) {
+        scheduledRaf = requestAnimationFrame(() => {
+          observeElements()
+          scheduledRaf = null
+        })
+      }
     })
 
     mutationObserver.observe(document.body, {
@@ -66,9 +73,9 @@ export default function useScrollReveal() {
     })
 
     return () => {
+      if (scheduledRaf) cancelAnimationFrame(scheduledRaf)
       revealObserver.disconnect()
       mutationObserver.disconnect()
     }
   }, [])
 }
-
