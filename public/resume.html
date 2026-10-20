@@ -269,6 +269,11 @@
 
     /* Print styles */
     @media print {
+      @page {
+        margin: 12mm 15mm;
+        size: auto;
+      }
+
       body {
         background-color: #ffffff;
         color: #000000;
@@ -276,13 +281,18 @@
       }
 
       .top-bar {
-        display: none;
+        display: none !important;
       }
 
       .resume-wrapper {
         margin: 0;
         padding: 0;
         max-width: 100%;
+      }
+
+      .entry-item, section {
+        break-inside: avoid;
+        page-break-inside: avoid;
       }
 
       .resume-paper {
@@ -390,15 +400,15 @@
         </div>
         <div class="skills-category">
           <span class="skills-category-name">Frontend:</span>
-          <span class="skills-tags">React.js, HTML5, CSS3</span>
+          <span class="skills-tags">React.js, Vite, Tailwind CSS, HTML5, CSS3</span>
         </div>
         <div class="skills-category">
           <span class="skills-category-name">Backend:</span>
           <span class="skills-tags">Node.js, Express.js, FastAPI</span>
         </div>
         <div class="skills-category">
-          <span class="skills-category-name">Databases:</span>
-          <span class="skills-tags">MongoDB, MySQL</span>
+          <span class="skills-category-name">Databases & Caching:</span>
+          <span class="skills-tags">MongoDB, MySQL, Redis</span>
         </div>
         <div class="skills-category">
           <span class="skills-category-name">Developer Tools:</span>
@@ -413,6 +423,19 @@
       <!-- Projects -->
       <section>
         <h2 class="section-title">Projects</h2>
+
+        <div class="entry-item">
+          <div class="entry-header">
+            <span class="entry-title">KL-Edge — Smart Student Utility Platform</span>
+            <span class="entry-meta">React.js — FastAPI — Python — Redis — Tailwind CSS</span>
+          </div>
+          <ul class="entry-bullets">
+            <li>Engineered an all-in-one student utility platform and PWA for KL University to streamline academic workflows and campus services.</li>
+            <li>Built real-time attendance calculation engines, shortage predictions, timetable schedulers, seating plans, and faculty search.</li>
+            <li>Implemented automated ERP synchronization routines with Redis caching, accelerating data retrieval while minimizing server load.</li>
+            <li>Integrated Moodle LMS for assignment tracking alongside an interactive campus facility map and secure device-based credential management.</li>
+          </ul>
+        </div>
 
         <div class="entry-item">
           <div class="entry-header">
