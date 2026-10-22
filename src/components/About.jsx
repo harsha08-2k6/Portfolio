@@ -7,11 +7,6 @@ const skills = [
   { title: 'Tools', tags: ['Git', 'Github', 'AWS', 'Docker'] },
 ]
 
-const stats = [
-  { num: 241, suffix: '+', lbl: 'Github Contributions' },
-  { num: 10, suffix: '+', lbl: 'Completed Projects' },
-]
-
 function CountUp({ target, suffix }) {
   const [count, setCount] = useState(0)
   const ref = useRef(null)
@@ -45,6 +40,33 @@ function CountUp({ target, suffix }) {
 }
 
 export default function About() {
+  const [liveStats, setLiveStats] = useState([
+    { num: 315, suffix: '+', lbl: 'Github Contributions' },
+    { num: 15, suffix: '+', lbl: 'Completed Projects' },
+  ])
+
+  useEffect(() => {
+    const USERNAME = 'harsha08-2k6'
+    const token = import.meta.env?.VITE_GITHUB_TOKEN || ''
+    const headers = { Accept: 'application/vnd.github+json' }
+    if (token) headers['Authorization'] = `Bearer ${token}`
+
+    Promise.all([
+      fetch(`https://github-contributions-api.jogruber.de/v4/${USERNAME}?y=last`)
+        .then(r => r.ok ? r.json() : null)
+        .catch(() => null),
+      fetch(`https://api.github.com/users/${USERNAME}`, { headers })
+        .then(r => r.ok ? r.json() : null)
+        .catch(() => null)
+    ]).then(([contribData, userData]) => {
+      const contributions = contribData?.total?.lastYear || 315
+      const repos = userData?.public_repos || 15
+      setLiveStats([
+        { num: contributions, suffix: '+', lbl: 'Github Contributions' },
+        { num: repos, suffix: '+', lbl: 'Completed Projects' },
+      ])
+    }).catch(() => {})
+  }, [])
   return (
     <section className="about" id="about">
       {/* Marquee strip */}
@@ -102,7 +124,7 @@ export default function About() {
         </div>
 
         <div className="stats-row">
-          {stats.map(s => (
+          {liveStats.map(s => (
             <div className="stat-box" key={s.lbl}>
               <div className="stat-num"><CountUp target={s.num} suffix={s.suffix} /></div>
               <div className="stat-lbl">{s.lbl}</div>
