@@ -133,6 +133,17 @@ flowchart TD
 - **Live Connection State Detection:** Native `online` / `offline` event listeners display a custom offline error screen with retry capabilities.
 - **Error Simulation Mode:** Includes a dev-mode simulation bar (`?dev=true`) to test 404, offline, and timeout states interactively.
 
+### 📊 Live GitHub Statistics & Telemetry (`GitHubStats`)
+- **Real-Time Profile & Repo Telemetry:** Direct communication with the GitHub REST API for `@harsha08-2k6` aggregating public repository counts, star counts, and weekly activity.
+- **Accurate 365-Day Commit Heatmap:** Renders a 5-level mint-green intensity activity heatmap matching official GitHub contribution metrics.
+- **Efficient Rate-Limit Strategy:** Authenticates optionally via `VITE_GITHUB_TOKEN` to access 5,000 requests/hr, paired with automated 15-minute polling intervals and manual refresh triggers.
+
+### 💻 Interactive Terminal Playground (`TerminalPlayground`)
+- **In-Browser Developer CLI:** Emulates a realistic Linux/UNIX shell environment with a custom prompt (`harsha@shvr:~$`).
+- **Interactive Command Suite:** Supports `help`, `about`, `skills`, `projects`, `stats`, `contact`, `resume`, and `clear`.
+- **Keyboard Command History:** Arrow key navigation (<kbd>↑</kbd> and <kbd>↓</kbd>) through executed command history.
+- **One-Click Transcript Copy:** Top-right action button to copy the active terminal session to clipboard.
+
 ### 🎭 Procedural Crowd Canvas Animation (`Skiper39`)
 - **GSAP Canvas Sprite Simulation:** Renders walking character sprites from a Peeps illustration sprite sheet using custom GSAP easing functions.
 - **Dynamic Character Generation:** Grounded randomized trajectories, continuous scaling, and automatic stage resize handling.
@@ -191,6 +202,8 @@ portfolio-react/
 │   │   ├── Cursor.jsx           # Custom glowing cursor follower
 │   │   ├── Demos.jsx            # Video showcase reels with sound controls
 │   │   ├── Footer.jsx           # Compact footer branding
+│   │   ├── GitHubStats.css      # Mint-themed GitHub widget styling
+│   │   ├── GitHubStats.jsx      # Live GitHub statistics & 365-day commit heatmap
 │   │   ├── Hero.jsx             # Hero section with role typewriter & audio toggle
 │   │   ├── InfoDocument.jsx     # Privacy Policy and Terms & Conditions viewer
 │   │   ├── MusicToggleButton.jsx# Ambient audio player with live equalizer bars
@@ -203,6 +216,8 @@ portfolio-react/
 │   │   ├── Skiper8Preloader.jsx # Multilingual greeting loader with SVG slide-up
 │   │   ├── StartProject.jsx     # Project inquiry form powered by EmailJS
 │   │   ├── TechnicalArsenal.jsx # System core interactive skill matrix
+│   │   ├── TerminalPlayground.css # Monospace terminal theme & traffic lights
+│   │   ├── TerminalPlayground.jsx # In-browser interactive CLI playground
 │   │   ├── TextBoxReveal.jsx    # Word-by-word tokenized reveal animation
 │   │   └── WhatsAppFloat.jsx    # Persistent floating WhatsApp connect button
 │   ├── hooks/
@@ -305,6 +320,8 @@ npm run preview
 | **MusicToggleButton** | Manages background audio playback (`/song.mp3`) and animates equalizer bars in real time |
 | **TechnicalArsenal** | Interactive matrix displaying technical skills with cross-category synchronized glowing highlights |
 | **Skiper80Showcase** | Follows cursor via Framer Motion spring physics with drag-to-inspect and modal case study triggers |
+| **GitHubStats** | Real-time GitHub commit counter, live 365-day commit heatmap, star tallies, and repo activity |
+| **TerminalPlayground** | In-browser interactive UNIX terminal CLI executing `help`, `about`, `skills`, `projects`, `stats`, `contact`, `resume` |
 | **Sanity Content Client** | Executes GROQ queries, fetches project records, and builds responsive image URLs via CDN |
 | **FolderFloat** | Simulates 2D rigid-body physical gravity, drift, and throw physics via Matter.js |
 | **Demos & PhotoArchive** | Renders hover video cards with custom mute buttons and fullscreen multi-image lightbox |
@@ -373,11 +390,11 @@ The project uses Vercel's multi-service architecture via [`vercel.json`](file://
 
 ## 🔮 Future Improvements
 
+- [x] **Live GitHub Statistics Widget:** Real-time commit counter, live 365-day contribution heatmap, total stars, and repository activity fetched directly via GitHub REST API.
+- [x] **Interactive Terminal Playground:** In-browser mini CLI allowing visitors to run commands like `help`, `about`, `skills`, `projects`, `stats`, `contact`, and `resume`.
 - [ ] **Interactive 3D WebGL Hero:** Three.js / React Three Fiber interactive 3D model replacing 2D imagery.
 - [ ] **Technical Blog via Sanity:** Dedicated engineering blog section powered by Sanity CMS schemas.
-- [ ] **Live GitHub Statistics Widget:** Real-time commit counter and repository activity graph fetched directly via GitHub REST API.
 - [ ] **Theme Customizer:** Accent color picker allowing visitors to switch between cyber-mint, electric-purple, and sunset-amber palettes.
-- [ ] **Interactive Terminal Playground:** In-browser mini CLI allowing visitors to run commands like `cat skills.txt` or `ping harsha`.
 
 ---
 
