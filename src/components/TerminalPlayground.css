@@ -1,0 +1,295 @@
+/* ===================================================
+   Terminal Playground Component Styling
+   Color Palette: Mint (#78ED95), Deep Dark (#0B0E11, #111518),
+   Borders: var(--card-border) & var(--mint-border)
+   =================================================== */
+
+.terminal-section {
+  position: relative;
+  padding: 80px 0 60px;
+  background: var(--bg);
+}
+
+.terminal-window {
+  margin-top: 2rem;
+  background: #0f1317;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  transition: border-color var(--ease), box-shadow var(--ease);
+  cursor: text;
+}
+
+.terminal-window:hover {
+  border-color: rgba(120, 237, 149, 0.25);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55), 0 0 30px rgba(120, 237, 149, 0.05);
+}
+
+/* Titlebar */
+.terminal-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: #14181d;
+  border-bottom: 1px solid var(--card-border);
+  user-select: none;
+}
+
+.terminal-dots {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.terminal-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-red {
+  background: #ff5f56;
+}
+
+.dot-yellow {
+  background: #ffbd2e;
+}
+
+.dot-green {
+  background: #27c93f;
+}
+
+.terminal-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--w50);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+.terminal-title-icon {
+  color: var(--mint);
+}
+
+.terminal-actions {
+  display: flex;
+  align-items: center;
+}
+
+.terminal-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: var(--w50);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--ease);
+}
+
+.terminal-action-btn:hover {
+  border-color: var(--mint);
+  color: var(--mint);
+  background: var(--mint-dim);
+}
+
+/* Console Body */
+.terminal-body {
+  padding: 20px 24px;
+  min-height: 260px;
+  max-height: 380px;
+  overflow-y: auto;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--w80);
+  scrollbar-width: thin;
+  scrollbar-color: var(--w25) transparent;
+}
+
+.terminal-line {
+  margin-bottom: 8px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.terminal-line pre {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  white-space: pre-wrap;
+}
+
+.line-system {
+  color: var(--w50);
+  border-left: 2px solid var(--mint-border);
+  padding-left: 10px;
+  margin-bottom: 12px;
+}
+
+.line-user {
+  color: var(--mint);
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.line-output {
+  color: #d1d5db;
+}
+
+.line-error {
+  color: #f87171;
+}
+
+/* Prompt Line */
+.terminal-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.terminal-prompt {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.prompt-user {
+  color: var(--mint);
+}
+
+.prompt-at {
+  color: var(--w50);
+}
+
+.prompt-host {
+  color: #60a5fa;
+}
+
+.prompt-colon {
+  color: var(--w50);
+}
+
+.prompt-path {
+  color: #fbbf24;
+}
+
+.prompt-dollar {
+  color: var(--white);
+  margin-left: 4px;
+}
+
+.terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--white);
+  font-family: inherit;
+  font-size: 13px;
+  caret-color: var(--mint);
+  padding: 0;
+}
+
+.terminal-input::placeholder {
+  color: var(--w25);
+  font-style: italic;
+}
+
+.terminal-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--w50);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color var(--ease);
+}
+
+.terminal-submit-btn:hover {
+  color: var(--mint);
+}
+
+/* Quick Action Pills */
+.terminal-quick-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: #14181d;
+  border-top: 1px solid var(--card-border);
+  user-select: none;
+  flex-wrap: wrap;
+}
+
+.quick-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--mint);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.quick-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.quick-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--card-border);
+  color: var(--w80);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all var(--ease);
+}
+
+.quick-pill:hover {
+  border-color: var(--mint);
+  color: var(--mint);
+  background: var(--mint-dim);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
+  .terminal-section {
+    padding: 50px 0 30px;
+  }
+  .terminal-body {
+    padding: 16px;
+    font-size: 12px;
+    min-height: 220px;
+  }
+  .terminal-input-row {
+    flex-wrap: wrap;
+  }
+  .terminal-input {
+    min-width: 140px;
+  }
+}

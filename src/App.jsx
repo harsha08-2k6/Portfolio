@@ -7,6 +7,7 @@ import About from './components/About'
 import TechnicalArsenal from './components/TechnicalArsenal'
 import Projects from './components/Projects'
 import GitHubStats from './components/GitHubStats'
+import TerminalPlayground from './components/TerminalPlayground'
 import Demos from './components/Demos'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
@@ -136,6 +137,7 @@ export default function App() {
               setShowAllProjects={setShowAllProjects}
             />
             <GitHubStats />
+            <TerminalPlayground />
             <Demos />
             <Contact 
               navigateToSection={navigateToSection} 
