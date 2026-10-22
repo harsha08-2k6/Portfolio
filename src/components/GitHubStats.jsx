@@ -184,7 +184,7 @@ export default function GitHubStats() {
                   </div>
                   <div className="gh-metric-text">
                     <strong>{stats.totalContributions.toLocaleString()}</strong>
-                    <span>Contributions</span>
+                    <span>Commits</span>
                   </div>
                 </div>
 
@@ -223,7 +223,7 @@ export default function GitHubStats() {
               <div className="gh-heatmap-card">
                 <div className="gh-heatmap-card-header">
                   <div className="gh-heatmap-title">
-                    <span>365-Day Contribution Graph</span>
+                    <span>365-Day Commit Graph</span>
                   </div>
                   <div className="gh-heatmap-actions">
                     <a
@@ -252,13 +252,13 @@ export default function GitHubStats() {
                   <div
                     className="github-heatmap"
                     role="img"
-                    aria-label="GitHub daily contribution heatmap"
+                    aria-label="GitHub daily commit heatmap"
                   >
                     {stats.activity.map((day) => (
                       <div
                         key={day.date}
                         className={`github-heatmap-day level-${getLevel(day.count)}`}
-                        title={`${day.date}: ${day.count} contributions`}
+                        title={`${day.date}: ${day.count} commits`}
                       />
                     ))}
                   </div>

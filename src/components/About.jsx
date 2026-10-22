@@ -41,7 +41,7 @@ function CountUp({ target, suffix }) {
 
 export default function About() {
   const [liveStats, setLiveStats] = useState([
-    { num: 315, suffix: '+', lbl: 'Github Contributions' },
+    { num: 315, suffix: '+', lbl: 'Github Commits' },
     { num: 15, suffix: '+', lbl: 'Completed Projects' },
   ])
 
@@ -62,7 +62,7 @@ export default function About() {
       const contributions = contribData?.total?.lastYear || 315
       const repos = userData?.public_repos || 15
       setLiveStats([
-        { num: contributions, suffix: '+', lbl: 'Github Contributions' },
+        { num: contributions, suffix: '+', lbl: 'Github Commits' },
         { num: repos, suffix: '+', lbl: 'Completed Projects' },
       ])
     }).catch(() => {})
