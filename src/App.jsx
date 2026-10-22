@@ -6,6 +6,7 @@ import Hero from './components/Hero'
 import About from './components/About'
 import TechnicalArsenal from './components/TechnicalArsenal'
 import Projects from './components/Projects'
+import GitHubStats from './components/GitHubStats'
 import Demos from './components/Demos'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
@@ -134,6 +135,7 @@ export default function App() {
               setActiveProjectId={setActiveProjectId} 
               setShowAllProjects={setShowAllProjects}
             />
+            <GitHubStats />
             <Demos />
             <Contact 
               navigateToSection={navigateToSection} 
