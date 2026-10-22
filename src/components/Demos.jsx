@@ -3,8 +3,29 @@ import PhotoArchive from './PhotoArchive/PhotoArchive'
 
 function VideoCard({ videoUrl }) {
   const videoRef = useRef(null)
+  const containerRef = useRef(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
+  const [isNearViewport, setIsNearViewport] = useState(false)
+
+  // IntersectionObserver: Warm up video buffer when user scrolls close to Demos section
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsNearViewport(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '300px' }
+    )
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
 
   // Synchronize state with video element
   useEffect(() => {
@@ -16,16 +37,18 @@ function VideoCard({ videoUrl }) {
   const handleMouseEnter = () => {
     setIsPlaying(true)
     if (videoRef.current) {
-      videoRef.current.currentTime = 0
       videoRef.current.muted = isMuted
-      videoRef.current.play()
-        .catch(err => {
-          console.log("Play failed, retrying muted:", err)
-          // Fallback to muted if play fails (e.g., browser autoplay restrictions)
-          videoRef.current.muted = true
-          setIsMuted(true)
-          videoRef.current.play().catch(e => console.log("Muted autoplay failed:", e))
+      const playPromise = videoRef.current.play()
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          // Fallback to muted autoplay if browser blocks audio autoplay
+          if (videoRef.current) {
+            videoRef.current.muted = true
+            setIsMuted(true)
+            videoRef.current.play().catch(() => {})
+          }
         })
+      }
     }
   }
 
@@ -44,6 +67,7 @@ function VideoCard({ videoUrl }) {
   return (
     <div 
       className="video-box"
+      ref={containerRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -53,8 +77,9 @@ function VideoCard({ videoUrl }) {
           src={videoUrl}
           loop
           playsInline
+          muted={isMuted}
           className="demo-video"
-          preload="none"
+          preload={isNearViewport ? "metadata" : "none"}
           aria-label="Demonstration reel video preview"
         >
           <track kind="captions" src="data:text/vtt,WEBVTT" label="English" default />

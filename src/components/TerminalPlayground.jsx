@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Terminal as TerminalIcon, CornerDownLeft, Sparkles, Copy, Check } from 'lucide-react'
+import { Terminal as TerminalIcon, CornerDownLeft, Copy, Check } from 'lucide-react'
 import './TerminalPlayground.css'
 
 const HELP_COMMANDS = [
@@ -258,28 +258,6 @@ Type "stats" to view live GitHub stats or scroll to the Projects section above.`
               >
                 <CornerDownLeft size={13} />
               </button>
-            </div>
-          </div>
-
-          {/* Bottom Quick-Action Command Pills */}
-          <div className="terminal-quick-bar" onClick={(e) => e.stopPropagation()}>
-            <span className="quick-label">
-              <Sparkles size={12} />
-              <span>Try:</span>
-            </span>
-            <div className="quick-pills">
-              {['help', 'about', 'skills', 'projects', 'stats', 'contact', 'clear'].map(
-                (cmd) => (
-                  <button
-                    key={cmd}
-                    type="button"
-                    className="quick-pill"
-                    onClick={() => handleCommand(cmd)}
-                  >
-                    {cmd}
-                  </button>
-                )
-              )}
             </div>
           </div>
         </div>
