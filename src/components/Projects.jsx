@@ -1,22 +1,27 @@
-import { useState } from 'react'
-import { projectsData } from '../data/projectsData'
-
+import { useState, useEffect } from 'react'
+import { client, urlFor } from '../client'
+import Skiper80Showcase from './Skiper80Showcase'
 export function ProjectCard({ project, onSelect }) {
   const [imgFailed, setImgFailed] = useState(false)
 
+  // Handle both Sanity images and local static images
+  const imageUrl = project.image?.asset ? urlFor(project.image).url() : project.image;
+  // Handle both Sanity tags and local tech arrays
+  const techTags = project.tags || project.tech || [];
+
   return (
-    <div className="proj-card-new" onClick={() => onSelect(project.id)}>
+    <div className="proj-card-new" onClick={() => onSelect(project._id || project.id)}>
       <div className="proj-card-new-img-wrap" data-cursor="expand">
-        {!imgFailed ? (
+        {!imgFailed && imageUrl ? (
           <>
             <img
-              src={project.image}
+              src={imageUrl}
               alt=""
               className="proj-card-new-img-bg"
               onError={() => setImgFailed(true)}
             />
             <img
-              src={project.image}
+              src={imageUrl}
               alt={project.title}
               className="proj-card-new-img"
               onError={() => setImgFailed(true)}
@@ -24,7 +29,7 @@ export function ProjectCard({ project, onSelect }) {
           </>
         ) : (
           <div className="proj-card-new-fallback">
-            <span>{project.title.substring(0, 2).toUpperCase()}</span>
+            <span>{project.title ? project.title.substring(0, 2).toUpperCase() : 'PR'}</span>
           </div>
         )}
       </div>
@@ -32,7 +37,7 @@ export function ProjectCard({ project, onSelect }) {
         <h3 className="proj-card-new-title">{project.title}</h3>
         <p className="proj-card-new-desc">{project.description}</p>
         <div className="proj-card-new-tags">
-          {project.tech.map(t => (
+          {techTags.map(t => (
             <span className="tech-pill" key={t}>{t}</span>
           ))}
         </div>
@@ -42,7 +47,20 @@ export function ProjectCard({ project, onSelect }) {
 }
 
 export default function Projects({ setActiveProjectId, setShowAllProjects }) {
-  const visibleProjects = projectsData.slice(0, 2)
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    // Fetch projects from Sanity
+    client.fetch('*[_type == "project"]')
+      .then((data) => {
+        if (data) setProjects(data);
+      })
+      .catch((err) => {
+        console.error("Sanity fetch error:", err);
+      });
+  }, []);
+
+  const visibleProjects = projects.slice(0, 2)
 
   return (
     <section className="projects" id="projects">
@@ -65,15 +83,10 @@ export default function Projects({ setActiveProjectId, setShowAllProjects }) {
           &gt;
         </div>
 
-        <div className="projects-grid-2col">
-          {visibleProjects.map(p => (
-            <ProjectCard
-              key={p.id}
-              project={p}
-              onSelect={setActiveProjectId}
-            />
-          ))}
-        </div>
+        <Skiper80Showcase
+          projects={projects.slice(0, 4)}
+          onSelect={setActiveProjectId}
+        />
 
         <div className="projects-more-btn-wrap reveal-left visible">
           <button 

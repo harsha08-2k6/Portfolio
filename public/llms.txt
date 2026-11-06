@@ -1,0 +1,29 @@
+# Tamlampudi Siva Harsha Vardhan Reddy
+
+> Full Stack Developer, Video Editor, Cybersecurity Enthusiast, and Open Source Contributor.
+
+## Primary Links
+
+- [Portfolio Website](https://sivaharshavardhanreddys-portfolio.vercel.app/): Interactive portfolio showcase featuring cutting-edge UI, creative showreels, and technical projects.
+- [Resume](https://sivaharshavardhanreddys-portfolio.vercel.app/resume.html): Detailed technical background, engineering experience, education, and credentials.
+- [GitHub Profile](https://github.com/harsha08-2k6): Open source repositories, code samples, and full-stack web applications.
+- [LinkedIn Profile](https://www.linkedin.com/in/siva-harsha-vardhan-reddy/): Professional experience, career background, and networking.
+- [Twitter / X](https://x.com/harsha08_2k6): Technology insights, developer updates, and cybersecurity research.
+- [Instagram](https://www.instagram.com/_name_is_harsha_/): Video editing demos, cinematic showreels, and creative visual projects.
+
+## Project Showcases
+
+- [Featured Applications](https://sivaharshavardhanreddys-portfolio.vercel.app/#projects): Production-grade applications built with React, Vite, Node.js, and Sanity CMS.
+- [Creative Video Demonstrations](https://sivaharshavardhanreddys-portfolio.vercel.app/#demos): High-impact video editing reels, motion design, and audio-visual synchronization.
+- [Visual Archive & Photography](https://sivaharshavardhanreddys-portfolio.vercel.app/#demos): Curated photography, travel narratives, and high-resolution gallery archives.
+
+## Technical Skills
+
+- [Frontend Engineering](https://sivaharshavardhanreddys-portfolio.vercel.app/#skills): React, Next.js, Vite, TypeScript, JavaScript (ESNext), Framer Motion, Responsive Web Design.
+- [Backend & Cloud Architecture](https://sivaharshavardhanreddys-portfolio.vercel.app/#skills): Node.js, Express, Fastify, RESTful APIs, Sanity CMS, Firebase, Vercel.
+- [Cybersecurity](https://sivaharshavardhanreddys-portfolio.vercel.app/#about): Vulnerability scanning, web security audits, threat assessment, secure system architecture.
+- [Creative Suite](https://sivaharshavardhanreddys-portfolio.vercel.app/#demos): Adobe Premiere Pro, After Effects, DaVinci Resolve, sound design, color grading.
+
+## Contact
+
+- [Email Siva Harsha](mailto:tsivaharshavardhanreddy08@gmail.com): Direct contact for full-stack engineering contracts, video commissions, and freelance inquiries.

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shvr-portfolio-cache-v1';
+const CACHE_NAME = 'shvr-portfolio-cache-v3';
 
 // Install event - pre-cache critical shell assets
 self.addEventListener('install', (event) => {
@@ -15,9 +15,7 @@ self.addEventListener('install', (event) => {
       // Cache assets individually to ensure one failed asset doesn't break the entire caching process
       return Promise.all(
         cleanAssets.map((asset) => {
-          return cache.add(asset)
-            .then(() => console.log('Successfully cached:', asset))
-            .catch((err) => console.warn('Failed to cache during install:', asset, err));
+          return cache.add(asset).catch(() => {});
         })
       ).then(() => self.skipWaiting());
     })
@@ -31,7 +29,6 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
-            console.log('ServiceWorker clearing old cache:', cache);
             return caches.delete(cache);
           }
         })
@@ -46,20 +43,37 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
+  // Only handle same-origin assets; let external APIs (Sanity, Google Fonts) handle their own network caching
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+
   // Exclude hot-reload files and WebSocket connections
   if (url.pathname.includes('hot-update') || url.pathname.includes('vite') || url.protocol === 'ws:') {
+    return;
+  }
+
+  // Do not intercept or cache media files or Range requests (media streaming causes Cache.put network errors)
+  if (
+    url.pathname.endsWith('.mp3') ||
+    url.pathname.endsWith('.mp4') ||
+    url.pathname.endsWith('.webm') ||
+    event.request.headers.has('range')
+  ) {
     return;
   }
 
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        // Cache same-origin assets dynamically as they are successfully fetched
-        if (response && response.status === 200 && (response.type === 'basic' || response.type === 'cors')) {
+        // Cache valid same-origin assets dynamically as they are successfully fetched
+        if (response && response.status === 200 && response.type === 'basic') {
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
+            cache.put(event.request, responseToCache).catch(() => {
+              // Silently ignore aborted/interrupted stream cache put errors
+            });
+          }).catch(() => {});
         }
         return response;
       })

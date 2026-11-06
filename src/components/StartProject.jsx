@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 
+import emailjs from '@emailjs/browser'
+
 export default function StartProject({ setShowStartProject, navigateToSection }) {
   const [formData, setFormData] = useState({
     name: '',
@@ -49,25 +51,28 @@ export default function StartProject({ setShowStartProject, navigateToSection })
       return
     }
 
-    const encode = (data) => {
-      return Object.keys(data)
-        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-        .join('&')
-    }
+    // ----------------------------------------------------
+    // EmailJS Configuration
+    // ----------------------------------------------------
+    const SERVICE_ID = 'service_yt02mzo';
+    const TEMPLATE_ID = 'template_6lznja7';
+    const PUBLIC_KEY = 'F032W588_gMn6Zu23';
 
-    fetch('/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: encode({ 'form-name': 'contact', ...formData })
-    })
-    .then(() => {
-      triggerToast(`Thank you ${formData.name}! Your message has been sent. I will get back to you soon.`, 'success')
-      setFormData({ name: '', email: '', description: '' })
-    })
-    .catch((error) => {
-      console.error(error)
-      triggerToast('Something went wrong. Please try again.', 'error')
-    })
+    const templateParams = {
+      name: formData.name,
+      email: formData.email,
+      message: formData.description // Passed to the {{message}} variable in template
+    };
+
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY)
+      .then((response) => {
+        console.log('SUCCESS!', response.status, response.text);
+        triggerToast(`Thank you ${formData.name}! Your message has been sent. I will get back to you soon.`, 'success');
+        setFormData({ name: '', email: '', description: '' });
+      }, (err) => {
+        console.error('FAILED...', err);
+        triggerToast('Something went wrong. Please try again.', 'error');
+      });
   }
 
   return (

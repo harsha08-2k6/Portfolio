@@ -1,0 +1,163 @@
+/* Brand Logo at top-left */
+.nav-logo-wrapper {
+  position: fixed;
+  top: 22px;
+  left: 3rem;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.nav-logo-wrapper .logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--mint);
+  text-decoration: none;
+  cursor: none;
+  user-select: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.nav-logo-wrapper .logo:hover {
+  opacity: 0.85;
+  transform: scale(1.02);
+}
+
+/* Floating Pill Navbar */
+.floating-navbar-wrapper {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  margin: 0 !important;
+  height: auto !important;
+  background: transparent !important;
+  border: none !important;
+  pointer-events: auto;
+  will-change: transform, opacity;
+}
+
+.floating-navbar {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(13, 17, 23, 0.82);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 4px 6px;
+  box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.6),
+              0 0 0 1px rgba(255, 255, 255, 0.03),
+              inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  gap: 2px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.nav-pill-btn {
+  position: relative;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: none;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: #8c929e;
+  padding: 7px 18px;
+  border-radius: 9999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+  z-index: 1;
+}
+
+.nav-pill-btn:hover {
+  color: #ffffff;
+}
+
+.nav-pill-btn.active {
+  color: #f6f3ed;
+  font-weight: 600;
+}
+
+/* Smooth spring-animated active pill background */
+.active-pill-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.nav-label-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Smooth spring-animated active underline directly underneath label */
+.active-nav-underline {
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background-color: #f6f3ed;
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .nav-logo-wrapper {
+    top: 16px;
+    left: 1.25rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .floating-navbar-wrapper {
+    top: 54px;
+    max-width: calc(100vw - 20px);
+  }
+
+  .floating-navbar {
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 3px 4px;
+    gap: 1px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .floating-navbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-pill-btn {
+    padding: 6px 12px;
+    font-size: 12.5px;
+  }
+}
+
+@media (max-width: 400px) {
+  .nav-pill-btn {
+    padding: 5px 9px;
+    font-size: 11.5px;
+  }
+}

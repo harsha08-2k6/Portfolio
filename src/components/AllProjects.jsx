@@ -1,10 +1,22 @@
-import { useEffect } from 'react'
-import { projectsData } from '../data/projectsData'
+import { useState, useEffect } from 'react'
 import { ProjectCard } from './Projects'
+import { client } from '../client'
+import Skiper80Showcase from './Skiper80Showcase'
 
 export default function AllProjects({ setActiveProjectId, setShowAllProjects, navigateToSection }) {
+  const [projects, setProjects] = useState([])
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
+
+    // Fetch projects from Sanity
+    client.fetch('*[_type == "project"]')
+      .then((data) => {
+        if (data) setProjects(data);
+      })
+      .catch((err) => {
+        console.error("Sanity fetch error:", err);
+      });
   }, [])
 
   return (
@@ -36,16 +48,11 @@ export default function AllProjects({ setActiveProjectId, setShowAllProjects, na
           &gt;
         </div>
 
-        {/* Projects Grid */}
-        <div className="projects-grid-2col">
-          {projectsData.map(p => (
-            <ProjectCard
-              key={p.id}
-              project={p}
-              onSelect={setActiveProjectId}
-            />
-          ))}
-        </div>
+        {/* Skiper80 Projects Showcase */}
+        <Skiper80Showcase
+          projects={projects}
+          onSelect={setActiveProjectId}
+        />
 
         {/* Back to Home Button */}
         <div className="projects-more-btn-wrap reveal-left visible">

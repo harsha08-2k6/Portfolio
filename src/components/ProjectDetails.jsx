@@ -1,41 +1,84 @@
 import { useState, useEffect } from 'react'
-import { projectsData } from '../data/projectsData'
 import { ProjectCard } from './Projects'
+import { client, urlFor } from '../client'
 
 export default function ProjectDetails({ projectId, setActiveProjectId, navigateToSection, showAllProjects }) {
-  const currentProject = projectsData.find(p => p.id === projectId)
+  const [currentProject, setCurrentProject] = useState(null)
+  const [otherProjects, setOtherProjects] = useState([])
+  const [loading, setLoading] = useState(true)
   const [imgFailed, setImgFailed] = useState(false)
   const [toast, setToast] = useState(null)
   const [showToastClass, setShowToastClass] = useState(false)
-
-  // Scroll to top whenever the selected project changes
+  // Fetch project data (either static or from Sanity)
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
     setImgFailed(false)
+    setLoading(true)
+
+    // Fetch from Sanity
+    client.fetch(`*[_type == "project" && _id == $id][0]`, { id: projectId })
+      .then(res => {
+        if (res) {
+          setCurrentProject({
+            id: res._id,
+            title: res.title || "Project",
+            tagline: res.tagline || (res.description ? res.description.substring(0, 100) + "..." : ""),
+            liveLink: res.link || "#",
+            github: res.github || null,
+            useGithubReadme: res.useGithubReadme || false,
+            client: res.client || "Personal Project",
+            industry: res.industry || "Software",
+            timeline: res.timeline || "Recent",
+            technologies: res.tags ? res.tags.join(", ") : "Various",
+            image: res.image?.asset ? urlFor(res.image).url() : res.image,
+            overview: res.overview || res.description || "No overview available.",
+            role: res.role || [],
+            techStack: res.techStack || (res.tags || []).map(t => ({ label: "Tech", value: t })),
+            features: res.features || [],
+            structure: res.structure || "",
+            structureBullets: res.structureBullets || [],
+            challenges: res.challenges || []
+          })
+
+          // Fetch other projects
+          client.fetch(`*[_type == "project" && _id != $id][0...4]`, { id: projectId })
+            .then(data => setOtherProjects(data || []))
+            .catch(console.error)
+        } else {
+          setCurrentProject(null)
+        }
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error(err)
+        setCurrentProject(null)
+        setLoading(false)
+      })
   }, [projectId])
 
   const triggerToast = (message, type = 'success') => {
     setToast({ message, type })
-    setTimeout(() => {
-      setShowToastClass(true)
-    }, 10)
-    
-    // Auto dismiss after 4 seconds
+    setTimeout(() => setShowToastClass(true), 10)
     const timer = setTimeout(() => {
       setShowToastClass(false)
-      setTimeout(() => {
-        setToast(null)
-      }, 400)
+      setTimeout(() => setToast(null), 400)
     }, 4000)
-
     return () => clearTimeout(timer)
   }
 
   const closeToast = () => {
     setShowToastClass(false)
-    setTimeout(() => {
-      setToast(null)
-    }, 400)
+    setTimeout(() => setToast(null), 400)
+  }
+
+  if (loading) {
+    return (
+      <div className="project-details-page">
+        <div className="section-inner" style={{ textAlign: 'center', padding: '100px 0' }}>
+          <h2>Loading project...</h2>
+        </div>
+      </div>
+    )
   }
 
   if (!currentProject) {
@@ -50,9 +93,6 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
       </div>
     )
   }
-
-  // Get other 3 projects to display in the "More Projects" section
-  const otherProjects = projectsData.filter(p => p.id.toLowerCase() !== projectId?.toLowerCase())
 
   return (
     <div className="project-details-page">
@@ -93,6 +133,17 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
               >
                 Live Preview <span>↗</span>
               </a>
+              {currentProject.github && (
+                <a
+                  href={currentProject.github}
+                  className="btn-live-preview"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ marginLeft: '10px', background: 'transparent', border: '1px solid var(--w50)', color: 'var(--white)' }}
+                >
+                  GitHub <span>↗</span>
+                </a>
+              )}
             </div>
 
             <div className="details-hero-right">
@@ -134,92 +185,110 @@ export default function ProjectDetails({ projectId, setActiveProjectId, navigate
           <div className="details-sections-grid">
             <div className="details-sections-left">
               {/* Project Overview */}
-              <div className="details-section">
-                <h2>Project Overview</h2>
-                {currentProject.overview.split('\n\n').map((paragraph, idx) => (
-                  <p key={idx}>{paragraph}</p>
-                ))}
-              </div>
+              {currentProject.overview && (
+                <div className="details-section">
+                  <h2>Project Overview</h2>
+                  {currentProject.overview.split('\n\n').map((paragraph, idx) => (
+                    <p key={idx}>{paragraph}</p>
+                  ))}
+                </div>
+              )}
 
               {/* Your Role */}
-              <div className="details-section">
-                <h2>Your Role</h2>
-                <ul>
-                  {currentProject.role.map((r, idx) => (
-                    <li key={idx}>{r}</li>
-                  ))}
-                </ul>
-              </div>
+              {currentProject.role && currentProject.role.length > 0 && (
+                <div className="details-section">
+                  <h2>Your Role</h2>
+                  <ul>
+                    {currentProject.role.map((r, idx) => (
+                      <li key={idx}>{r}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* Tech Stack Used */}
-              <div className="details-section">
-                <h2>Tech Stack Used</h2>
-                <ul>
-                  {currentProject.techStack.map((tech, idx) => (
-                    <li key={idx}>
-                      <strong>{tech.label}:</strong> {tech.value}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {currentProject.techStack && currentProject.techStack.length > 0 && (
+                <div className="details-section">
+                  <h2>Tech Stack Used</h2>
+                  <ul>
+                    {currentProject.techStack.map((tech, idx) => (
+                      <li key={idx}>
+                        <strong>{tech.label}:</strong> {tech.value}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* Key Features */}
-              <div className="details-section">
-                <h2>Key Features</h2>
-                <ul>
-                  {currentProject.features.map((f, idx) => (
-                    <li key={idx}>{f}</li>
-                  ))}
-                </ul>
-              </div>
+              {currentProject.features && currentProject.features.length > 0 && (
+                <div className="details-section">
+                  <h2>Key Features</h2>
+                  <ul>
+                    {currentProject.features.map((f, idx) => (
+                      <li key={idx}>{f}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* Code Structure */}
-              <div className="details-section">
-                <h2>Code Structure & Architecture</h2>
-                <div className="code-editor-box">
-                  <div className="code-editor-header">
-                    <div className="code-editor-buttons">
-                      <span className="code-editor-dot dot-red" />
-                      <span className="code-editor-dot dot-yellow" />
-                      <span className="code-editor-dot dot-green" />
+              {(currentProject.structure || (currentProject.structureBullets && currentProject.structureBullets.length > 0)) && (
+                <div className="details-section">
+                  <h2>Code Structure & Architecture</h2>
+                  {currentProject.structure && (
+                    <div className="code-editor-box">
+                      <div className="code-editor-header">
+                        <div className="code-editor-buttons">
+                          <span className="code-editor-dot dot-red" />
+                          <span className="code-editor-dot dot-yellow" />
+                          <span className="code-editor-dot dot-green" />
+                        </div>
+                        <div className="code-editor-title">bash</div>
+                      </div>
+                      <div className="code-editor-body">
+                        {currentProject.structure}
+                      </div>
                     </div>
-                    <div className="code-editor-title">bashCopyEdit/components</div>
-                  </div>
-                  <div className="code-editor-body">
-                    {currentProject.structure}
-                  </div>
+                  )}
+                  {currentProject.structureBullets && currentProject.structureBullets.length > 0 && (
+                    <ul>
+                      {currentProject.structureBullets.map((b, idx) => (
+                        <li key={idx}>{b}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                <ul>
-                  {currentProject.structureBullets.map((b, idx) => (
-                    <li key={idx}>{b}</li>
-                  ))}
-                </ul>
-              </div>
+              )}
 
               {/* Challenges & Solutions */}
-              <div className="details-section">
-                <h2>Challenges & Solutions</h2>
-                <div className="challenges-list">
-                  {currentProject.challenges.map((c, idx) => (
-                    <div className="challenge-item" key={idx}>
-                      <strong>Challenge: {c.challenge}</strong>
-                      <span>Solution: {c.solution}</span>
-                    </div>
-                  ))}
+              {currentProject.challenges && currentProject.challenges.length > 0 && (
+                <div className="details-section">
+                  <h2>Challenges & Solutions</h2>
+                  <div className="challenges-list">
+                    {currentProject.challenges.map((c, idx) => (
+                      <div className="challenge-item" key={idx}>
+                        <strong>Challenge: {c.challenge}</strong>
+                        <span>Solution: {c.solution}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
           {/* More Projects Section */}
-          <div className="more-projects-section">
-            <h2 className="more-projects-title">More Projects</h2>
-            <div className="projects-grid-2col">
-              {otherProjects.map(p => (
-                <ProjectCard key={p.id} project={p} onSelect={setActiveProjectId} />
-              ))}
+          {otherProjects && otherProjects.length > 0 && (
+            <div className="more-projects-section">
+              <h2 className="more-projects-title">More Projects</h2>
+              <div className="projects-grid-2col">
+                {otherProjects.map(p => (
+                  <ProjectCard key={p._id || p.id} project={p} onSelect={setActiveProjectId} />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 

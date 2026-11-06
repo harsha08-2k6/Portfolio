@@ -9,7 +9,8 @@ export default function Cursor() {
         cursorRef.current.style.left = e.clientX + 'px'
         cursorRef.current.style.top = e.clientY + 'px'
       }
-      const shouldExpand = !!e.target.closest('[data-cursor="expand"]')
+      const isInHero = !!e.target.closest('#hero')
+      const shouldExpand = !isInHero && !!e.target.closest('[data-cursor="expand"]')
       cursorRef.current?.setAttribute('data-state', shouldExpand ? 'image' : '')
     }
     document.addEventListener('mousemove', onMove)
