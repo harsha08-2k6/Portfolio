@@ -123,7 +123,11 @@ export default function MusicToggleButton({ audioSrc = '/song.mp3' }) {
 
       {/* Helper text near the button for easy understanding */}
       <span className="skiper25-helper-text">
-        <span className="skiper25-helper-prefix">//</span>
+        {isPlaying ? (
+          <span className="skiper25-live-dot" />
+        ) : (
+          <span className="skiper25-helper-prefix">//</span>
+        )}
         <span>{isPlaying ? 'Playing track' : 'Play soundtrack'}</span>
       </span>
     </div>

@@ -437,8 +437,34 @@ section[id] {
 .meta-row {
   display: flex;
   align-items: center;
-  gap: 1rem;
   font-size: 13px;
+  position: relative;
+  z-index: 50;
+}
+
+.meta-email-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--w50);
+  text-decoration: none;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: color var(--ease), transform var(--ease);
+}
+
+.meta-email-link:hover {
+  color: var(--mint);
+  transform: translateY(-1px);
+}
+
+.meta-email-link:hover .meta-icon {
+  color: var(--mint);
+  transform: scale(1.1);
+}
+
+.meta-email-link:hover .meta-val {
+  color: var(--mint);
 }
 
 .meta-icon {
@@ -446,15 +472,12 @@ section[id] {
   height: 16px;
   color: var(--mint);
   flex-shrink: 0;
+  transition: transform var(--ease), color var(--ease);
 }
 
 .meta-val {
   color: var(--w50);
   transition: color var(--ease);
-}
-
-.meta-val:hover {
-  color: var(--mint);
 }
 
 /* CENTER image */
@@ -496,20 +519,20 @@ section[id] {
 .hero-corner {
   position: absolute;
   bottom: 2.5rem;
-  z-index: 20;
+  z-index: 50;
   pointer-events: auto;
 }
 
 .hero-corner-left {
   left: 3rem;
-  z-index: 25;
+  z-index: 50;
 }
 
 .hero-socials {
   display: flex;
   gap: .5rem;
   position: relative;
-  z-index: 25;
+  z-index: 50;
   pointer-events: auto;
 }
 
@@ -525,24 +548,32 @@ section[id] {
   font-size: 13px;
   font-weight: 500;
   color: var(--w50);
-  transition: color var(--ease), letter-spacing var(--ease), transform var(--ease);
+  transition: color var(--ease), transform var(--ease);
   cursor: pointer;
   pointer-events: auto;
   position: relative;
-  z-index: 26;
+  z-index: 50;
   display: inline-flex;
   align-items: center;
+  gap: 0.45rem;
+  text-decoration: none;
 }
 
 .soc-link:hover {
   color: var(--mint);
-  letter-spacing: .06em;
-  transform: translateX(-4px);
+  transform: translateY(-2px);
 }
 
-.soc-slash {
+.soc-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  transition: transform var(--ease), color var(--ease);
+}
+
+.soc-link:hover .soc-icon {
   color: var(--mint);
-  margin-right: 2px;
+  transform: scale(1.15);
 }
 
 /* photo */
