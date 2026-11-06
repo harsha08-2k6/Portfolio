@@ -34,6 +34,7 @@ flowchart TD
     User([Visitor / Browser])
 
     subgraph Client["React 19 + Vite Frontend SPA"]
+        Navbar["Floating Capsule Navbar (Framer Motion)"]
         Preloader["Multilingual SVG Preloader (Skiper8)"]
         Hero["Hero & Word-by-Word Reveal (TextBoxReveal)"]
         Audio["Ambient Audio & Waveform Equalizer (MusicToggleButton)"]
@@ -138,11 +139,12 @@ flowchart TD
 - **Accurate 365-Day Commit Heatmap:** Renders a 5-level mint-green intensity activity heatmap matching official GitHub contribution metrics.
 - **Efficient Rate-Limit Strategy:** Authenticates optionally via `VITE_GITHUB_TOKEN` to access 5,000 requests/hr, paired with automated 15-minute polling intervals and manual refresh triggers.
 
-### 💻 Interactive Terminal Playground (`TerminalPlayground`)
-- **In-Browser Developer CLI:** Emulates a realistic Linux/UNIX shell environment with a custom prompt (`harsha@shvr:~$`).
-- **Interactive Command Suite:** Supports `help`, `about`, `skills`, `projects`, `stats`, `contact`, `resume`, and `clear`.
-- **Keyboard Command History:** Arrow key navigation (<kbd>↑</kbd> and <kbd>↓</kbd>) through executed command history.
-- **One-Click Transcript Copy:** Top-right action button to copy the active terminal session to clipboard.
+### 🧭 Floating Capsule Navbar with Spring Physics (`Navbar`)
+- **Adaptive Scroll Visibility:** Intelligently hides on the initial Hero section to preserve full-bleed visual impact, then smoothly fades and slides down into view once visitors scroll into content sections or navigate to subpages.
+- **Page-Sequential Navigation Options:** Structured strictly according to the webpage sections: **About** &rarr; **Stack** &rarr; **Projects** &rarr; **Interests** &rarr; **Contact**.
+- **Gliding Spring Layout Indicator:** Powered by Framer Motion's `layoutId="activeNavPill"` and `layoutId="activeNavUnderline"` with physics-calibrated spring dynamics (`stiffness: 380`, `damping: 30`) to fluidly glide the active pill highlight and underline between buttons without abrupt jumps.
+- **Real-Time Scroll Spy & Smooth Breathing Room:** Automatically syncs the highlighted pill with viewport scroll position at 60 FPS using `requestAnimationFrame`, paired with `scroll-margin-top` for clean breathing room beneath the bar.
+- **Permanent `.SHVR` Brand Anchor:** Fixed at the top-left across all views, serving as an instant one-click shortcut back to the Hero section.
 
 ### 🎭 Procedural Crowd Canvas Animation (`Skiper39`)
 - **GSAP Canvas Sprite Simulation:** Renders walking character sprites from a Peeps illustration sprite sheet using custom GSAP easing functions.
@@ -207,7 +209,8 @@ portfolio-react/
 │   │   ├── Hero.jsx             # Hero section with role typewriter & audio toggle
 │   │   ├── InfoDocument.jsx     # Privacy Policy and Terms & Conditions viewer
 │   │   ├── MusicToggleButton.jsx# Ambient audio player with live equalizer bars
-│   │   ├── Navbar.jsx           # Responsive sticky navigation bar
+│   │   ├── Navbar.css           # Glassmorphism capsule pill styling & spring motion
+│   │   ├── Navbar.jsx           # Floating pill navbar with Framer Motion layout transitions
 │   │   ├── NotFound.jsx         # 404 page & offline connection error handler
 │   │   ├── ProjectDetails.jsx   # In-depth project case study view
 │   │   ├── Projects.jsx         # Featured projects grid loaded from Sanity
@@ -216,8 +219,6 @@ portfolio-react/
 │   │   ├── Skiper8Preloader.jsx # Multilingual greeting loader with SVG slide-up
 │   │   ├── StartProject.jsx     # Project inquiry form powered by EmailJS
 │   │   ├── TechnicalArsenal.jsx # System core interactive skill matrix
-│   │   ├── TerminalPlayground.css # Monospace terminal theme & traffic lights
-│   │   ├── TerminalPlayground.jsx # In-browser interactive CLI playground
 │   │   ├── TextBoxReveal.jsx    # Word-by-word tokenized reveal animation
 │   │   └── WhatsAppFloat.jsx    # Persistent floating WhatsApp connect button
 │   ├── hooks/
@@ -321,7 +322,7 @@ npm run preview
 | **TechnicalArsenal** | Interactive matrix displaying technical skills with cross-category synchronized glowing highlights |
 | **Skiper80Showcase** | Follows cursor via Framer Motion spring physics with drag-to-inspect and modal case study triggers |
 | **GitHubStats** | Real-time GitHub commit counter, live 365-day commit heatmap, star tallies, and repo activity |
-| **TerminalPlayground** | In-browser interactive UNIX terminal CLI executing `help`, `about`, `skills`, `projects`, `stats`, `contact`, `resume` |
+| **Navbar** | Floating glassmorphism pill capsule navigation with Framer Motion spring layout transitions, adaptive scroll spy, and permanent `.SHVR` brand anchor |
 | **Sanity Content Client** | Executes GROQ queries, fetches project records, and builds responsive image URLs via CDN |
 | **FolderFloat** | Simulates 2D rigid-body physical gravity, drift, and throw physics via Matter.js |
 | **Demos & PhotoArchive** | Renders hover video cards with custom mute buttons and fullscreen multi-image lightbox |
@@ -391,7 +392,7 @@ The project uses Vercel's multi-service architecture via [`vercel.json`](file://
 ## 🔮 Future Improvements
 
 - [x] **Live GitHub Statistics Widget:** Real-time commit counter, live 365-day contribution heatmap, total stars, and repository activity fetched directly via GitHub REST API.
-- [x] **Interactive Terminal Playground:** In-browser mini CLI allowing visitors to run commands like `help`, `about`, `skills`, `projects`, `stats`, `contact`, and `resume`.
+- [x] **Floating Capsule Navbar:** Frosted-glass pill navbar with adaptive scroll visibility, Framer Motion spring layout transitions, and page-synced navigation.
 - [ ] **Interactive 3D WebGL Hero:** Three.js / React Three Fiber interactive 3D model replacing 2D imagery.
 - [ ] **Technical Blog via Sanity:** Dedicated engineering blog section powered by Sanity CMS schemas.
 - [ ] **Theme Customizer:** Accent color picker allowing visitors to switch between cyber-mint, electric-purple, and sunset-amber palettes.
