@@ -1,57 +1,174 @@
 import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import './Navbar.css'
 
-export default function Navbar({ navigateToSection }) {
-  const [open, setOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
+// Navigation options ordered strictly as per the webpage sections
+const NAV_ITEMS = [
+  { id: 'about', label: 'About' },
+  { id: 'arsenal', label: 'Stack' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'demos', label: 'Interests' },
+  { id: 'contact', label: 'Contact' },
+]
+
+export default function Navbar({ navigateToSection, isSubpage = false, subpageActiveSection = null }) {
+  const [scrollVisible, setScrollVisible] = useState(false)
+  const [scrollActiveSection, setScrollActiveSection] = useState('about')
+  const [clickedSection, setClickedSection] = useState(null)
+
+  // Derived state to avoid setState inside effects
+  const isVisible = isSubpage ? true : scrollVisible
+  const activeSection = clickedSection || (isSubpage && subpageActiveSection ? subpageActiveSection : scrollActiveSection)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    // If on a subpage, don't run scroll detection
+    if (isSubpage) return
 
-  // Close dropdown if user clicks outside of the navbar menu container
-  useEffect(() => {
-    if (!open) return
-    const handleOutsideClick = (e) => {
-      if (!e.target.closest('.navbar-menu-container')) {
-        setOpen(false)
-      }
+    let isTicking = false
+
+    const handleScroll = () => {
+      if (isTicking) return
+      isTicking = true
+
+      requestAnimationFrame(() => {
+        // Reset clicked override once user resumes natural scrolling
+        setClickedSection(null)
+
+        // 1. Hero visibility detection
+        const hero = document.getElementById('hero')
+        if (hero) {
+          const heroRect = hero.getBoundingClientRect()
+          // Navbar appears once user scrolls past hero
+          setScrollVisible(heroRect.bottom <= 150)
+        } else {
+          setScrollVisible(true)
+        }
+
+        // 2. Bottom of page check (activate Contact)
+        const isAtBottom =
+          window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 120
+        if (isAtBottom) {
+          setScrollActiveSection('contact')
+          isTicking = false
+          return
+        }
+
+        // 3. Scroll spy in exact DOM order of page sections
+        const sectionMap = [
+          { elId: 'about', navId: 'about' },
+          { elId: 'arsenal', navId: 'arsenal' },
+          { elId: 'projects', navId: 'projects' },
+          { elId: 'github-stats', navId: 'projects' },
+          { elId: 'demos', navId: 'demos' },
+          { elId: 'contact', navId: 'contact' },
+        ]
+
+        let currentActive = null
+        for (const section of sectionMap) {
+          const el = document.getElementById(section.elId)
+          if (el) {
+            const rect = el.getBoundingClientRect()
+            if (rect.top <= 240) {
+              currentActive = section.navId
+            }
+          }
+        }
+
+        if (currentActive) {
+          setScrollActiveSection(currentActive)
+        }
+
+        isTicking = false
+      })
     }
-    document.addEventListener('click', handleOutsideClick)
-    return () => document.removeEventListener('click', handleOutsideClick)
-  }, [open])
 
-  const handleNavClick = (id) => {
-    navigateToSection(id)
-    setOpen(false)
+    // Initial check on mount
+    handleScroll()
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [isSubpage])
+
+  const handleNavClick = (e, id) => {
+    e.preventDefault()
+    setClickedSection(id)
+    if (navigateToSection) {
+      navigateToSection(id)
+    }
+  }
+
+  const handleLogoClick = (e) => {
+    e.preventDefault()
+    setClickedSection(null)
+    if (navigateToSection) {
+      navigateToSection('hero')
+    }
   }
 
   return (
-    <nav style={{ background: 'transparent', backdropFilter: 'none', borderBottom: 'none' }}>
-      <a href="#hero" className="logo" onClick={e => { e.preventDefault(); handleNavClick('hero') }}>.SHVR</a>
-      
-      <div className="navbar-menu-container">
-        <div className={`custom-menu-card ${open ? 'open' : ''}`}>
-          <button className="menu-card-header" onClick={() => setOpen(!open)}>
-            <span className="menu-text">Menu</span>
-            {!open ? (
-              <span className="menu-icon-brackets">&lt;&gt;</span>
-            ) : (
-              <span className="menu-icon-arrows">↕</span>
-            )}
-          </button>
-          
-          <div className="dropdown-items-wrap">
-            <div className="dropdown-items">
-              <a href="#about" className="dropdown-item" onClick={e => { e.preventDefault(); handleNavClick('about') }}>About</a>
-              <a href="#projects" className="dropdown-item" onClick={e => { e.preventDefault(); handleNavClick('projects') }}>Project</a>
-              <a href="#demos" className="dropdown-item" onClick={e => { e.preventDefault(); handleNavClick('demos') }}>Interests</a>
-              <a href="#contact" className="dropdown-item" onClick={e => { e.preventDefault(); handleNavClick('contact') }}>Contact</a>
-            </div>
-          </div>
-        </div>
+    <>
+      {/* Permanent brand logo at top-left */}
+      <div className="nav-logo-wrapper">
+        <a 
+          href="#hero" 
+          className="logo" 
+          onClick={handleLogoClick}
+          aria-label="Back to top (.SHVR)"
+        >
+          .SHVR
+        </a>
       </div>
-    </nav>
+
+      {/* Floating pill navbar appearing on remaining pages/sections */}
+      <AnimatePresence>
+        {isVisible && (
+          <motion.nav
+            className="floating-navbar-wrapper"
+            aria-label="Main Navigation"
+            initial={{ y: -24, opacity: 0, x: '-50%' }}
+            animate={{ y: 0, opacity: 1, x: '-50%' }}
+            exit={{ y: -20, opacity: 0, x: '-50%' }}
+            transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="floating-navbar">
+              {NAV_ITEMS.map((item) => {
+                const isActive = activeSection === item.id
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={`nav-pill-btn ${isActive ? 'active' : ''}`}
+                    onClick={(e) => handleNavClick(e, item.id)}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    {/* Smooth gliding pill highlight */}
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeNavPill"
+                        className="active-pill-bg"
+                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      />
+                    )}
+
+                    <span className="nav-label-wrap">
+                      {item.label}
+
+                      {/* Smooth gliding underline accent */}
+                      {isActive && (
+                        <motion.span
+                          layoutId="activeNavUnderline"
+                          className="active-nav-underline"
+                          transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                        />
+                      )}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+    </>
   )
 }

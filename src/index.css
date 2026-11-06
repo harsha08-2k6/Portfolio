@@ -106,21 +106,11 @@ a {
   display: none;
 }
 
-/* nav */
-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  height: var(--nav-h);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 3rem;
-  background: transparent;
+section[id] {
+  scroll-margin-top: 85px;
 }
 
+/* logo used in footer */
 .logo {
   font-size: 22px;
   font-weight: 800;

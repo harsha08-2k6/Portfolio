@@ -7,7 +7,6 @@ import About from './components/About'
 import TechnicalArsenal from './components/TechnicalArsenal'
 import Projects from './components/Projects'
 import GitHubStats from './components/GitHubStats'
-import TerminalPlayground from './components/TerminalPlayground'
 import Demos from './components/Demos'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
@@ -70,6 +69,15 @@ export default function App() {
     }, 50)
   }
 
+  const isSubpage = !isOnline || showDoc !== null || activeProjectId !== null || showAllProjects || showStartProject
+  const subpageActiveSection = (activeProjectId !== null || showAllProjects)
+    ? 'projects'
+    : showStartProject
+    ? 'contact'
+    : showDoc !== null
+    ? 'about'
+    : null
+
   return (
     <>
       <AnimatePresence mode="wait">
@@ -83,7 +91,11 @@ export default function App() {
 
       <Cursor />
       <WhatsAppFloat />
-      <Navbar navigateToSection={navigateToSection} />
+      <Navbar 
+        navigateToSection={navigateToSection}
+        isSubpage={isSubpage}
+        subpageActiveSection={subpageActiveSection}
+      />
       
       <main id="main-content">
         {!isOnline ? (
@@ -137,7 +149,6 @@ export default function App() {
               setShowAllProjects={setShowAllProjects}
             />
             <GitHubStats />
-            <TerminalPlayground />
             <Demos />
             <Contact 
               navigateToSection={navigateToSection} 
