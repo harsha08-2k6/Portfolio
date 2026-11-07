@@ -1,13 +1,112 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 
-export default function WhatsAppFloat() {
+const DISMISSED_KEY = 'wa_popup_dismissed'
+
+// Safely read from sessionStorage
+const isSessionDismissed = () => {
+  try {
+    return sessionStorage.getItem(DISMISSED_KEY) === 'true'
+  } catch {
+    return false
+  }
+}
+
+// Safely write to sessionStorage
+const markSessionDismissed = () => {
+  try {
+    sessionStorage.setItem(DISMISSED_KEY, 'true')
+  } catch {
+    // Ignore storage errors in restricted environments
+  }
+}
+
+export default function WhatsAppFloat({ isAppReady = true }) {
   const [isOpen, setIsOpen] = useState(false)
+  const timerRef = useRef(null)
+  const autoOpenTimerRef = useRef(null)
+
+  // Clear any existing inactivity timer
+  const clearInactivityTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
+      timerRef.current = null
+    }
+  }, [])
+
+  // Start or reset the 5-second countdown timer
+  const startInactivityTimer = useCallback(() => {
+    clearInactivityTimer()
+    timerRef.current = setTimeout(() => {
+      setIsOpen(false)
+      markSessionDismissed()
+    }, 5000)
+  }, [clearInactivityTimer])
+
+  // Automatically show the popup on initial load once app is ready, unless previously dismissed this session
+  useEffect(() => {
+    if (!isAppReady) return
+
+    if (!isSessionDismissed()) {
+      autoOpenTimerRef.current = setTimeout(() => {
+        setIsOpen(true)
+      }, 1200)
+    }
+
+    return () => {
+      if (autoOpenTimerRef.current) {
+        clearTimeout(autoOpenTimerRef.current)
+        autoOpenTimerRef.current = null
+      }
+    }
+  }, [isAppReady])
+
+  // Start 5s countdown when popup becomes visible; clean up when closed or unmounted
+  useEffect(() => {
+    if (isOpen) {
+      startInactivityTimer()
+    } else {
+      clearInactivityTimer()
+    }
+
+    return () => {
+      clearInactivityTimer()
+    }
+  }, [isOpen, startInactivityTimer, clearInactivityTimer])
+
+  // Reset inactivity timer on any user interaction within the popup
+  const handleInteraction = () => {
+    if (isOpen) {
+      startInactivityTimer()
+    }
+  }
+
+  // Handle main toggle / close (X) button click
+  const handleToggle = (e) => {
+    e.stopPropagation()
+    if (isOpen) {
+      // Close immediately if user clicks the X button
+      clearInactivityTimer()
+      setIsOpen(false)
+      markSessionDismissed()
+    } else {
+      // User manually opened it
+      setIsOpen(true)
+    }
+  }
 
   return (
-    <div className="wa-float-container">
+    <div 
+      className="wa-float-container"
+      onMouseEnter={handleInteraction}
+      onMouseMove={handleInteraction}
+      onTouchStart={handleInteraction}
+      onTouchMove={handleInteraction}
+      onClick={handleInteraction}
+      onFocus={handleInteraction}
+    >
       {/* Main white toggle button */}
       <button 
-        onClick={() => setIsOpen(!isOpen)} 
+        onClick={handleToggle} 
         className="wa-toggle-btn"
         aria-label="Toggle floating menu"
       >

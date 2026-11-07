@@ -90,7 +90,7 @@ export default function App() {
       </AnimatePresence>
 
       <Cursor />
-      <WhatsAppFloat />
+      <WhatsAppFloat isAppReady={!isLoading} />
       <Navbar 
         navigateToSection={navigateToSection}
         isSubpage={isSubpage}
