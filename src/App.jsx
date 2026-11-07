@@ -42,7 +42,10 @@ export default function App() {
   }, [isLoading])
 
   useEffect(() => {
-    const handleOnline = () => setIsOnline(true)
+    // When returning online, let NotFound show its graceful "Connection restored" UI before restoring
+    const handleOnline = () => {
+      // Handled inside NotFound when offline view is active
+    }
     const handleOffline = () => setIsOnline(false)
 
     window.addEventListener('online', handleOnline)
