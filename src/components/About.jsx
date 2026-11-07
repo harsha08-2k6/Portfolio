@@ -74,12 +74,18 @@ export default function About() {
         <div className="marquee-track">
           <div className="marquee-group">
             {Array(20).fill(null).map((_, i) => (
-              <span key={i} className="marquee-item">SHVR <span className="marquee-dot">·</span></span>
+              <span key={i} className="marquee-item">
+                <span className="marquee-text">SHVR</span>
+                <span className="marquee-dot">·</span>
+              </span>
             ))}
           </div>
           <div className="marquee-group" aria-hidden="true">
             {Array(20).fill(null).map((_, i) => (
-              <span key={i} className="marquee-item">SHVR <span className="marquee-dot">·</span></span>
+              <span key={i} className="marquee-item">
+                <span className="marquee-text">SHVR</span>
+                <span className="marquee-dot">·</span>
+              </span>
             ))}
           </div>
         </div>
